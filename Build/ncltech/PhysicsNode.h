@@ -62,15 +62,23 @@ public:
 		: position(0.0f, 0.0f, 0.0f)
 		, linVelocity(0.0f, 0.0f, 0.0f)
 		, force(0.0f, 0.0f, 0.0f)
+		, acceleration(0.0f, 0.0f, 0.0f)
 		, invMass(0.0f)
 		, orientation(0.0f, 0.0f, 0.0f, 1.0f)
 		, angVelocity(0.0f, 0.0f, 0.0f)
+		, angAcceleration(0.0f, 0.0f, 0.0f)
 		, torque(0.0f, 0.0f, 0.0f)
 		, invInertia(Matrix3::ZeroMatrix)
 		, collisionShape(NULL)
 		, friction(0.5f)
 		, elasticity(0.9f)
 	{
+		lastPosition = position;
+		lastOrientation = orientation;
+		lastLinVelocity = linVelocity;
+		lastAngVelocity = angVelocity;
+		lastAcceleration = acceleration;
+		
 	}
 
 	virtual ~PhysicsNode()
@@ -167,15 +175,41 @@ protected:
 	Vector3		position;
 	Vector3		linVelocity;
 	Vector3		force;
+	Vector3		acceleration;
 	float		invMass;
+	void IntegrateLinearVelocity(float dt);
+	void IntegrateLinearPosition(float dt);
+	// Properties at the last time step
+	Vector3		lastPosition;
+	Vector3		lastLinVelocity;
+	Vector3		lastAcceleration;
+
+	// Runge-Kutta Coefficients
+	Vector3 RKLinCoeffs[4]; //k1, k2, k3, k4
+	void CalculateRKLinCoefficients(float dt);
 
 	//<----------ANGULAR-------------->
 	Quaternion  orientation;
 	Vector3		angVelocity;
 	Vector3		torque;
+	Vector3		angAcceleration;
 	Matrix3     invInertia;
+	void IntegrateAngularVelocity(float dt);
+	void IntegrateAngularPosition(float dt);
 
+	// Properties at the last time step
+	Quaternion lastOrientation;
+	Vector3	   lastAngVelocity;
+	Vector3	   lastAngAcceleration;
 
+	// Runge-Kutta Coeffs
+	Vector3 RKAngCoeffs[4]; //k1, k2, k3, k4
+	void CalculateRKAngCoefficients(float dt);
+
+	// Integration type
+	bool implicitEuler = false;
+	bool symplecticEuler = false;
+	bool midpointMethod = true;
 //Added in Tutorial 4/5
 	//<----------COLLISION------------>
 	CollisionShape*				collisionShape;
