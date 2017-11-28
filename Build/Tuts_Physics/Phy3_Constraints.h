@@ -63,9 +63,24 @@ public:
 				ball->Physics()->GetPosition());	//Attachment Position on Object B	-> Currently the centre  
 			PhysicsEngine::Instance()->AddConstraint(constraint);
 		
+			// Create a box to make a double pendulum
+			GameObject* box2 = CommonUtils::BuildCuboidObject("",
+				Vector3(-4.f, 5.f, -5.0f),				//Position
+				Vector3(0.7f, 0.7f, 0.7f),				//Half Dimensions
+				true,									//Has Physics Object
+				1.0f,									//Inverse Mass = 1 / 1kg mass
+				false,									//No Collision Shape Yet
+				false,									//Dragable by the user
+				CommonUtils::GenColor(0.7f, 1.0f));		//Color
 
-
-
+			this->AddGameObject(box2);
+			constraint = new DistanceConstraint(
+				ball->Physics(),
+				box2->Physics(),
+				ball->Physics()->GetPosition(),
+				box2->Physics()->GetPosition()
+			);
+			PhysicsEngine::Instance()->AddConstraint(constraint);
 
 		//Create Hanging Cube (Attached by corner)
 			handle = CommonUtils::BuildSphereObject("",

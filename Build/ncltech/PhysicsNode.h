@@ -208,8 +208,8 @@ protected:
 
 	// Integration type
 	bool implicitEuler = false;
-	bool symplecticEuler = false;
-	bool midpointMethod = true;
+	bool symplecticEuler = true;
+	bool midpointMethod = false;
 //Added in Tutorial 4/5
 	//<----------COLLISION------------>
 	CollisionShape*				collisionShape;
