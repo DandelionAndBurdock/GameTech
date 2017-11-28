@@ -146,8 +146,6 @@ void HandleKeyboardInputs()
 	if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_G)) draw_debug = !draw_debug;
 	if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_H)) draw_performance = !draw_performance;
 
-
-
 	uint drawFlags = PhysicsEngine::Instance()->GetDebugDrawFlags();
 	if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_Z))
 		drawFlags ^= DEBUGDRAW_FLAGS_CONSTRAINT;

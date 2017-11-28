@@ -18,6 +18,7 @@ Description:
 #pragma once
 
 #include "GameObject.h"
+#include "SceneManager.h"
 
 namespace CommonUtils
 {
@@ -52,4 +53,26 @@ namespace CommonUtils
 		bool collidable = true,				//requires physics_enabled = true
 		bool dragable = true,
 		const Vector4& color = Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+
+	// Create a sphere with attached render node
+	const float SPHERE_RADIUS = 1.0f;
+	const float SPHERE_INV_MASS = 1.0f;
+	const float SPHERE_SPEED = 10.0f;
+	const Vector4 SPHERE_COLOUR = Vector4(0.3f, 0.8f, 0.8f, 1.0f);
+	//GameObject* CreateSphere() {
+	//	GameObject* sphere = BuildSphereObject(
+	//		"",					// Optional: Name
+	//		pos,				// Position
+	//		ballsize,			// Half-Dimensions
+	//		true,				// Physics Enabled?
+	//		10.f,				// Physical Mass (must have physics enabled)
+	//		true,				// Physically Collidable (has collision shape)
+	//		false,				// Dragable by user?
+	//		col);// Render color
+	//	this->AddGameObject(sphere);
+	//}
+	//}
+	// Spawn a sphere from spawnPos in direction dir
+	void SpawnSphere(const Vector3& spawnPos, const Vector3& dir);
 };
+

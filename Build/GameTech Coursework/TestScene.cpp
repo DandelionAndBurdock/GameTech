@@ -38,7 +38,7 @@ void TestScene::OnInitializeScene()
 	//  main point of this is the ability to output to file easily from anywhere.
 	//  So if your having trouble debugging with hundreds of 'cout << vector3()' just
 	//  through them into NCLLOG() and look at the 'program_output.txt' later =]
-	NCLDebug::Log("This is a log entry - It will printed to the console, on screen log and <project_dir>\program_output.txt");
+	NCLDebug::Log("This is a log entry - It will printed to the console, on screen log and <project_dir>\\program_output.txt");
 	//NCLERROR("THIS IS AN ERROR!"); // <- On Debug mode this will also trigger a breakpoint in your code!
 	
 

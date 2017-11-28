@@ -45,6 +45,8 @@ public:
 	//Sets position in world space
 	void	SetPosition(const Vector3& val) { position = val; }
 
+	Vector3 GetForwardDirection();
+
 	//Gets yaw, in degrees
 	float	GetYaw()   const { return yaw; }
 	//Sets yaw, in degrees

@@ -9,9 +9,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="CHANGELIST.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="NCLDebug.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -173,5 +170,10 @@
     <ClInclude Include="PerfTimer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="CHANGELIST.txt">
+      <Filter>Source Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

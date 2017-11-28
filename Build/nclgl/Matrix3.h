@@ -81,6 +81,8 @@ public:
 
 	static Matrix3 OuterProduct(const Vector3& a, const Vector3& b);
 
+	inline float SumDiagonals() const {	return _11 + _22 + _33;}
+
 
 
 	// Additional Functionality

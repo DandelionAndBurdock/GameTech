@@ -205,3 +205,21 @@ GameObject* CommonUtils::BuildCuboidObject(
 	
 	return obj;
 }
+
+
+void CommonUtils::SpawnSphere(const Vector3& spawnPos, const Vector3& dir) {
+	GameObject* sphere = BuildSphereObject(
+		"",
+		spawnPos,
+		SPHERE_RADIUS,
+		true,
+		SPHERE_INV_MASS,			//requires physics_enabled = true
+		true,				//requires physics_enabled = true
+		false,
+		SPHERE_COLOUR);
+
+	sphere->Physics()->SetPosition(spawnPos);
+	sphere->Physics()->SetLinearVelocity(Vector3(dir) * SPHERE_SPEED);
+
+	SceneManager::Instance()->GetCurrentScene()->AddGameObject(sphere);
+}
