@@ -81,6 +81,7 @@ Matrix4 Camera::BuildViewMatrix() {
 };
 
 
+// Inverse of the view matrix
 Vector3 Camera::GetForwardDirection() {
 	return Matrix4::Rotation(pitch, Vector3(1, 0, 0)) *
 		Matrix4::Rotation(yaw, Vector3(0, 1, 0)) * Vector3(0.0f, 0.0f, -1.0f);

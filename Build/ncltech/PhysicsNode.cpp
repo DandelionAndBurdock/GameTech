@@ -15,7 +15,7 @@ void PhysicsNode::IntegrateLinearVelocity(float dt) {
 
 	// Update acceleration
 	acceleration = Vector3(0.0f);
-	acceleration += PhysicsEngine::Instance()->GetGravity();
+	acceleration += GetGravity();
 
 	acceleration += force * invMass;
 
@@ -23,13 +23,15 @@ void PhysicsNode::IntegrateLinearVelocity(float dt) {
 	lastLinVelocity = linVelocity;
 	linVelocity += acceleration * dt;
 
-	if (midpointMethod) {
+	if (integrationType >= MIDPOINT) {
 		CalculateRKLinCoefficients(dt);
 	}
-	
 
-	// Apply damping
-	linVelocity = linVelocity * PhysicsEngine::Instance()->GetDampingFactor();
+
+	if (damping) {
+		linVelocity = linVelocity * PhysicsEngine::Instance()->GetDampingFactor();
+	}
+
 }
 
 void PhysicsNode::IntegrateAngularVelocity(float dt) {
@@ -40,16 +42,17 @@ void PhysicsNode::IntegrateAngularVelocity(float dt) {
 	// Update acceleration
 	lastAngAcceleration = angAcceleration;
 	angAcceleration = Vector3(0.0f);
-	if (implicitEuler || symplecticEuler) {
-		angAcceleration += invInertia * torque;
-	}
+	angAcceleration += invInertia * torque;
 
 	// Update velocity
 	lastAngVelocity = angVelocity;
 	angVelocity += angAcceleration * dt;
 
 	// Apply damping
-	angVelocity = angVelocity * PhysicsEngine::Instance()->GetDampingFactor();
+	if (damping) {
+		angVelocity = angVelocity * PhysicsEngine::Instance()->GetDampingFactor();
+	}
+
 }
 
 /* Between these two functions the physics engine will solve for velocity
@@ -71,32 +74,38 @@ void PhysicsNode::IntegrateForPosition(float dt)
 void PhysicsNode::IntegrateLinearPosition(float dt) {
 
 	lastPosition = position;
-	if (symplecticEuler) {
+	switch (integrationType) {
+	case SYMPLECTIC_EULER:
 		position += linVelocity * dt;
-	}
-	else if (implicitEuler) {
-		position += RKLinCoeffs[0];
-	}
-	else if (midpointMethod) {
+		break;
+	case EXPLICIT_EULER:
+		position += lastLinVelocity * dt;
+		break;
+	case MIDPOINT:
+
+	default:
 		position += RKLinCoeffs[1];
 	}
 }
 
 void PhysicsNode::IntegrateAngularPosition(float dt) {
 	lastOrientation = orientation;
-	if (symplecticEuler) {
+	switch (integrationType) {
+	case SYMPLECTIC_EULER :
 		orientation = orientation + Quaternion(angVelocity * dt * 0.5, 0.0f) * orientation;
-	}
-	else if (implicitEuler) {
+		break;
+	case EXPLICIT_EULER:
 		orientation = orientation + Quaternion(lastAngVelocity * dt * 0.5, 0.0f) * orientation;
+		break;
 	}
 	orientation.Normalise();
 }
 
 // Assumes no position dependence of the velocity
 void PhysicsNode::CalculateRKLinCoefficients(float dt) {
-	RKLinCoeffs[0] = lastLinVelocity * dt * dt; // Explicit Euler
-	RKLinCoeffs[1] = (lastLinVelocity + acceleration * dt / 2) * dt;
+	RKLinCoeffs[0] = lastLinVelocity * dt; // Explicit Euler
+	RKLinCoeffs[1] = (lastLinVelocity + acceleration * dt / 2);
+	//RKLinCoeffs[1] = (lastLinVelocity + acceleration * )
 	//RKLinCoeffs[2] = (lastLinVelocity 
 	
 }
@@ -104,4 +113,35 @@ void PhysicsNode::CalculateRKLinCoefficients(float dt) {
 void PhysicsNode::CalculateRKAngCoefficients(float dt) {
 	RKAngCoeffs[0] = lastLinVelocity * dt * dt; // Explicit Euler
 	RKAngCoeffs[1] = (lastLinVelocity + acceleration * dt / 2) * dt;
+}
+
+
+Vector3 PhysicsNode::GetGravity() {
+	// Direction
+	Vector3 fieldDirection;
+	if (gravAttractorPos) {
+		fieldDirection = *gravAttractorPos - position;
+		fieldDirection.Normalise();
+	}
+	else {
+		fieldDirection = Vector3(0.0f, -1.0f, 0.0f);
+	}
+
+
+	// Strength
+	return fieldDirection * PhysicsEngine::Instance()->GetGravity();
+
+}
+
+Vector3 PhysicsNode::PredictAcceleration(Vector3 pos) {
+	Vector3 fieldDirection;
+	if (gravAttractorPos) {
+		fieldDirection = *gravAttractorPos - pos;
+		fieldDirection.Normalise();
+	}
+	else {
+		fieldDirection = Vector3(0.0f, -1.0f, 0.0f);
+	}
+	return fieldDirection * PhysicsEngine::Instance()->GetGravity();
+
 }

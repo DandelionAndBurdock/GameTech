@@ -12,7 +12,8 @@ void PhysicsEngine::SetDefaults()
 	//Variables set here /will/ be reset with each scene
 	updateTimestep = 1.0f / 60.f;
 	updateRealTimeAccum = 0.0f;
-	gravity = Vector3(0.0f, -9.81f, 0.0f);
+	//gravity = Vector3(0.0f, -9.81f, 0.0f);
+	gravity = 9.81f; // Gravitational Field Strength
 	dampingFactor = 0.999f;
 }
 
@@ -220,7 +221,6 @@ void PhysicsEngine::NarrowPhaseCollisions()
 				cp.pObjectA->GetCollisionShape(),
 				cp.pObjectB->GetCollisionShape());
 
-			//--TUTORIAL 4 CODE--
 			// Detects if the objects are colliding
 			if (colDetect.AreColliding(&colData))
 			{
@@ -243,6 +243,7 @@ void PhysicsEngine::NarrowPhaseCollisions()
 
 				if (okA && okB)
 				{
+					//cp.pObjectA->Renn
 					/* TUTORIAL 5 CODE */
 				}
 			}

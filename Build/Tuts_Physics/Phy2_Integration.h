@@ -45,7 +45,8 @@ public:
 		m_TrajectoryPoints.clear();
 
 	//Set Defaults
-		PhysicsEngine::Instance()->SetGravity(Vector3(0.0f, 0.0f, 0.0f));		//No Gravity!
+//		PhysicsEngine::Instance()->SetGravity(Vector3(0.0f, 0.0f, 0.0f));		//No Gravity!
+		PhysicsEngine::Instance()->SetGravity(0.0f);
 		PhysicsEngine::Instance()->SetDampingFactor(1.0f);						//No Damping!
 
 

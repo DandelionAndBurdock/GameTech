@@ -35,7 +35,7 @@ Matrix3 SphereCollisionShape::BuildInverseInertia(float invMass) const
 }
 
 
-//TUTORIAL 4 CODE
+
 void SphereCollisionShape::GetCollisionAxes(const PhysicsNode* otherObject, std::vector<Vector3>& out_axes) const
 {
 	/* There are infinite possible axes on a sphere so we MUST handle it seperately

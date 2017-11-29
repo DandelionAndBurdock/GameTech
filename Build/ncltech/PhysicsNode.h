@@ -58,6 +58,8 @@ class GameObject;
 class PhysicsNode
 {
 public:
+	enum IntegrationType { EXPLICIT_EULER, SYMPLECTIC_EULER, MIDPOINT, RK4};
+public:
 	PhysicsNode()
 		: position(0.0f, 0.0f, 0.0f)
 		, linVelocity(0.0f, 0.0f, 0.0f)
@@ -101,6 +103,7 @@ public:
 	inline float				GetFriction()				const { return friction; }
 
 	inline const Vector3&		GetPosition()				const { return position; }
+	inline Vector3*				GetPositionPtr()				  { return &position; }
 	inline const Vector3&		GetLinearVelocity()			const { return linVelocity; }
 	inline const Vector3&		GetForce()					const { return force; }
 	inline float				GetInverseMass()			const { return invMass; }
@@ -109,6 +112,8 @@ public:
 	inline const Vector3&		GetAngularVelocity()		const { return angVelocity; }
 	inline const Vector3&		GetTorque()					const { return torque; }
 	inline const Matrix3&		GetInverseInertia()			const { return invInertia; }
+
+	Vector3						GetGravity();
 
 	inline CollisionShape*		GetCollisionShape()			const { return collisionShape; }
 
@@ -132,6 +137,11 @@ public:
 	inline void SetAngularVelocity(const Vector3& v)				{ angVelocity = v; }
 	inline void SetTorque(const Vector3& v)							{ torque = v; }
 	inline void SetInverseInertia(const Matrix3& v)					{ invInertia = v; }
+
+	inline void SetIntegrationMethod(IntegrationType t)				{ integrationType = t; }
+	inline void SetGravitationalAttractor(Vector3* pos)				{ gravAttractorPos = pos; }
+
+	inline void SetDamping(bool damping)							{ this->damping = damping; }
 
 	inline void SetCollisionShape(CollisionShape* colShape)
 	{ 
@@ -169,6 +179,13 @@ protected:
 	Matrix4					worldTransform;
 	PhysicsUpdateCallback	onUpdateCallback;
 
+	// Position of sun/planet centre which is the major gravitational attractor
+	// If null gravity will be in the -y direction
+	Vector3* gravAttractorPos = nullptr;
+	Vector3 PredictAcceleration(Vector3 pos);
+
+	// Motion should be damped
+	bool damping = true;
 
 //Added in Tutorial 2
 	//<---------LINEAR-------------->
@@ -207,9 +224,8 @@ protected:
 	void CalculateRKAngCoefficients(float dt);
 
 	// Integration type
-	bool implicitEuler = false;
-	bool symplecticEuler = true;
-	bool midpointMethod = false;
+	IntegrationType integrationType = SYMPLECTIC_EULER;
+
 //Added in Tutorial 4/5
 	//<----------COLLISION------------>
 	CollisionShape*				collisionShape;

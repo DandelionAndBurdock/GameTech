@@ -100,10 +100,10 @@ public:
 	inline void SetDebugDrawFlags(uint flags)   { debugDrawFlags = flags; }
 	
 	inline float GetUpdateTimestep() const { return updateTimestep; }
-	inline void SetUpdateTimestep(float updateTimestep) { updateTimestep = updateTimestep; }
+	inline void SetUpdateTimestep(float updateTimestep) { this->updateTimestep = updateTimestep; }
 
-	inline const Vector3& GetGravity() const	{ return gravity; }
-	inline void SetGravity(const Vector3& g)	{ gravity = g; }
+	inline const float GetGravity() const	{ return gravity; }
+	inline void SetGravity(float g)	{ gravity = g; }
 
 	inline float GetDampingFactor() const		{ return dampingFactor; }
 	inline void  SetDampingFactor(float d)		{ dampingFactor = d; }
@@ -136,7 +136,7 @@ protected:
 	float		updateTimestep, updateRealTimeAccum;
 	uint		debugDrawFlags;
 
-	Vector3		gravity;
+	float		gravity;
 	float		dampingFactor;
 
 

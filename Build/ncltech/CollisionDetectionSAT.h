@@ -83,6 +83,10 @@ protected:
 	// are indeed colliding in this direction.
 	bool CheckCollisionAxis(const Vector3& axis, CollisionData& coldata);
 	
+	// Adds all possible collision axes to the vector possibleColAxes
+	void FindAllPossibleCollisionAxes();
+
+
 private:
 	//Physics Nodes
 	const PhysicsNode*		pnodeA;
