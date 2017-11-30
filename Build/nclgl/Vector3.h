@@ -59,6 +59,10 @@ public:
 		return sqrt((x*x)+(y*y)+(z*z));	
 	}
 
+	inline float LengthSq() const {
+		return Dot(*this, *this);
+	}
+
 	void			Invert() {
 		x = -x;
 		y = -y;	
@@ -121,6 +125,7 @@ public:
 	inline Vector3  operator/(const float v) const{
 		return Vector3(x / v,y / v, z / v);
 	};
+
 
 	inline bool	operator==(const Vector3 &A)const {return (A.x == x && A.y == y && A.z == z) ? true : false;};
 	inline bool	operator!=(const Vector3 &A)const {return (A.x == x && A.y == y && A.z == z) ? false : true;};

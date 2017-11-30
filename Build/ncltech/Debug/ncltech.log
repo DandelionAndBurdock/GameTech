@@ -1,16 +1,2 @@
-﻿  SphereCollisionShape.cpp
-  ScreenPicker.cpp
-  SceneManager.cpp
-  PhysicsNode.cpp
-  PhysicsEngine.cpp
-  NetworkBase.cpp
-  Manifold.cpp
-  Hull.cpp
-  GraphicsPipeline.cpp
-  GeometryUtils.cpp
-  CuboidCollisionShape.cpp
-  CommonUtils.cpp
-  CommonMeshes.cpp
-  CollisionDetectionSAT.cpp
-  Generating Code...
-  ncltech.vcxproj -> D:\GameTechnologyNew\Build\Debug\ncltech.lib
+﻿  CollisionDetectionSAT.cpp
+  ncltech.vcxproj -> D:\Test\GameTech\Build\Debug\ncltech.lib

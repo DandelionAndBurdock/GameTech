@@ -44,7 +44,7 @@ void SphereCollisionShape::GetCollisionAxes(const PhysicsNode* otherObject, std:
 	Vector3 dir = (otherObject->GetPosition() - Parent()->GetPosition()).Normalise();
 
 	Vector3 p1 = Parent()->GetPosition();
-	Vector3 p2 = otherObject->GetCollisionShape()->GetClosestPoint(p1);
+	Vector3 p2 = otherObject->GetNarrowCollisionShape()->GetClosestPoint(p1);
 
 	out_axes.push_back((p1 - p2).Normalise());
 }

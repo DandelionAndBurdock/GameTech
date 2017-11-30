@@ -1,6 +1,7 @@
 #include "PhysicsEngine.h"
 #include "GameObject.h"
 #include "CollisionDetectionSAT.h"
+#include "BasicCollisionTests.h"
 #include <nclgl\NCLDebug.h>
 #include <nclgl\Window.h>
 #include <omp.h>
@@ -181,16 +182,17 @@ void PhysicsEngine::BroadPhaseCollisions()
 				pnodeA = physicsNodes[i];
 				pnodeB = physicsNodes[j];
 
-				//Check they both atleast have collision shapes
-				if (pnodeA->GetCollisionShape() != NULL
-					&& pnodeB->GetCollisionShape() != NULL)
-				{
-					CollisionPair cp;
-					cp.pObjectA = pnodeA;
-					cp.pObjectB = pnodeB;
-					broadphaseColPairs.push_back(cp);
+				if (AreColliding(dynamic_cast<SphereCollisionShape*>(pnodeA->GetBroadCollisionShape()), dynamic_cast<SphereCollisionShape*>(pnodeB->GetBroadCollisionShape()))) {
+					//Check they both atleast have collision shapes
+					if (pnodeA->GetNarrowCollisionShape() != NULL
+						&& pnodeB->GetNarrowCollisionShape() != NULL)
+					{
+						CollisionPair cp;
+						cp.pObjectA = pnodeA;
+						cp.pObjectB = pnodeB;
+						broadphaseColPairs.push_back(cp);
+					}
 				}
-
 			}
 		}
 	}
@@ -212,14 +214,14 @@ void PhysicsEngine::NarrowPhaseCollisions()
 		{
 			CollisionPair& cp = broadphaseColPairs[i];
 
-			CollisionShape *shapeA = cp.pObjectA->GetCollisionShape();
-			CollisionShape *shapeB = cp.pObjectB->GetCollisionShape();
+			CollisionShape *shapeA = cp.pObjectA->GetNarrowCollisionShape();
+			CollisionShape *shapeB = cp.pObjectB->GetNarrowCollisionShape();
 
 			colDetect.BeginNewPair(
 				cp.pObjectA,
 				cp.pObjectB,
-				cp.pObjectA->GetCollisionShape(),
-				cp.pObjectB->GetCollisionShape());
+				cp.pObjectA->GetNarrowCollisionShape(),
+				cp.pObjectB->GetNarrowCollisionShape());
 
 			// Detects if the objects are colliding
 			if (colDetect.AreColliding(&colData))
@@ -243,8 +245,20 @@ void PhysicsEngine::NarrowPhaseCollisions()
 
 				if (okA && okB)
 				{
-					//cp.pObjectA->Renn
-					/* TUTORIAL 5 CODE */
+					// Generate collision manifold
+					Manifold* manifold = new Manifold();
+					manifold->Initiate(cp.pObjectA, cp.pObjectB);
+
+					// Construct contact points forming the perimeter of the manifold
+					colDetect.GenContactPoints(manifold);
+			
+					if (!manifold->contactPoints.empty()) {
+						// Add to the list of manifolds that need solving
+						manifolds.push_back(manifold);
+					}
+					else {
+						delete manifold;
+					}
 				}
 			}
 		}
@@ -278,9 +292,9 @@ void PhysicsEngine::DebugRender()
 	{
 		for (PhysicsNode* obj : physicsNodes)
 		{
-			if (obj->GetCollisionShape() != NULL)
+			if (obj->GetNarrowCollisionShape() != NULL)
 			{
-				obj->GetCollisionShape()->DebugDraw();
+				obj->GetNarrowCollisionShape()->DebugDraw();
 			}
 		}
 	}

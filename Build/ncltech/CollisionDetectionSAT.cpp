@@ -18,8 +18,8 @@ void CollisionDetectionSAT::BeginNewPair(
 
 	pnodeA = obj1;
 	pnodeB = obj2;
-	cshapeA = obj1->GetCollisionShape();
-	cshapeB = obj2->GetCollisionShape();
+	cshapeA = obj1->GetNarrowCollisionShape();
+	cshapeB = obj2->GetNarrowCollisionShape();
 
 	areColliding = false;
 }
@@ -74,7 +74,7 @@ void CollisionDetectionSAT::FindAllPossibleCollisionAxes() {
 		AddPossibleCollisionAxis(axis);
 	}
 
-	// Edge-Edge Cases
+	 //Edge-Edge Cases
 	for (const Vector3& norm1 : defaultAxesA) {
 		for (const Vector3& norm2 : defaultAxesB) {
 			AddPossibleCollisionAxis(Vector3::Cross(norm1, norm2).Normalise());
@@ -133,7 +133,90 @@ bool CollisionDetectionSAT::CheckCollisionAxis(const Vector3& axis, CollisionDat
 
 void CollisionDetectionSAT::GenContactPoints(Manifold* out_manifold)
 {
- /* TUTORIAL 5 CODE */
+	if (!out_manifold || !areColliding || bestColData._penetration >= 0.0f) {
+		return;
+	}
+
+	// Get face data for the two shapes based on the collision normal
+	std::list<Vector3> polygonA, polygonB;			// Store face information
+	Vector3 normalA, normalB;						// Store normal information
+	std::vector<Plane> adjPlanesA, adjPlanesB;		// Store plane information(??)
+
+	cshapeA->GetIncidentReferencePolygon(bestColData._normal, polygonA, normalA, adjPlanesA);
+	cshapeB->GetIncidentReferencePolygon(-bestColData._normal, polygonB, normalB, adjPlanesB);
+
+	if (polygonA.empty() || polygonB.empty()) {
+		return;
+	}// If either shape returned a a single point then it must be on a curve and can already access its contact point
+	else if (polygonA.size() == 1) {
+		out_manifold->AddContact(
+			polygonA.front(), // Polygon2 <-- Polygon1 (??)
+			polygonA.front() + bestColData._normal *
+			bestColData._penetration,
+			bestColData._normal,
+			bestColData._penetration);
+	}
+	else if (polygonB.size() == 1) {
+		out_manifold->AddContact(
+			polygonB.front() + bestColData._normal *
+			bestColData._penetration, // Polygon2 <-- Polygon1 (??)
+			polygonB.front(),
+			bestColData._normal,
+			bestColData._penetration);
+	}
+	else { // Otherwise clip the incident plane to inside the reference plane using surrounding face planes
+
+		// Do we need to flip the incident and reference faces around for clipping?
+		bool isFlipped = fabs(Vector3::Dot(bestColData._normal, normalA)) < fabs(Vector3::Dot(bestColData._normal, normalB));
+
+		if (isFlipped) {
+			std::swap(polygonA, polygonB);
+			std::swap(normalA, normalB);
+			std::swap(adjPlanesA, adjPlanesB);
+		}
+
+		// Clip the incident face to the adjacent edges of the reference faces
+		if (!adjPlanesA.empty()) {
+			SutherlandHodgmanClipping(polygonB, adjPlanesA.size(), &adjPlanesA[0], &polygonB, false);
+		}
+
+		// Clip and remove any contact points above the reference face
+		Plane refPlane = Plane(-normalA, -Vector3::Dot(-normalA, polygonA.front()));
+		SutherlandHodgmanClipping(polygonB, 1, &refPlane, &polygonB, true);
+
+		// Generate manifold from the remaining valid contact points
+		for (const Vector3& point : polygonB) {
+			// Distance to the reference plane
+			Vector3 pointDiff = point - GetClosestPointPolygon(point, polygonA);
+			float contactPenetration = Vector3::Dot(pointDiff, bestColData._normal);
+
+			// Contact data
+			Vector3 globalOnA;
+			Vector3 globalOnB;
+
+			// If we flipped incident and reference planes need to flip it back before sending it to the manifold
+			// e.g. turn it from objectB->objectA into objectA->objectB
+
+			if (isFlipped) {
+				contactPenetration = -contactPenetration;
+				globalOnA = point + bestColData._normal * contactPenetration;
+				globalOnB = point;
+			}
+			else {
+				globalOnA = point;
+				globalOnB = point - bestColData._normal * contactPenetration;
+			}
+
+			// Sanity check that the contact point is an actual point of contact and not just a clipping bug
+			if (contactPenetration < 0.0f) {
+				out_manifold->AddContact(globalOnA, globalOnB, bestColData._normal, contactPenetration);
+			}
+		}
+
+		
+	}
+	
+
 }
 
 

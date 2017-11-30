@@ -98,6 +98,14 @@ Vector4 CommonUtils::GenHSVColor(const Vector3& hsv, float alpha)
 	return c;
 }
 
+
+
+bool ChangeColourCallback(PhysicsNode* this_obj, PhysicsNode* colliding_obj) {
+	this_obj->GetParent()->Render()->SetColorRecursive(Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+	return true;
+}
+
+
 GameObject* CommonUtils::BuildSphereObject(
 	const std::string& name,
 	const Vector3& pos,
@@ -134,7 +142,8 @@ GameObject* CommonUtils::BuildSphereObject(
 		else
 		{
 			CollisionShape* pColshape = new SphereCollisionShape(radius);
-			pnode->SetCollisionShape(pColshape);
+			pnode->SetNarrowPhaseCollisionShape(pColshape);
+			pnode->SetBroadPhaseCollisionShape(pColshape);
 			pnode->SetInverseInertia(pColshape->BuildInverseInertia(inverse_mass));
 		}
 	}
@@ -188,8 +197,11 @@ GameObject* CommonUtils::BuildCuboidObject(
 		else
 		{
 			CollisionShape* pColshape = new CuboidCollisionShape(halfdims);
-			pnode->SetCollisionShape(pColshape);
+			pnode->SetNarrowPhaseCollisionShape(pColshape);
 			pnode->SetInverseInertia(pColshape->BuildInverseInertia(inverse_mass));
+			CollisionShape* pColBPshape = new SphereCollisionShape(halfdims.Length());
+			pnode->SetBroadPhaseCollisionShape(pColBPshape);
+	
 		}
 	}
 

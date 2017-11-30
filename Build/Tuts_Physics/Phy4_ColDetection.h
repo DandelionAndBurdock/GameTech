@@ -8,6 +8,7 @@
 #include <ncltech\DistanceConstraint.h>
 #include <ncltech\CommonUtils.h>
 
+
 class Phy4_ColDetection : public Scene
 {
 public:
@@ -22,6 +23,7 @@ public:
 
 	virtual void OnInitializeScene() override
 	{
+
 		//Create Ground (..everybody loves finding some common ground)
 		GameObject* ground = CommonUtils::BuildCuboidObject(
 			"Ground",
@@ -35,18 +37,31 @@ public:
 
 		this->AddGameObject(ground);
 
-
+		GameObject* obj;
 		//Create Sphere-Sphere Manifold Test
 		{
 
-			this->AddGameObject(CommonUtils::BuildSphereObject("orbiting_sphere1",
+			obj = CommonUtils::BuildSphereObject("orbiting_sphere1",
 				ss_pos + Vector3(0.75f, 0.0f, 0.0f),	//Position leading to 0.25 meter overlap between spheres
 				0.5f,									//Radius
 				true,									//Has Physics Object
 				0.0f,									//Infinite Mass
 				true,									//Has Collision Shape
 				true,									//Dragable by the user
-				CommonUtils::GenColor(0.45f, 0.5f)));	//Color
+				CommonUtils::GenColor(0.45f, 0.5f));	//Color
+
+
+			
+			obj->Physics()->SetOnCollisionCallback([](PhysicsNode* this_obj, PhysicsNode* colliding_obj) {
+				this_obj->GetParent()->Render()->SetColorRecursive(Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+				return true;
+			});
+			this->AddGameObject(obj);
+			this->RegisterOnUpdateCallback(obj, [obj](float dt)
+			{
+				obj->Render()->SetColorRecursive(Vector4(1.0f, 0.0f, 1.0f, 1.0f));
+			});
+
 
 			this->AddGameObject(CommonUtils::BuildSphereObject("",
 				ss_pos,									//Position
@@ -57,6 +72,8 @@ public:
 				true,									//Dragable by the user
 				CommonUtils::GenColor(0.5f, 1.0f)));	//Color
 		}
+
+		
 
 		//Create Sphere-Cuboid Manifold Test
 		{

@@ -56,7 +56,7 @@ public:
 
 		player->SetPhysics(new PhysicsNode());
 		player->Physics()->SetPosition(Vector3(0.0f, 0.5f, 0.0f));
-		player->Physics()->SetCollisionShape(new CuboidCollisionShape(Vector3(0.5f, 0.5f, 1.0f)));
+		player->Physics()->SetNarrowPhaseCollisionShape(new CuboidCollisionShape(Vector3(0.5f, 0.5f, 1.0f)));
 
 		this->AddGameObject(player);
 
@@ -72,7 +72,7 @@ public:
 		city1->Render()->AddChild(citymesh_yellow);
 		city1->SetPhysics(new PhysicsNode());
 		city1->Physics()->SetPosition(Vector3(-5.0f, col_size1.y, -5.0f));
-		city1->Physics()->SetCollisionShape(new CuboidCollisionShape(col_size1));
+		city1->Physics()->SetNarrowPhaseCollisionShape(new CuboidCollisionShape(col_size1));
 		city1->Physics()->SetOnCollisionCallback(&Phy4_AiCallbacks::ExampleCallbackFunction1);
 
 		this->AddGameObject(city1);
@@ -89,7 +89,7 @@ public:
 		city2->SetPhysics(new PhysicsNode());
 		city2->Physics()->SetPosition(Vector3(5.0f, col_size2.y, -5.0f));
 		city2->Physics()->SetOrientation(Quaternion::AxisAngleToQuaterion(Vector3(0, 1, 0), 45.f));
-		city2->Physics()->SetCollisionShape(new CuboidCollisionShape(col_size2));
+		city2->Physics()->SetNarrowPhaseCollisionShape(new CuboidCollisionShape(col_size2));
 		city2->Physics()->SetOnCollisionCallback(
 			std::bind(&Phy4_AiCallbacks::ExampleCallbackFunction2,
 				this,							//Any non-placeholder param will be passed into the function each time it is called
@@ -104,7 +104,8 @@ public:
 		//'Hidden' Physics Node (no visual mesh or renderable object attached)	
 		PhysicsNode* nde = new PhysicsNode();
 		nde->SetPosition(Vector3(5.0f, 1.0f, 0.0f));
-		nde->SetCollisionShape(new SphereCollisionShape(1.0f));
+		nde->SetNarrowPhaseCollisionShape(new SphereCollisionShape(1.0f));
+		nde->SetBroadPhaseCollisionShape(new SphereCollisionShape(1.0f));
 		nde->SetOnCollisionCallback([nde](PhysicsNode* self, PhysicsNode* collidingObject) {
 
 			NCLDebug::Log(Vector3(1.0f, 0.0f, 0.0f), "You found the secret! - Inline callback");

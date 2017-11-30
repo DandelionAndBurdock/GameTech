@@ -71,7 +71,8 @@ public:
 		, angAcceleration(0.0f, 0.0f, 0.0f)
 		, torque(0.0f, 0.0f, 0.0f)
 		, invInertia(Matrix3::ZeroMatrix)
-		, collisionShape(NULL)
+		, narrowCollisionShape(NULL)
+		, broadCollisionShape(NULL)
 		, friction(0.5f)
 		, elasticity(0.9f)
 	{
@@ -85,7 +86,8 @@ public:
 
 	virtual ~PhysicsNode()
 	{
-		SAFE_DELETE(collisionShape);
+		SAFE_DELETE(narrowCollisionShape);
+		//SAFE_DELETE(broadCollisionShape);
 	}
 
 
@@ -115,7 +117,8 @@ public:
 
 	Vector3						GetGravity();
 
-	inline CollisionShape*		GetCollisionShape()			const { return collisionShape; }
+	inline CollisionShape*		GetNarrowCollisionShape()	const { return narrowCollisionShape; }
+	inline CollisionShape*		GetBroadCollisionShape()	const { return broadCollisionShape; }
 
 	const Matrix4&				GetWorldSpaceTransform()    const { return worldTransform; }
 
@@ -143,14 +146,19 @@ public:
 
 	inline void SetDamping(bool damping)							{ this->damping = damping; }
 
-	inline void SetCollisionShape(CollisionShape* colShape)
+	inline void SetNarrowPhaseCollisionShape(CollisionShape* colShape)
 	{ 
-		if (collisionShape) collisionShape->SetParent(NULL);
-		collisionShape = colShape;
-		if (collisionShape) collisionShape->SetParent(this);
+		if (narrowCollisionShape) narrowCollisionShape->SetParent(NULL);
+		narrowCollisionShape = colShape;
+		if (narrowCollisionShape) narrowCollisionShape->SetParent(this);
 	}
 	
-
+	inline void SetBroadPhaseCollisionShape(CollisionShape* colShape)
+	{
+		if (broadCollisionShape) broadCollisionShape->SetParent(NULL);
+		broadCollisionShape = colShape;
+		if (broadCollisionShape) broadCollisionShape->SetParent(this);
+	}
 
 
 	//<---------- CALLBACKS ------------>
@@ -228,7 +236,10 @@ protected:
 
 //Added in Tutorial 4/5
 	//<----------COLLISION------------>
-	CollisionShape*				collisionShape;
+	// Broad phase collision shape
+	CollisionShape*				broadCollisionShape;
+	// Narrow phase collision shape
+	CollisionShape*				narrowCollisionShape;
 	PhysicsCollisionCallback	onCollisionCallback;
 
 

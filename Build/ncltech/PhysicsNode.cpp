@@ -82,7 +82,7 @@ void PhysicsNode::IntegrateLinearPosition(float dt) {
 		position += lastLinVelocity * dt;
 		break;
 	case MIDPOINT:
-
+		break;
 	default:
 		position += RKLinCoeffs[1];
 	}
