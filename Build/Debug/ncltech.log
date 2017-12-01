@@ -1,12 +1,10 @@
-﻿  CollisionDetectionSAT.cpp
+﻿  CommonUtils.cpp
   Generating Code...
   Compiling...
-  SphereCollisionShape.cpp
+  PhysicsEngine.cpp
+  Generating Code...
+  Skipping... (no relevant changes detected)
   SceneManager.cpp
   PhysicsNode.cpp
-  PhysicsEngine.cpp
   Manifold.cpp
-  CuboidCollisionShape.cpp
-  CommonUtils.cpp
-  Generating Code...
   ncltech.vcxproj -> D:\Test\GameTech\Build\Debug\ncltech.lib

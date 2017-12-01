@@ -59,6 +59,8 @@ public:
 		Vector3& out_normal,
 		std::vector<Plane>& out_adjacent_planes) const override;
 
+	float GetSize() override { return m_Radius; }
+
 protected:
 	float	m_Radius;
 };

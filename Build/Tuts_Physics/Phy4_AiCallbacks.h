@@ -139,13 +139,6 @@ public:
 	}
 
 
-
-
-
-
-
-
-
 	virtual void OnUpdateScene(float dt) override
 	{
 		Scene::OnUpdateScene(dt);

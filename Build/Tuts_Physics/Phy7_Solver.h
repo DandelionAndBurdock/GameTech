@@ -6,14 +6,16 @@
 #include <ncltech\SceneManager.h>
 #include <ncltech\CommonUtils.h>
 #include <ncltech\PhysicsEngine.h>
-
+#include <ncltech\Octtree.h>
 class Phy7_Solver : public Scene
 {
 public:
 	Phy7_Solver(const std::string& friendly_name)
 		: Scene(friendly_name)
-		, m_StackHeight(6)
-	{}
+		, m_StackHeight(6), tree(Vector3(-20.0f, +0.0f, -20.0f), Vector3(20.0f))
+	{
+		
+	}
 
 	int m_StackHeight;
 	virtual void OnInitializeScene() override
@@ -35,7 +37,7 @@ public:
 		//       into rectangles :)
 		const float width_scalar = 1.0f; 
 		const float height_scalar = 1.0f; 
-
+		m_StackHeight = 3;
 		for (int y = 0; y < m_StackHeight; ++y)
 		{
 			for (int x = 0; x <= y; ++x)
@@ -57,6 +59,9 @@ public:
 			}
 		}
 		
+		std::vector<PhysicsNode*> notGround = std::vector<PhysicsNode*>(PhysicsEngine::Instance()->GetPhysicsNodes().begin() + 1, PhysicsEngine::Instance()->GetPhysicsNodes().end());
+		tree.InsertObjects(notGround);
+		tree.BuildTree();
 
 	}
 
@@ -69,6 +74,7 @@ public:
 
 		NCLDebug::AddStatusEntry(Vector4(1.0f, 0.9f, 0.8f, 1.0f), "--- Controls ---");
 		NCLDebug::AddStatusEntry(Vector4(1.0f, 0.9f, 0.8f, 1.0f), "    Stack Height : %2d ([1]/[2] to change)", m_StackHeight);
+		tree.DebugDraw();
 
 		if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_1))
 		{
@@ -82,4 +88,7 @@ public:
 			SceneManager::Instance()->JumpToScene(SceneManager::Instance()->GetCurrentSceneIndex());
 		}
 	}
+
+protected:
+	Octtree tree;
 };

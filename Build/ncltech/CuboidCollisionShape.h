@@ -70,8 +70,8 @@ public:
 		Vector3& out_normal,
 		std::vector<Plane>& out_adjacent_planes) const override;
 
-
-
+	// TODO: Not very nice
+	virtual float GetSize() { return halfDims.x; }
 protected:
 	//Constructs the static cube hull 
 	static void ConstructCubeHull();

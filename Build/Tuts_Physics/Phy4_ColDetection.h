@@ -8,6 +8,7 @@
 #include <ncltech\DistanceConstraint.h>
 #include <ncltech\CommonUtils.h>
 
+#include <ncltech\Octtree.h>
 
 class Phy4_ColDetection : public Scene
 {
@@ -117,6 +118,7 @@ public:
 				true,									//Dragable by the user
 				CommonUtils::GenColor(0.5f, 1.0f)));	//Color
 		}
+
 
 	}
 

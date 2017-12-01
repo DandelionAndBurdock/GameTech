@@ -124,34 +124,41 @@ void PhysicsEngine::UpdatePhysics()
 
 
 	//A whole physics engine in 6 simple steps =D
-	
+
 	//-- Using positions from last frame --
 //1. Broadphase Collision Detection (Fast and dirty)
 	perfBroadphase.BeginTimingSection();
 	BroadPhaseCollisions();
 	perfBroadphase.EndTimingSection();
 
-//2. Narrowphase Collision Detection (Accurate but slow)
+	//2. Narrowphase Collision Detection (Accurate but slow)
 	perfNarrowphase.BeginTimingSection();
 	NarrowPhaseCollisions();
 	perfNarrowphase.EndTimingSection();
 
 
-//3. Initialize Constraint Params (precompute elasticity/baumgarte factor etc)
-	//Optional step to allow constraints to 
-	// precompute values based off current velocities 
-	// before they are updated loop below.
+	//3. Initialize Constraint Params (precompute elasticity/baumgarte factor etc)
+		//Optional step to allow constraints to 
+		// precompute values based off current velocities 
+		// before they are updated loop below.
+	std::random_shuffle(manifolds.begin(), manifolds.end());			// Randomising solve order betwen time steps so that errors do not always tend to occur in the same direction
+	for (Manifold* m : manifolds) m->PreSolverStep(updateTimestep);
+	 std::random_shuffle(constraints.begin(), constraints.end());
 	for (Constraint* c : constraints) c->PreSolverStep(updateTimestep);
 
 
-//4. Update Velocities
+	//4. Update Velocities
 	perfUpdate.BeginTimingSection();
 	for (PhysicsNode* obj : physicsNodes) obj->IntegrateForVelocity(updateTimestep);
 	perfUpdate.EndTimingSection();
 
-//5. Constraint Solver
+	//5. Constraint Solver
 	perfSolver.BeginTimingSection();
-	for (Constraint* c : constraints) c->ApplyImpulse();
+	for (size_t i = 0; i < SOLVER_ITERATIONS; ++i) {
+		for (Manifold* m : manifolds) m->ApplyImpulse();
+		for (Constraint* c : constraints) c->ApplyImpulse();
+	}
+
 	perfSolver.EndTimingSection();
 
 //6. Update Positions (with final 'real' velocities)
