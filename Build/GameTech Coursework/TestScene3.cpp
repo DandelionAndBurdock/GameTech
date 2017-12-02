@@ -10,6 +10,8 @@
 #include <ncltech\CuboidCollisionShape.h>
 #include <ncltech\SphereCollisionShape.h>
 
+#include <ncltech\PathFollowing.h>
+
 using namespace CommonUtils;
 
 
@@ -83,13 +85,19 @@ void TestScene3::OnInitializeScene()
 	CreateTarget(Vector3(0.1f + 5.f, 2.0f, 10.0f), Vector3(0.1f, 0.5f, 0.5f), 2.0f);
 	CreateTarget(Vector3(-10.0f, 2.0f, -15.0f), Vector3(0.1f, 1.5f, 1.5f), 0.1f, false);
 
+	CreateTarget(Vector3(-10.0f, 2.0f, -15.0f), Vector3(0.1f, 1.5f, 1.5f), 0.1f, false, true);
+
 }
 
 void TestScene3::OnCleanupScene()
 {
+	for (auto& target : movingTargets) {
+		delete target;
+	}
 	//Just delete all created game objects 
 	//  - this is the default command on any Scene instance so we don't really need to override this function here.
 	Scene::OnCleanupScene();
+	
 }
 
 void TestScene3::OnUpdateScene(float dt)
@@ -100,10 +108,13 @@ void TestScene3::OnUpdateScene(float dt)
 	bool donkeys = true;
 	NCLDebug::AddStatusEntry(Vector4(1.0f, 0.4f, 0.4f, 1.0f), "   The %s in this scene are dragable", donkeys ? "donkeys" : "cubes");
 	NCLDebug::AddStatusEntry(Vector4(1.0f, 0.0f, 0.0f, 1.0f), "	   Score: %i ", m_score);
-
+	Scene::OnUpdateScene(dt);
+	for (auto& target : movingTargets) {
+		target->Update(dt);
+	}
 }
 
-void TestScene3::CreateTarget(Vector3 pos, Vector3 size, float invMass, bool good) {
+void TestScene3::CreateTarget(Vector3 pos, Vector3 size, float invMass, bool good, bool moving) {
 	using namespace Target;
 	RenderNode* targetRender = new RenderNode();
 	targetRender->SetMesh(m_TargetMesh);
@@ -139,6 +150,9 @@ void TestScene3::CreateTarget(Vector3 pos, Vector3 size, float invMass, bool goo
 		targetObject->Physics()->SetOnCollisionCallback(std::bind(&TestScene3::HitBadTarget, this, _1, _2));
 	}
 
+	if (moving) {
+		movingTargets.push_back(new PathFollowing(targetObject));
+	}
 
 	this->AddGameObject(targetObject);
 }
@@ -146,7 +160,7 @@ void TestScene3::CreateTarget(Vector3 pos, Vector3 size, float invMass, bool goo
 
 bool TestScene3::HitGoodTarget(PhysicsNode* this_obj, PhysicsNode* colliding_obj) {
 	if (colliding_obj->GetParent()->GetName() == "Projectile") {
-		m_score += 50;
+		m_score += 100;
 	}
 	return true;
 }

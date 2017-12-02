@@ -143,6 +143,7 @@
     <ClCompile Include="Manifold.cpp" />
     <ClCompile Include="NetworkBase.cpp" />
     <ClCompile Include="Octtree.cpp" />
+    <ClCompile Include="PathFollowing.cpp" />
     <ClCompile Include="PhysicsEngine.cpp" />
     <ClCompile Include="PhysicsNode.cpp" />
     <ClCompile Include="SceneManager.cpp" />
@@ -167,6 +168,7 @@
     <ClInclude Include="Manifold.h" />
     <ClInclude Include="NetworkBase.h" />
     <ClInclude Include="Octtree.h" />
+    <ClInclude Include="PathFollowing.h" />
     <ClInclude Include="PhysicsEngine.h" />
     <ClInclude Include="PhysicsNode.h" />
     <ClInclude Include="Scene.h" />
