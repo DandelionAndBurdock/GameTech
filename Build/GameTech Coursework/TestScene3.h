@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ncltech\Scene.h>
+#include <ncltech\PhysicsNode.h>
 
 class TestScene3 : public Scene
 {
@@ -13,6 +14,11 @@ public:
 	virtual void OnUpdateScene(float dt) override;
 
 protected:
+	void CreateTarget(Vector3 pos, Vector3 size, float invMass, bool good = true);
+
+	bool HitGoodTarget(PhysicsNode* this_obj, PhysicsNode* colliding_obj);
+	bool HitBadTarget(PhysicsNode* this_obj, PhysicsNode* colliding_obj);
+
 	float					m_AccumTime;
 	GameObject*				m_pPlayer;
 	int					    m_score = 0;

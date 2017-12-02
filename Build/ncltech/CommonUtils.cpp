@@ -221,7 +221,7 @@ GameObject* CommonUtils::BuildCuboidObject(
 
 void CommonUtils::SpawnSphere(const Vector3& spawnPos, const Vector3& dir) {
 	GameObject* sphere = BuildSphereObject(
-		"",
+		"Projectile",
 		spawnPos,
 		SPHERE_RADIUS,
 		true,

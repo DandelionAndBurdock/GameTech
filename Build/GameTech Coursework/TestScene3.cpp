@@ -12,6 +12,14 @@
 
 using namespace CommonUtils;
 
+
+
+namespace Target {
+	// Colour for "good"/"bad" targets which increase/decrease score
+	Vector4 goodColour = Vector4(0.0f, 0.4f, 0.0f, 1.0f);
+	Vector4 badColour = Vector4(0.85f, 0.1f, 0.2f, 1.0f);
+}
+
 TestScene3::TestScene3(const std::string& friendly_name)
 	: Scene(friendly_name)
 	, m_AccumTime(0.0f)
@@ -70,28 +78,11 @@ void TestScene3::OnInitializeScene()
 	this->AddGameObject(BuildCuboidObject("Ground", Vector3(0.0f, -1.0f, 0.0f), Vector3(20.0f, 1.0f, 20.0f), true, 0.0f, true, false, Vector4(0.2f, 0.5f, 1.0f, 1.0f)));
 
 
-	//Create Target
+	//Create Target //TODO: Vary elasticity based on invMass
+	CreateTarget(Vector3(0.1f + 5.f, 2.0f, 0.0f), Vector3(0.1f, 2.0f, 2.f), 0.5f);
+	CreateTarget(Vector3(0.1f + 5.f, 2.0f, 10.0f), Vector3(0.1f, 0.5f, 0.5f), 2.0f);
+	CreateTarget(Vector3(-10.0f, 2.0f, -15.0f), Vector3(0.1f, 1.5f, 1.5f), 0.1f, false);
 
-
-	RenderNode* targetRender = new RenderNode();
-	targetRender->SetMesh(m_TargetMesh);
-	targetRender->SetTransform(Matrix4::Scale(Vector3(0.1f, 2.0f, 2.f)));
-	targetRender->SetColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-	targetRender->SetBoundingRadius(4.0f);
-	
-
-	GameObject* targetObject = new GameObject("Target");
-	targetObject->SetRender(new RenderNode());
-	targetObject->Render()->AddChild(targetRender);
-	targetObject->SetPhysics(new PhysicsNode());
-	targetObject->Physics()->SetInverseMass(0.f);
-	targetObject->Physics()->SetPosition(Vector3(0.1f + 5.f, 2.0f, 0.0f));
-	CollisionShape* pColshape = new CuboidCollisionShape(Vector3(0.1f, 2.0f, 2.f));
-	targetObject->Physics()->SetNarrowPhaseCollisionShape(pColshape);
-	targetObject->Physics()->SetInverseInertia(pColshape->BuildInverseInertia(0.0f));
-	CollisionShape* pColBPshape = new SphereCollisionShape(2.0f);
-	targetObject->Physics()->SetBroadPhaseCollisionShape(pColBPshape);
-	this->AddGameObject(targetObject);
 }
 
 void TestScene3::OnCleanupScene()
@@ -110,4 +101,58 @@ void TestScene3::OnUpdateScene(float dt)
 	NCLDebug::AddStatusEntry(Vector4(1.0f, 0.4f, 0.4f, 1.0f), "   The %s in this scene are dragable", donkeys ? "donkeys" : "cubes");
 	NCLDebug::AddStatusEntry(Vector4(1.0f, 0.0f, 0.0f, 1.0f), "	   Score: %i ", m_score);
 
+}
+
+void TestScene3::CreateTarget(Vector3 pos, Vector3 size, float invMass, bool good) {
+	using namespace Target;
+	RenderNode* targetRender = new RenderNode();
+	targetRender->SetMesh(m_TargetMesh);
+	targetRender->SetTransform(Matrix4::Scale(size));
+	if (good) {
+		targetRender->SetColor(goodColour);
+	}
+	else {
+		targetRender->SetColor(badColour);
+	}
+	
+	targetRender->SetBoundingRadius(4.0f);
+
+
+	GameObject* targetObject = new GameObject("Target");
+	targetObject->SetRender(new RenderNode());
+	targetObject->Render()->AddChild(targetRender);
+	targetObject->SetPhysics(new PhysicsNode());
+	targetObject->Physics()->SetInverseMass(invMass);
+	targetObject->Physics()->SetPosition(pos);
+	CollisionShape* pColshape = new CuboidCollisionShape(size);
+	targetObject->Physics()->SetNarrowPhaseCollisionShape(pColshape);
+	targetObject->Physics()->SetInverseInertia(pColshape->BuildInverseInertia(invMass));
+	float radius = max(max(size.x, size.y), size.z);
+	CollisionShape* pColBPshape = new SphereCollisionShape(radius);
+	targetObject->Physics()->SetBroadPhaseCollisionShape(pColBPshape);
+
+	using namespace std::placeholders; // For _1, _2
+	if (good) {
+		targetObject->Physics()->SetOnCollisionCallback(std::bind(&TestScene3::HitGoodTarget, this, _1, _2));
+	}
+	else {
+		targetObject->Physics()->SetOnCollisionCallback(std::bind(&TestScene3::HitBadTarget, this, _1, _2));
+	}
+
+
+	this->AddGameObject(targetObject);
+}
+
+
+bool TestScene3::HitGoodTarget(PhysicsNode* this_obj, PhysicsNode* colliding_obj) {
+	if (colliding_obj->GetParent()->GetName() == "Projectile") {
+		m_score += 50;
+	}
+	return true;
+}
+bool TestScene3::HitBadTarget(PhysicsNode* this_obj, PhysicsNode* colliding_obj) {
+	if (colliding_obj->GetParent()->GetName() == "Projectile") {
+		m_score -= 50;
+	}
+	return true;
 }
