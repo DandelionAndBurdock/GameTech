@@ -120,6 +120,13 @@ void HandleKeyboardInputs()
 	if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_J)) {
 		CommonUtils::SpawnSphere(GraphicsPipeline::Instance()->GetCamera()->GetPosition(), GraphicsPipeline::Instance()->GetCamera()->GetForwardDirection());
 	}
+
+	if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_C)) {
+		uint drawFlags = PhysicsEngine::Instance()->GetDebugDrawFlags();
+		drawFlags ^= DEBUGDRAW_FLAGS_COLLISIONVOLUMES;
+		PhysicsEngine::Instance()->SetDebugDrawFlags(drawFlags);
+	}
+
 		
 }
 
@@ -162,7 +169,7 @@ int main()
 		//Update Physics
 		
 		PhysicsEngine::Instance()->Update(dt);
-		
+		PhysicsEngine::Instance()->DebugRender();
 
 		//Render Scene
 		timer_render.BeginTimingSection();

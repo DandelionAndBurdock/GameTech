@@ -7,6 +7,9 @@
 #include <ncltech\SceneManager.h>
 #include <ncltech\CommonMeshes.h>
 #include <ncltech\CommonUtils.h>
+#include <ncltech\CuboidCollisionShape.h>
+#include <ncltech\SphereCollisionShape.h>
+
 using namespace CommonUtils;
 
 TestScene3::TestScene3(const std::string& friendly_name)
@@ -70,12 +73,25 @@ void TestScene3::OnInitializeScene()
 	//Create Target
 
 
-	RenderNode* target = new RenderNode();
-	target->SetMesh(m_TargetMesh);
-	target->SetTransform(Matrix4::Translation(Vector3(0.1f + 5.f, 2.0f, 0.0f)) * Matrix4::Scale(Vector3(0.1f, 2.0f, 2.f)));
-	target->SetColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-	target->SetBoundingRadius(4.0f);
-	this->AddGameObject(new GameObject("Target", target, NULL));
+	RenderNode* targetRender = new RenderNode();
+	targetRender->SetMesh(m_TargetMesh);
+	targetRender->SetTransform(Matrix4::Scale(Vector3(0.1f, 2.0f, 2.f)));
+	targetRender->SetColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	targetRender->SetBoundingRadius(4.0f);
+	
+
+	GameObject* targetObject = new GameObject("Target");
+	targetObject->SetRender(new RenderNode());
+	targetObject->Render()->AddChild(targetRender);
+	targetObject->SetPhysics(new PhysicsNode());
+	targetObject->Physics()->SetInverseMass(0.f);
+	targetObject->Physics()->SetPosition(Vector3(0.1f + 5.f, 2.0f, 0.0f));
+	CollisionShape* pColshape = new CuboidCollisionShape(Vector3(0.1f, 2.0f, 2.f));
+	targetObject->Physics()->SetNarrowPhaseCollisionShape(pColshape);
+	targetObject->Physics()->SetInverseInertia(pColshape->BuildInverseInertia(0.0f));
+	CollisionShape* pColBPshape = new SphereCollisionShape(2.0f);
+	targetObject->Physics()->SetBroadPhaseCollisionShape(pColBPshape);
+	this->AddGameObject(targetObject);
 }
 
 void TestScene3::OnCleanupScene()
