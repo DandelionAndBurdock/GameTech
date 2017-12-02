@@ -65,13 +65,16 @@ protected:
 	Vector3 worldMax;
 
 	// Recusion will halt if an octant has a dimension lower minCubeSize
-	float minCubeSize = 2.0f;
+	float minCubeSize = 10.0f;
 	// Threshold for the max number of objects in one octant (assuming size greater than minCubeSize)
-	int maxOctantObjects = 3;
+	int maxOctantObjects = 4;
 
 protected:
 	// Divide octant into 8 further child octants
 	void Divide(OcttreeNode* node);
+
+	// Allocate all objects in this node into the correct child node
+	void SendObjectsToChildren(OcttreeNode* node);
 
 	// Insert an object recursively into the correct 
 	void InsertObject(PhysicsNode* object, OcttreeNode* node);

@@ -61,4 +61,5 @@ protected:
 	float	yaw;
 	float	pitch;
 	Vector3 position;
+	Matrix4 viewMatrix;
 };

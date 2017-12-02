@@ -42,7 +42,7 @@ public:
 			0.5f,			// Half -Dimensions
 			false,				// Physics Enabled?
 			1.0f,				// Physical Mass (must have physics enabled)
-			true,				// Physically Collidable (has collision shape)
+			false,				// Physically Collidable (has collision shape)
 			false,				// Dragable by user?
 			Vector4(1.0f, 0.5f, 1.0f, 1.0f));// Render color
 
@@ -54,7 +54,7 @@ public:
 			0.5f,			// Half -Dimensions
 			true,				// Physics Enabled?
 			1.0f,				// Physical Mass (must have physics enabled)
-			true,				// Physically Collidable (has collision shape)
+			false,				// Physically Collidable (has collision shape)
 			false,				// Dragable by user?
 			Vector4(1.0f, 0.5f, 0.0f, 1.0f));// Render color
 
@@ -70,7 +70,7 @@ public:
 			0.5f,			// Half-Dimensions
 			true,				// Physics Enabled?
 			1.0f,				// Physical Mass (must have physics enabled)
-			true,				// Physically Collidable (has collision shape)
+			false,				// Physically Collidable (has collision shape)
 			false,				// Dragable by user?
 			Vector4(0.3f, 0.5f, 0.4f, 1.0f));// Render color
 
@@ -89,7 +89,7 @@ public:
 			0.1f,			// Half-Dimensions
 			true,				// Physics Enabled?
 			1.0f,				// Physical Mass (must have physics enabled)
-			true,				// Physically Collidable (has collision shape)
+			false,				// Physically Collidable (has collision shape)
 			false,				// Dragable by user?
 			Vector4(1.0f, 1.0f, 1.0f, 1.0f));// Render color
 		this->AddGameObject(moon);

@@ -140,8 +140,6 @@ public:
 		if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_2))	ResetScene(1.0f / 15.0f);
 		if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_3))	ResetScene(1.0f / 30.0f);
 		if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_4))	ResetScene(1.0f / 60.0f);
-		if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_J))	CommonUtils::SpawnSphere(GraphicsPipeline::Instance()->GetCamera()->GetPosition(), GraphicsPipeline::Instance()->GetCamera()->GetForwardDirection());
-		
 
 	//Draw the trajectory:-	
 		const Vector4 cols[2] = {

@@ -1,125 +1,60 @@
-[09:13:28] Loading Shader:
-[09:13:28]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechVertexBasic.glsl
-[09:13:28]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechFragSuperSample.glsl
-[09:13:28]     -> Linking Shader: Success!
-[09:13:28] 
-[09:13:28] Loading Shader:
-[09:13:28]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechVertexShadow.glsl
-[09:13:28]     -> Compiling Shader: ../../Data/Shaders/Common/EmptyFragment.glsl
-[09:13:28]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechGeomShadow.glsl
-[09:13:28]     -> Linking Shader: Success!
-[09:13:28] 
-[09:13:28] Loading Shader:
-[09:13:28]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechVertexFull.glsl
-[09:13:28]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechFragForwardRender.glsl
-[09:13:28]     -> Linking Shader: Success!
-[09:13:28] 
-[09:13:28] Loading Shader:
-[09:13:28]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/PointVertex.glsl
-[09:13:28]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/PointFragment.glsl
-[09:13:28]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/PointGeometry.glsl
-[09:13:28]     -> Linking Shader: Success!
-[09:13:28] 
-[09:13:28] Loading Shader:
-[09:13:28]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/Vertex.glsl
-[09:13:28]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/Fragment.glsl
-[09:13:28]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/LineGeometry.glsl
-[09:13:28]     -> Linking Shader: Success!
-[09:13:28] 
-[09:13:28] Loading Shader:
-[09:13:28]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/VertexColOnly.glsl
-[09:13:28]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/Fragment.glsl
-[09:13:28]     -> Linking Shader: Success!
-[09:13:28] 
-[09:13:28] Loading Shader:
-[09:13:28]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/TextVertex.glsl
-[09:13:28]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/TextFragment.glsl
-[09:13:28]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/TextGeometry.glsl
-[09:13:28]     -> Linking Shader: Success!
-[09:13:28] 
-[09:13:28] Loading Shader:
-[09:13:28]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechVertexPicker.glsl
-[09:13:28]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechFragScreenPicker_nsightfix.glsl
-[09:13:28]     -> Linking Shader: Success!
-[09:13:28] 
-[09:13:28] Loading Mesh: ../../Data/Meshes/cube.obj
-[09:13:28] 
-[09:13:28] Loading Mesh: ../../Data/Meshes/sphere.obj
-[09:13:28] 
-[09:13:28] [SceneManager] - Enqueued scene: "GameTech #1 - Framework Sandbox!"
-[09:13:28] 
-[09:13:28] This is a log entry - It will printed to the console, on screen log and <project_dir>\program_output.txt
-[09:13:28] [SceneManager] - Scene switched to: "GameTech #1 - Framework Sandbox!"
-[09:13:28] [SceneManager] - Enqueued scene: "GameTech #2 - Peace and quiet"
-[09:13:28] [SceneManager] - Enqueued scene: "GameTech #3 - More peace and quiet"
-[09:13:33] Physics too slow to run in real time!
-[09:13:33] Physics too slow to run in real time!
-[09:13:33] Physics too slow to run in real time!
-[09:13:34] Physics too slow to run in real time!
-[09:13:34] Physics too slow to run in real time!
-[09:13:35] Physics too slow to run in real time!
-[09:13:35] Physics too slow to run in real time!
-[09:13:35] Physics too slow to run in real time!
-[09:13:36] Physics too slow to run in real time!
-[09:13:36] Physics too slow to run in real time!
-[09:13:37] Physics too slow to run in real time!
-[09:13:37] Physics too slow to run in real time!
-[09:13:37] Physics too slow to run in real time!
-[09:13:38] Physics too slow to run in real time!
-[09:13:38] Physics too slow to run in real time!
-[09:13:38] Physics too slow to run in real time!
-[09:13:39] Physics too slow to run in real time!
-[09:13:39] Physics too slow to run in real time!
-[09:13:40] Physics too slow to run in real time!
-[09:13:40] Physics too slow to run in real time!
-[09:13:40] Physics too slow to run in real time!
-[09:13:41] Physics too slow to run in real time!
-[09:13:41] Physics too slow to run in real time!
-[09:13:42] Physics too slow to run in real time!
-[09:13:42] Physics too slow to run in real time!
-[09:13:42] Physics too slow to run in real time!
-[09:13:43] Physics too slow to run in real time!
-[09:13:43] Physics too slow to run in real time!
-[09:13:43] Physics too slow to run in real time!
-[09:13:44] Physics too slow to run in real time!
-[09:13:44] Physics too slow to run in real time!
-[09:13:44] Physics too slow to run in real time!
-[09:13:44] Physics too slow to run in real time!
-[09:13:45] Physics too slow to run in real time!
-[09:13:45] Physics too slow to run in real time!
-[09:13:45] Physics too slow to run in real time!
-[09:13:45] Physics too slow to run in real time!
-[09:13:46] Physics too slow to run in real time!
-[09:13:46] Physics too slow to run in real time!
-[09:13:46] Physics too slow to run in real time!
-[09:13:46] Physics too slow to run in real time!
-[09:13:47] Physics too slow to run in real time!
-[09:13:47] Physics too slow to run in real time!
-[09:13:47] Physics too slow to run in real time!
-[09:13:47] Physics too slow to run in real time!
-[09:13:48] Physics too slow to run in real time!
-[09:13:48] Physics too slow to run in real time!
-[09:13:48] Physics too slow to run in real time!
-[09:13:48] Physics too slow to run in real time!
-[09:13:49] Physics too slow to run in real time!
-[09:13:49] Physics too slow to run in real time!
-[09:13:49] Physics too slow to run in real time!
-[09:13:49] Physics too slow to run in real time!
-[09:13:50] Physics too slow to run in real time!
-[09:13:50] Physics too slow to run in real time!
-[09:13:50] Physics too slow to run in real time!
-[09:13:50] Physics too slow to run in real time!
-[09:13:51] Physics too slow to run in real time!
-[09:13:51] Physics too slow to run in real time!
-[09:13:51] Physics too slow to run in real time!
-[09:13:51] Physics too slow to run in real time!
-[09:13:52] Physics too slow to run in real time!
-[09:13:52] Physics too slow to run in real time!
-[09:13:52] Physics too slow to run in real time!
-[09:13:52] Physics too slow to run in real time!
-[09:13:53] Physics too slow to run in real time!
-[09:13:53] Physics too slow to run in real time!
-[09:13:53] Physics too slow to run in real time!
-[09:13:53] Physics too slow to run in real time!
-[09:13:54] Physics too slow to run in real time!
-[09:13:54] [SceneManager] Closing scene manager
+[13:27:09] Loading Shader:
+[13:27:09]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechVertexBasic.glsl
+[13:27:09]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechFragSuperSample.glsl
+[13:27:09]     -> Linking Shader: Success!
+[13:27:09] 
+[13:27:09] Loading Shader:
+[13:27:09]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechVertexShadow.glsl
+[13:27:09]     -> Compiling Shader: ../../Data/Shaders/Common/EmptyFragment.glsl
+[13:27:09]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechGeomShadow.glsl
+[13:27:09]     -> Linking Shader: Success!
+[13:27:09] 
+[13:27:09] Loading Shader:
+[13:27:09]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechVertexFull.glsl
+[13:27:09]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechFragForwardRender.glsl
+[13:27:09]     -> Linking Shader: Success!
+[13:27:09] 
+[13:27:09] Loading Shader:
+[13:27:09]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/PointVertex.glsl
+[13:27:09]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/PointFragment.glsl
+[13:27:09]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/PointGeometry.glsl
+[13:27:09]     -> Linking Shader: Success!
+[13:27:09] 
+[13:27:09] Loading Shader:
+[13:27:09]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/Vertex.glsl
+[13:27:09]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/Fragment.glsl
+[13:27:09]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/LineGeometry.glsl
+[13:27:09]     -> Linking Shader: Success!
+[13:27:09] 
+[13:27:09] Loading Shader:
+[13:27:09]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/VertexColOnly.glsl
+[13:27:09]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/Fragment.glsl
+[13:27:09]     -> Linking Shader: Success!
+[13:27:09] 
+[13:27:09] Loading Shader:
+[13:27:09]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/TextVertex.glsl
+[13:27:09]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/TextFragment.glsl
+[13:27:09]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/TextGeometry.glsl
+[13:27:09]     -> Linking Shader: Success!
+[13:27:09] 
+[13:27:09] Loading Shader:
+[13:27:09]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechVertexPicker.glsl
+[13:27:09]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechFragScreenPicker_nsightfix.glsl
+[13:27:09]     -> Linking Shader: Success!
+[13:27:09] 
+[13:27:09] Loading Mesh: ../../Data/Meshes/cube.obj
+[13:27:09] 
+[13:27:09] Loading Mesh: ../../Data/Meshes/sphere.obj
+[13:27:09] 
+[13:27:09] [SceneManager] - Enqueued scene: "GameTech #1 - Framework Sandbox!"
+[13:27:09] 
+[13:27:09] This is a log entry - It will printed to the console, on screen log and <project_dir>\program_output.txt
+[13:27:09] [SceneManager] - Scene switched to: "GameTech #1 - Framework Sandbox!"
+[13:27:09] [SceneManager] - Enqueued scene: "GameTech #2 - Peace and quiet"
+[13:27:09] [SceneManager] - Enqueued scene: "GameTech #3 - More peace and quiet"
+[13:27:09] [SceneManager] - Enqueued scene: "GameTech #3 - Even More peace and quiet"
+[13:27:11] [SceneManager] - Exiting scene -
+[13:27:11] 
+[13:27:11] This is a log entry - It will printed to the console, on screen log and <project_dir>\program_output.txt
+[13:27:11] [SceneManager] - Scene switched to: "GameTech #3 - Even More peace and quiet"
+[13:27:21] [SceneManager] Closing scene manager

@@ -75,14 +75,19 @@ straight to the shader...it's already an 'inverse camera' matrix.
 Matrix4 Camera::BuildViewMatrix() {
 	//Why do a complicated matrix inversion, when we can just generate the matrix
 	//using the negative values ;). The matrix multiplication order is important!
-	return	Matrix4::Rotation(-pitch, Vector3(1, 0, 0)) *
+	viewMatrix = Matrix4::Rotation(-pitch, Vector3(1, 0, 0)) *
 		Matrix4::Rotation(-yaw, Vector3(0, 1, 0)) *
 		Matrix4::Translation(-position);
-};
+	return	viewMatrix;
+}
 
 
 // Inverse of the view matrix
 Vector3 Camera::GetForwardDirection() {
+	// Was calculating this similar to the BuildViewMatrix function or with trigonometry but I think the
+	// transpose is faster
+	return viewMatrix.GetTransposedRotation() * Vector3(0.0, 0.0, -1.0);
 	return Matrix4::Rotation(pitch, Vector3(1, 0, 0)) *
-		Matrix4::Rotation(yaw, Vector3(0, 1, 0)) * Vector3(0.0f, 0.0f, -1.0f);
+		Matrix4::Rotation(yaw, Vector3(0, 1, 0)) *
+		Matrix4::Translation(position) * Vector3(0.0, 0.0, -1.0);
 }

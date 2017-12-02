@@ -57,8 +57,8 @@ namespace CommonUtils
 	// Create a sphere with attached render node
 	const float SPHERE_RADIUS = 1.0f;
 	const float SPHERE_INV_MASS = 1.0f;
-	const float SPHERE_SPEED = 10.0f;
-	const Vector4 SPHERE_COLOUR = Vector4(0.3f, 0.8f, 0.8f, 1.0f);
+	const float SPHERE_SPEED = 50.0f;
+	const Vector4 SPHERE_COLOUR = Vector4(0.8f, 0.2f, 0.8f, 1.0f);
 	//GameObject* CreateSphere() {
 	//	GameObject* sphere = BuildSphereObject(
 	//		"",					// Optional: Name

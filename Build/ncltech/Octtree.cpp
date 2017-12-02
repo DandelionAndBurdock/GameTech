@@ -48,6 +48,7 @@ void Octtree::Divide(OcttreeNode* node) {
 	// Size of each new octant
 	Vector3 divisionSize = node->GetSize() / 2.0f; // Divide each axis in half will give 8 octants
 	// If cube size is too small stop division
+	std::cout << divisionSize.x << " " << divisionSize.y << " " << divisionSize.z << std::endl;
 	if (divisionSize.x < minCubeSize || divisionSize.y < minCubeSize || divisionSize.z < minCubeSize) {
 		return;
 	}
@@ -96,19 +97,30 @@ void Octtree::InsertObject(PhysicsNode* object, OcttreeNode* node) {
 	if (node->objects.size() > maxOctantObjects) {
 		Divide(node);
 		// Reinsert objects into children 
-		for (auto& object : node->objects) {
-			for (int i = 0; i < NUM_OCTANTS; ++i) {
-				InsertObject(object, node->children[i]);
-			}
-		}
-		// Erase objects in parent
-		objects.clear();
+		SendObjectsToChildren(node);
 	}
 }
+
 
 void Octtree::DebugDraw() {
 	DebugDraw(root);
 }
+
+void Octtree::SendObjectsToChildren(OcttreeNode* node) {
+	// Should not do anything if node has no children
+	if (!node->hasChildren) {
+		return;
+	}
+
+	for (int i = 0; i < NUM_OCTANTS; ++i) {
+		for (auto& object : node->objects) { // This looks inefficient but number of objects should never be too large
+			InsertObject(object, node->children[i]);
+		}
+	}
+	// Erase objects in parent
+	node->objects.clear();
+}
+
 
 void Octtree::DebugDraw(OcttreeNode* node) {
 	Matrix4 transform = Matrix4::Translation(node->GetCentre()) * Matrix4::Scale(node->GetSize() / 2.0f);

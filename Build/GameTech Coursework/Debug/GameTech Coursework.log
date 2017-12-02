@@ -1,4 +1,10 @@
-﻿LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/LTCG' specification
+﻿  TestScene.cpp
+  Generating Code...
+  Compiling...
+  main.cpp
+  TestScene3.cpp
+  Generating Code...
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/LTCG' specification
 LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
 LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
   Generating code
@@ -6,6 +12,5 @@ LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; us
     0 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
-glew32.lib(glew.obj) : warning LNK4099: PDB 'glew_static.pdb' was not found with 'glew32.lib(glew.obj)' or at 'D:\Test\GameTech\Build\Debug\glew_static.pdb'; linking object as if no debug info
-  GameTech Coursework.vcxproj -> D:\Test\GameTech\Build\Debug\GameTech Coursework.exe
-  GameTech Coursework.vcxproj -> D:\Test\GameTech\Build\Debug\GameTech Coursework.pdb (Partial PDB)
+glew32.lib(glew.obj) : warning LNK4099: PDB 'glew_static.pdb' was not found with 'glew32.lib(glew.obj)' or at 'D:\GameTech\Build\Debug\glew_static.pdb'; linking object as if no debug info
+  GameTech Coursework.vcxproj -> D:\GameTech\Build\Debug\GameTech Coursework.exe
