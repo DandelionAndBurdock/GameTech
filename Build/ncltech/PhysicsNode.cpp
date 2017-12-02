@@ -23,11 +23,6 @@ void PhysicsNode::IntegrateLinearVelocity(float dt) {
 	lastLinVelocity = linVelocity;
 	linVelocity += acceleration * dt;
 
-	if (integrationType >= MIDPOINT) {
-		CalculateRKLinCoefficients(dt);
-	}
-
-
 	if (damping) {
 		linVelocity = linVelocity * PhysicsEngine::Instance()->GetDampingFactor();
 	}
@@ -64,11 +59,6 @@ void PhysicsNode::IntegrateForPosition(float dt)
 {
 	IntegrateLinearPosition(dt);
 	IntegrateAngularPosition(dt);
-
-	//Finally: Notify any listener's that this PhysicsNode has a new world transform.
-	// - This is used by GameObject to set the worldTransform of any RenderNode's. 
-	//   Please don't delete this!!!!!
-	FireOnUpdateCallback();
 }
 
 void PhysicsNode::IntegrateLinearPosition(float dt) {
@@ -144,4 +134,36 @@ Vector3 PhysicsNode::PredictAcceleration(Vector3 pos) {
 	}
 	return fieldDirection * PhysicsEngine::Instance()->GetGravity();
 
+}
+
+void PhysicsNode::IntegratePreSolver(float dt) {
+	if (integrationType == MIDPOINT || integrationType == RK4) { // Will not work for collisions in this framework
+// If had a velocity or explicitly time dependent acceleration would also factor this in here
+
+		// Start of the interval
+		Vector3 dx1 = linVelocity * dt;
+		Vector3 dv1 = GetGravity() * dt;
+
+		// Midpoint -> Looks wrong??
+		Vector3 dx2 = (linVelocity + dv1 / 2) * dt;
+		Vector3 dv2 = PredictAcceleration(position + dx1 / 2) * dt;
+
+		position += dx2;
+		linVelocity += dv2;
+
+		// DAMPING
+	}
+	else {
+		IntegrateForVelocity(dt);
+	}
+
+	//Finally: Notify any listener's that this PhysicsNode has a new world transform.
+	// - This is used by GameObject to set the worldTransform of any RenderNode's. 
+	//   Please don't delete this!!!!!
+	FireOnUpdateCallback();
+}
+void PhysicsNode::IntegratePostSolver(float dt) {
+	if (integrationType < MIDPOINT) { // Will not work for collisions in this framework
+		IntegrateForPosition(dt);
+	}
 }

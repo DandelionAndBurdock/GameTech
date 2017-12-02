@@ -149,7 +149,7 @@ void PhysicsEngine::UpdatePhysics()
 
 	//4. Update Velocities
 	perfUpdate.BeginTimingSection();
-	for (PhysicsNode* obj : physicsNodes) obj->IntegrateForVelocity(updateTimestep);
+	for (PhysicsNode* obj : physicsNodes) obj->IntegratePreSolver(updateTimestep);
 	perfUpdate.EndTimingSection();
 
 	//5. Constraint Solver
@@ -163,7 +163,7 @@ void PhysicsEngine::UpdatePhysics()
 
 //6. Update Positions (with final 'real' velocities)
 	perfUpdate.BeginTimingSection();
-	for (PhysicsNode* obj : physicsNodes) obj->IntegrateForPosition(updateTimestep);
+	for (PhysicsNode* obj : physicsNodes) obj->IntegratePostSolver(updateTimestep);
 	perfUpdate.EndTimingSection();
 }
 

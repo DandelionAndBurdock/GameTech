@@ -84,8 +84,10 @@ void TestScene3::OnInitializeScene()
 	CreateTarget(Vector3(0.1f + 5.f, 2.0f, 0.0f), Vector3(0.1f, 2.0f, 2.f), 0.5f);
 	CreateTarget(Vector3(0.1f + 5.f, 2.0f, 10.0f), Vector3(0.1f, 0.5f, 0.5f), 2.0f);
 	CreateTarget(Vector3(-10.0f, 2.0f, -15.0f), Vector3(0.1f, 1.5f, 1.5f), 0.1f, false);
+	CreateTarget(Vector3(-5.f, 2.0f, 10.0f), Vector3(0.1f, 0.5f, 0.5f), 0.0f, false);
 
 	CreateTarget(Vector3(-10.0f, 2.0f, -15.0f), Vector3(0.1f, 1.5f, 1.5f), 0.1f, false, true);
+	CreateTarget(Vector3(-10.0f, 2.0f, -15.0f), Vector3(0.1f, 0.75f, 0.75f), 0.1f, true, true);
 
 }
 
@@ -142,9 +144,24 @@ void TestScene3::CreateTarget(Vector3 pos, Vector3 size, float invMass, bool goo
 	CollisionShape* pColBPshape = new SphereCollisionShape(radius);
 	targetObject->Physics()->SetBroadPhaseCollisionShape(pColBPshape);
 
+
 	using namespace std::placeholders; // For _1, _2
 	if (good) {
 		targetObject->Physics()->SetOnCollisionCallback(std::bind(&TestScene3::HitGoodTarget, this, _1, _2));
+
+		// Give stationary "good" targets additional points for accuracy
+		GameObject* bullseye = new GameObject("Bullseye");
+		bullseye->SetPhysics(new PhysicsNode());
+		bullseye->Physics()->SetInverseMass(invMass);
+		bullseye->Physics()->SetPosition(pos);
+		CollisionShape* pColshape = new CuboidCollisionShape(size / 4.0f);
+		bullseye->Physics()->SetNarrowPhaseCollisionShape(pColshape);
+		bullseye->Physics()->SetInverseInertia(pColshape->BuildInverseInertia(invMass));
+		float radius = max(max(size.x / 4.0f, size.y / 4.0f), size.z / 4.0f);
+		CollisionShape* pColBPshape = new SphereCollisionShape(radius);
+		bullseye->Physics()->SetBroadPhaseCollisionShape(pColBPshape);
+		bullseye->Physics()->SetOnCollisionCallback(std::bind(&TestScene3::HitBullseye, this, _1, _2));
+		this->AddGameObject(bullseye);
 	}
 	else {
 		targetObject->Physics()->SetOnCollisionCallback(std::bind(&TestScene3::HitBadTarget, this, _1, _2));
@@ -168,5 +185,13 @@ bool TestScene3::HitBadTarget(PhysicsNode* this_obj, PhysicsNode* colliding_obj)
 	if (colliding_obj->GetParent()->GetName() == "Projectile") {
 		m_score -= 50;
 	}
+	return true;
+}
+
+bool TestScene3::HitBullseye(PhysicsNode* this_obj, PhysicsNode* colliding_obj) {
+	if (colliding_obj->GetParent()->GetName() == "Projectile") {
+		m_score += 100;
+	}
+	NCLLOG("BULLSEYE!");
 	return true;
 }

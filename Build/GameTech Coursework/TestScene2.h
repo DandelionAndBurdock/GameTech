@@ -80,6 +80,22 @@ public:
 		planets[2]->Physics()->SetLinearVelocity(Vector3(0.0f, 0.0f, orbitalSpeed));
 		planets[2]->Physics()->SetDamping(false);
 
+		planets[3] = CommonUtils::BuildSphereObject(
+			"Method",					// Optional: Name
+			Vector3(radius, 0.0f, 0.0f),				// Position
+			0.5f,			// Half-Dimensions
+			true,				// Physics Enabled?
+			1.0f,				// Physical Mass (must have physics enabled)
+			false,				// Physically Collidable (has collision shape)
+			false,				// Dragable by user?
+			Vector4(1.0f, 1.0f, 1.0f, 1.0f));// Render color
+
+		this->AddGameObject(planets[3]);
+		planets[3]->Physics()->SetIntegrationMethod(PhysicsNode::IntegrationType::MIDPOINT);
+		planets[3]->Physics()->SetGravitationalAttractor(sun->Physics()->GetPositionPtr());
+		planets[3]->Physics()->SetLinearVelocity(Vector3(0.0f, 0.0f, orbitalSpeed));
+		planets[3]->Physics()->SetDamping(false);
+
 
 		float moonRadius = 1.0f;
 		float moonSpeed = sqrt(PhysicsEngine::Instance()->GetGravity() * moonRadius);
@@ -107,7 +123,7 @@ public:
 
 
 protected:
-	static const int NUM_PLANETS = 3;
+	static const int NUM_PLANETS = 4;
 	GameObject* planets[NUM_PLANETS];
 	float angularFrequency;
 	float radius;

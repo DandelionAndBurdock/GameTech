@@ -13,6 +13,12 @@ PathFollowing::PathFollowing(GameObject* follower)
 	elapsed_time = 0.0f;
 	cubic_tangent_weighting = 0.5f;
 
+ // Not brilliant randomness but okay if only make a few paths
+	float radius = float(rand() % 5) + 15.0f;
+	float heightMin = float(rand() % 2) + 2.0f;
+	float heightMax = float(rand() % 2) + 4.0f;
+	static bool reverse = false;
+	reverse = !reverse;
 
 	//Create some balls to drag around and form our path
 	const Vector4 ball_col = Vector4(1.0f, 0.f, 0.f, 1.0f);
@@ -20,12 +26,20 @@ PathFollowing::PathFollowing(GameObject* follower)
 	for (int i = 0; i < num_control_points; ++i)
 	{
 		float angle = (i / (float)num_control_points) * 2.0f * PI;
-		float x = cosf(angle) * 10.0f;
-		float z = sinf(angle) * 10.0f;
+		float x;
+		float z;
+		if (reverse) {
+			x = cosf(angle) * radius;
+			z = sinf(angle) * radius;
+		}
+		else {
+			x = cosf(-angle) * radius;
+			z = sinf(-angle) * radius;
+		}
 
 		obj = CommonUtils::BuildSphereObject(
 			"",
-			Vector3(x, (i % 3 == 0) ? 4.0f : 2.0f, z),
+			Vector3(x, (i % 3 == 0) ? heightMax : heightMin, z),
 			0.3f,
 			false,
 			0.0f,

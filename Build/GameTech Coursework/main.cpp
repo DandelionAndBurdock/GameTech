@@ -5,9 +5,9 @@
 #include <nclgl\PerfTimer.h>
 
 #include "TestScene.h"
-#include "EmptyScene.h"
 #include "TestScene2.h"
 #include "TestScene3.h"
+#include "TestScene4.h"
 
 const Vector4 status_colour = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 const Vector4 status_colour_header = Vector4(0.8f, 0.9f, 1.0f, 1.0f);
@@ -55,8 +55,8 @@ void Initialize()
 	//Enqueue All Scenes
 	SceneManager::Instance()->EnqueueScene(new TestScene("GameTech #1 - Framework Sandbox!"));
 	SceneManager::Instance()->EnqueueScene(new TestScene2("GameTech #2 - Peace and quiet"));
-	SceneManager::Instance()->EnqueueScene(new EmptyScene("GameTech #3 - More peace and quiet"));
-	SceneManager::Instance()->EnqueueScene(new TestScene3("GameTech #3 - Even More peace and quiet"));
+	SceneManager::Instance()->EnqueueScene(new TestScene3("GameTech #3 - More peace and quiet"));
+	SceneManager::Instance()->EnqueueScene(new TestScene4("GameTech #3 - Even More peace and quiet"));
 }
 
 // Print Debug Info

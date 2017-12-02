@@ -93,9 +93,10 @@ public:
 
 	//<-------- Integration --------->
 	// Called automatically by PhysicsEngine on all physics nodes each frame
-	void IntegrateForVelocity(float dt);
+	void IntegratePreSolver(float dt);
 	//<-- Between calling these two functions the physics engine will solve velocity to get 'true' final velocity -->
-	void IntegrateForPosition(float dt);
+	void IntegratePostSolver(float dt);
+	
 
 
 	//<--------- GETTERS ------------->
@@ -204,6 +205,8 @@ protected:
 	float		invMass;
 	void IntegrateLinearVelocity(float dt);
 	void IntegrateLinearPosition(float dt);
+	void IntegrateForVelocity(float dt);
+	void IntegrateForPosition(float dt);
 	// Properties at the last time step
 	Vector3		lastPosition;
 	Vector3		lastLinVelocity;

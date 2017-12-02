@@ -20,6 +20,7 @@ protected:
 
 	bool HitGoodTarget(PhysicsNode* this_obj, PhysicsNode* colliding_obj);
 	bool HitBadTarget(PhysicsNode* this_obj, PhysicsNode* colliding_obj);
+	bool HitBullseye(PhysicsNode* this_obj, PhysicsNode* colliding_obj);
 
 	float					m_AccumTime;
 	GameObject*				m_pPlayer;
