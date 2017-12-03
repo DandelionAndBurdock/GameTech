@@ -8,6 +8,7 @@
 #include "TestScene2.h"
 #include "TestScene3.h"
 #include "TestScene4.h"
+#include "TestScene5.h"
 
 const Vector4 status_colour = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 const Vector4 status_colour_header = Vector4(0.8f, 0.9f, 1.0f, 1.0f);
@@ -56,7 +57,8 @@ void Initialize()
 	SceneManager::Instance()->EnqueueScene(new TestScene("GameTech #1 - Framework Sandbox!"));
 	SceneManager::Instance()->EnqueueScene(new TestScene2("GameTech #2 - Peace and quiet"));
 	SceneManager::Instance()->EnqueueScene(new TestScene3("GameTech #3 - More peace and quiet"));
-	SceneManager::Instance()->EnqueueScene(new TestScene4("GameTech #3 - Even More peace and quiet"));
+	SceneManager::Instance()->EnqueueScene(new TestScene4("GameTech #4 - Even More peace and quiet"));
+	SceneManager::Instance()->EnqueueScene(new TestScene5("GameTech #5 - Too much peace and quiet"));
 }
 
 // Print Debug Info
@@ -158,17 +160,19 @@ int main()
 		//Handle Keyboard Inputs
 		HandleKeyboardInputs();
 
-		timer_physics.EndTimingSection();
+		
 		timer_total.BeginTimingSection();
 
 		//Update Scene
 		timer_update.BeginTimingSection();
+		SceneManager::Instance()->GetCurrentScene()->FireOnSceneUpdate(dt);
 		SceneManager::Instance()->GetCurrentScene()->OnUpdateScene(dt);
 		timer_update.EndTimingSection();
 
 		//Update Physics
 		
 		PhysicsEngine::Instance()->Update(dt);
+		timer_physics.EndTimingSection();
 		PhysicsEngine::Instance()->DebugRender();
 
 		//Render Scene

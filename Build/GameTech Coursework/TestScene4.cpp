@@ -1,9 +1,5 @@
 #include "TestScene4.h"
 
-
-
-#include "TestScene.h"
-
 #include <nclgl\Vector4.h>
 #include <ncltech\GraphicsPipeline.h>
 #include <ncltech\PhysicsEngine.h>

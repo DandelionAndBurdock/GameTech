@@ -136,6 +136,7 @@
     <ClCompile Include="CollisionDetectionSAT.cpp" />
     <ClCompile Include="CommonMeshes.cpp" />
     <ClCompile Include="CommonUtils.cpp" />
+    <ClCompile Include="CompositeCollisionShape.cpp" />
     <ClCompile Include="CuboidCollisionShape.cpp" />
     <ClCompile Include="GeometryUtils.cpp" />
     <ClCompile Include="GraphicsPipeline.cpp" />
@@ -158,6 +159,7 @@
     <ClInclude Include="CollisionShape.h" />
     <ClInclude Include="CommonMeshes.h" />
     <ClInclude Include="CommonUtils.h" />
+    <ClInclude Include="CompositeCollisionShape.h" />
     <ClInclude Include="Constraint.h" />
     <ClInclude Include="CuboidCollisionShape.h" />
     <ClInclude Include="DistanceConstraint.h" />

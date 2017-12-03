@@ -63,6 +63,10 @@ public:
 		return Dot(*this, *this);
 	}
 
+	static float DistanceSq(Vector3 a, Vector3 b) {
+		return (a - b).LengthSq();
+	}
+
 	void			Invert() {
 		x = -x;
 		y = -y;	

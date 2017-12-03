@@ -54,13 +54,13 @@ void PhysicsEngine::RemoveAllPhysicsObjects()
 	//Delete and remove all constraints/collision manifolds
 	for (Constraint* c : constraints)
 	{
-		delete c;
+		SAFE_DELETE(c);
 	}
 	constraints.clear();
 
 	for (Manifold* m : manifolds)
 	{
-		delete m;
+		SAFE_DELETE(m);
 	}
 	manifolds.clear();
 
