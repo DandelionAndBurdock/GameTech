@@ -58,7 +58,7 @@ class GameObject;
 class PhysicsNode
 {
 public:
-	enum IntegrationType { EXPLICIT_EULER, SYMPLECTIC_EULER, MIDPOINT, RK4};
+	enum IntegrationType { NONE, EXPLICIT_EULER, SYMPLECTIC_EULER, MIDPOINT, RK4};
 public:
 	PhysicsNode()
 		: position(0.0f, 0.0f, 0.0f)

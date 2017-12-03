@@ -137,6 +137,9 @@ Vector3 PhysicsNode::PredictAcceleration(Vector3 pos) {
 }
 
 void PhysicsNode::IntegratePreSolver(float dt) {
+	if (integrationType == NONE) {
+		return;
+	}
 	if (integrationType == MIDPOINT || integrationType == RK4) { // Will not work for collisions in this framework
 // If had a velocity or explicitly time dependent acceleration would also factor this in here
 
@@ -163,6 +166,9 @@ void PhysicsNode::IntegratePreSolver(float dt) {
 	FireOnUpdateCallback();
 }
 void PhysicsNode::IntegratePostSolver(float dt) {
+	if (integrationType == NONE) {
+		return;
+	}
 	if (integrationType < MIDPOINT) { // Will not work for collisions in this framework
 		IntegrateForPosition(dt);
 	}

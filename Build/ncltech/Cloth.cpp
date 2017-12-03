@@ -158,9 +158,33 @@ void Cloth::SatisfyConstraints() {
 		for (const auto& constraint : m_pinConstraints) {
 			m_currentPosition[constraint->m_index] = constraint->m_position;
 		}
+
+		ResolveCollisions();
 	}
 }
 
 void Cloth::Pin(int index) {
 	m_pinConstraints.push_back(new PinConstraint(index, m_currentPosition[index]));
 }
+
+void Cloth::ResolveCollisions() {
+	for (int i = 0; i < m_numPoints; ++i) {
+		for (auto& sphere : m_spheres) {
+			ResolveCollision(m_currentPosition[i], sphere);
+		}
+	}
+
+}
+
+void Cloth::ResolveCollision(Vector3& clothPoint, SphereCollisionShape* sphere) {
+	GLfloat sphereRadius = sphere->GetRadius();
+	Vector3 sphereCentre = sphere->Parent()->GetPosition();
+	Vector3 contactNormal = clothPoint - sphereCentre;
+	if (contactNormal.LengthSq() < sphereRadius * sphereRadius) {
+		sphereRadius += BIAS;
+		contactNormal.Normalise();
+		clothPoint = sphereCentre + contactNormal * sphereRadius;
+	}
+}
+
+
