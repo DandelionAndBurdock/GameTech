@@ -20,17 +20,25 @@ Cloth::Cloth(GLint dim, GLfloat len)
 
 	BuildMesh();
 	BufferData();
-}
 
+	// Setup distance constraints so behaves like a cloth
+	m_pairConstraints = MakeSquareLattice(dim, m_tileSize);
+}
 
 Cloth::~Cloth()
 {
 	SAFE_DELETE(m_acceleration);
 	SAFE_DELETE(m_currentPosition);
 	SAFE_DELETE(m_oldPosition);
+
+	for (auto& constraint : m_pinConstraints) {
+		SAFE_DELETE(constraint);
+	}
+	for (auto& constraint : m_pairConstraints) {
+		SAFE_DELETE(constraint);
+	}
+
 }
-
-
 
 void Cloth::BuildMesh()
 {
@@ -45,7 +53,6 @@ void Cloth::BuildMesh()
 
 	//textureCoords = new Vector2[numVertices]; Can live without texture coordinates for now
 
-
 	// x increases with columns, y is up, z increases with rows
 	int index = 0;
 	for (int row = 0; row != m_dimension; ++row)
@@ -55,10 +62,7 @@ void Cloth::BuildMesh()
 			vertices[index] = pos;
 			m_currentPosition[index] = pos;
 			m_oldPosition[index++] = pos;
-			//m_clothVertices.push_back(glm::vec3(col * m_tileSize - xOffset, 1.0f, row * m_tileSize - zOffset));
 		}
-
-
 
 	// Setup indices for quads
 	index = 0;
@@ -74,11 +78,7 @@ void Cloth::BuildMesh()
 			indices[index++] = i;
 			indices[index++] = i + 1;
 			indices[index++] = i + m_dimension;
-			//m_clothVertexIndices.push_back(i);
-			//m_clothVertexIndices.push_back(i + 1);
-			//m_clothVertexIndices.push_back(i + m_dimension);
 		}
-
 
 		if (i % m_dimension) // Not for top row
 		{
@@ -86,14 +86,8 @@ void Cloth::BuildMesh()
 			indices[index++] = i;
 			indices[index++] = i + m_dimension - 1;
 			indices[index++] = i + m_dimension;
-			//m_clothVertexIndices.push_back(i);
-			//m_clothVertexIndices.push_back(i + m_dimension - 1);
-			//m_clothVertexIndices.push_back(i + m_dimension);
 		}
-
 	}
-
-
 }
 
 void Cloth::Update(float dt) {
@@ -146,20 +140,21 @@ void Cloth::Rebuffer() {
 void Cloth::SatisfyConstraints() {
 	for (int itr = 0; itr < NUM_ITERATIONS; ++itr)
 	{
-		//for (const auto& constraint : m_pairConstraints)
-		//{
-		//	glm::vec3 difference = m_currentPositions.at(constraint.m_indexFirst) - m_currentPositions.at(constraint.m_indexSecond);
-		//	float differenceLength = glm::length(difference);
-		//	difference = glm::normalize(difference);
-		//
-		//	const float SENSITIVITY = 1E-5;
-		//	//if (0.5f * (differenceLength - constraint.m_restLength) > SENSITIVITY)
-		//	{
-		//		m_currentPositions.at(constraint.m_indexFirst) -= 0.5f * (differenceLength - constraint.m_restLength) * difference;
-		//		m_currentPositions.at(constraint.m_indexSecond) += 0.5f * (differenceLength - constraint.m_restLength) * difference;
-		//	}
-		//
-		//}
+		// Pair Constraints
+		for (const auto& constraint : m_pairConstraints){
+			// Compare current distance between the points to the constraint distance
+			// Vector from first index position to second index position
+			Vector3 currentSeperation = m_currentPosition[constraint->m_indexFirst] - m_currentPosition[constraint->m_indexSecond];
+			// Unfortunate square root
+			float seperationLength = currentSeperation.Length();
+			// Get a unit vector from first index to second index, this gives the direction along which we will seperate the mesh points
+			currentSeperation = currentSeperation / seperationLength;
+			// Step together or apart 
+			m_currentPosition[constraint->m_indexFirst] -= currentSeperation * 0.5f * (seperationLength - constraint->m_restLength);
+			m_currentPosition[constraint->m_indexSecond] += currentSeperation * 0.5f * (seperationLength - constraint->m_restLength);
+		}
+
+		// Pin Constraints
 		for (const auto& constraint : m_pinConstraints) {
 			m_currentPosition[constraint->m_index] = constraint->m_position;
 		}

@@ -43,6 +43,7 @@ protected:
 
 	// Constraints
 	std::vector<PinConstraint*> m_pinConstraints;
+	std::vector<PairConstraint*> m_pairConstraints;
 
 	// Sum gravity, wind, etc...
 	void AccumulateForces(float dt);
