@@ -49,3 +49,8 @@ void TestScene6::OnUpdateScene(float dt) {
 	}
 	
 }
+
+void TestScene6::AddProjectile(GameObject* obj) {
+	Scene::AddProjectile(obj);
+	clothMesh->AddSphere(dynamic_cast<SphereCollisionShape*>(obj->Physics()->GetBroadCollisionShape()));
+}

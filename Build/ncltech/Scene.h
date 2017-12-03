@@ -170,6 +170,8 @@ public:
 				it++;
 		}
 	}
+	// Some scenes will handle projectiles a little differently
+	virtual void AddProjectile(GameObject* object) { AddGameObject(object); }
 protected:
 	// Delete all contained Objects
 	//    - This is the default action upon firing OnCleanupScene()

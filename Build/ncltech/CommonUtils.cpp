@@ -233,5 +233,5 @@ void CommonUtils::SpawnSphere(const Vector3& spawnPos, const Vector3& dir) {
 	sphere->Physics()->SetPosition(spawnPos);
 	sphere->Physics()->SetLinearVelocity(Vector3(dir) * SPHERE_SPEED);
 
-	SceneManager::Instance()->GetCurrentScene()->AddGameObject(sphere);
+	SceneManager::Instance()->GetCurrentScene()->AddProjectile(sphere);
 }
