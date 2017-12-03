@@ -7,6 +7,7 @@ Cloth::Cloth(GLint dim, GLfloat len)
 	m_dimension(dim), m_length(len), m_tileSize(len / (dim - 1)),
 	m_numPoints(dim * dim)
 {
+	
 	m_acceleration = new Vector3[m_numPoints];
 	m_currentPosition = new Vector3[m_numPoints];
 	m_oldPosition = new Vector3[m_numPoints];
@@ -98,6 +99,7 @@ void Cloth::BuildMesh()
 void Cloth::Update(float dt) {
 	AccumulateForces(dt);
 	Integrate(dt);
+	Rebuffer();
 }
 
 
@@ -113,7 +115,7 @@ void Cloth::Draw() {
 }
 
 void Cloth::AccumulateForces(float dt) {
-	Vector3 gravity = Vector3(0.0f, PhysicsEngine::Instance()->GetGravity(), 0.0f);
+	Vector3 gravity = GRAVITY;
 	for (int i = 0; i < m_numPoints; ++i) {
 		m_acceleration[i] = gravity;
 	}
@@ -122,5 +124,18 @@ void Cloth::AccumulateForces(float dt) {
 
 void Cloth::Integrate(float dt) {
 	// Using Verlet should move to PhysicsNode really but doesn't sit so elegantly in the framework
+	for (int i = 0; i < m_numPoints; ++i)
+	{
+		Vector3 temp = m_currentPosition[i]; // Need to store old value
+		m_currentPosition[i] += (m_currentPosition[i] - m_oldPosition[i] + 
+			m_acceleration[i] * dt * dt) * m_energyLossFactor;
 
+		m_oldPosition[i] = temp;
+
+	}
+}
+
+void Cloth::Rebuffer() {
+	glBindBuffer(GL_ARRAY_BUFFER, bufferObject[VERTEX_BUFFER]);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, m_numPoints * sizeof(Vector3), m_currentPosition);
 }

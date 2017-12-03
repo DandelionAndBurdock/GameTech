@@ -21,3 +21,10 @@ void TestScene6::OnInitializeScene() {
 	this->AddGameObject(cloth);
 
 }
+
+void TestScene6::OnUpdateScene(float dt) {
+	if (!PhysicsEngine::Instance()->IsPaused()) {
+		clothMesh->Update(dt);
+	}
+	
+}

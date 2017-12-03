@@ -25,7 +25,12 @@ protected:
 	// Construct vertices, indices, texture coordinates etc for mesh
 	void BuildMesh();
 
+	// Send updated positions to graphics card
+	void Rebuffer();
+
 	// Physics
+	// Add some artificial damping into the system
+	float m_energyLossFactor = ENERGY_LOSS_FACTOR;
 	// Contains acceleration at each point on the mesh calculated in accumulated forces function
 	Vector3* m_acceleration;
 	// Contains current position at each point on the mesh

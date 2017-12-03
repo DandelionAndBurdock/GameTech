@@ -9,7 +9,8 @@ public:
 	TestScene6(const std::string& friendly_name);
 	~TestScene6();
 
-	virtual void OnInitializeScene()	 override;
+	void OnInitializeScene()	 override;
+	void OnUpdateScene(float dt) override;
 protected:
 	Cloth* clothMesh;
 };
