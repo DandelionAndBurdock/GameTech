@@ -1,2 +1,3 @@
-﻿  CompositeCollisionShape.cpp
+﻿  Cloth.cpp
+d:\gametech\build\ncltech\cloth.cpp(68): warning C4018: '<': signed/unsigned mismatch
   ncltech.vcxproj -> D:\GameTech\Build\Debug\ncltech.lib

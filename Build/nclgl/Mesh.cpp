@@ -358,12 +358,13 @@ void	Mesh::BufferData()	{
 	glBindVertexArray(arrayObject);
 
 	//Buffer vertex data
+	std::cout << glGetError() << std::endl;
 	glGenBuffers(1, &bufferObject[VERTEX_BUFFER]);
 	glBindBuffer(GL_ARRAY_BUFFER, bufferObject[VERTEX_BUFFER]);
 	glBufferData(GL_ARRAY_BUFFER, numVertices*sizeof(Vector3), vertices, GL_STATIC_DRAW);
 	glVertexAttribPointer(VERTEX_BUFFER, 3, GL_FLOAT, GL_FALSE, 0, 0); 
 	glEnableVertexAttribArray(VERTEX_BUFFER);
-
+	std::cout << glGetError() << std::endl;
 	//Buffer texture data
 	if(textureCoords) {
 		glGenBuffers(1, &bufferObject[TEXTURE_BUFFER]);

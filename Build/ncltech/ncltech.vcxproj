@@ -133,6 +133,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BoundingCube.cpp" />
+    <ClCompile Include="Cloth.cpp" />
     <ClCompile Include="CollisionDetectionSAT.cpp" />
     <ClCompile Include="CommonMeshes.cpp" />
     <ClCompile Include="CommonUtils.cpp" />
@@ -155,6 +156,7 @@
     <ClInclude Include="BasicCollisionTests.h" />
     <ClInclude Include="BoundingBox.h" />
     <ClInclude Include="BoundingCube.h" />
+    <ClInclude Include="Cloth.h" />
     <ClInclude Include="CollisionDetectionSAT.h" />
     <ClInclude Include="CollisionShape.h" />
     <ClInclude Include="CommonMeshes.h" />
@@ -176,6 +178,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="ScreenPicker.h" />
+    <ClInclude Include="SoftBodyConstants.h" />
     <ClInclude Include="SphereCollisionShape.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
