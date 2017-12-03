@@ -99,6 +99,7 @@ void Cloth::BuildMesh()
 void Cloth::Update(float dt) {
 	AccumulateForces(dt);
 	Integrate(dt);
+	SatisfyConstraints();
 	Rebuffer();
 }
 
@@ -138,4 +139,33 @@ void Cloth::Integrate(float dt) {
 void Cloth::Rebuffer() {
 	glBindBuffer(GL_ARRAY_BUFFER, bufferObject[VERTEX_BUFFER]);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, m_numPoints * sizeof(Vector3), m_currentPosition);
+}
+
+
+
+void Cloth::SatisfyConstraints() {
+	for (int itr = 0; itr < NUM_ITERATIONS; ++itr)
+	{
+		//for (const auto& constraint : m_pairConstraints)
+		//{
+		//	glm::vec3 difference = m_currentPositions.at(constraint.m_indexFirst) - m_currentPositions.at(constraint.m_indexSecond);
+		//	float differenceLength = glm::length(difference);
+		//	difference = glm::normalize(difference);
+		//
+		//	const float SENSITIVITY = 1E-5;
+		//	//if (0.5f * (differenceLength - constraint.m_restLength) > SENSITIVITY)
+		//	{
+		//		m_currentPositions.at(constraint.m_indexFirst) -= 0.5f * (differenceLength - constraint.m_restLength) * difference;
+		//		m_currentPositions.at(constraint.m_indexSecond) += 0.5f * (differenceLength - constraint.m_restLength) * difference;
+		//	}
+		//
+		//}
+		for (const auto& constraint : m_pinConstraints) {
+			m_currentPosition[constraint->m_index] = constraint->m_position;
+		}
+	}
+}
+
+void Cloth::Pin(int index) {
+	m_pinConstraints.push_back(new PinConstraint(index, m_currentPosition[index]));
 }

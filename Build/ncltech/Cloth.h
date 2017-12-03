@@ -2,6 +2,7 @@
 
 #include <nclgl\Mesh.h>
 #include "SoftBodyConstants.h"
+#include "SoftBodyConstraint.h"
 
 
 class Cloth : public Mesh
@@ -15,6 +16,8 @@ public:
 
 	void Update(float dt);
 
+	// Create a new constraint pinning index i at its current position
+	void Pin(int index);
 protected:
 	// Grid properties
 	GLuint m_dimension;
@@ -38,12 +41,15 @@ protected:
 	// Contains position at each point on the mesh in the previous physics update
 	Vector3* m_oldPosition;
 
+	// Constraints
+	std::vector<PinConstraint*> m_pinConstraints;
+
 	// Sum gravity, wind, etc...
 	void AccumulateForces(float dt);
 	// Numerical integration of points in mesh
 	void Integrate(float dt);
-
-	//void SatisfyConstraints();
+	// Use relaxation to converge towards a valid configuration
+	void SatisfyConstraints();
 
 	bool m_wireframe = true;
 

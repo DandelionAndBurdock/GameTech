@@ -11,6 +11,7 @@ public:
 
 	void OnInitializeScene()	 override;
 	void OnUpdateScene(float dt) override;
+
 protected:
 	Cloth* clothMesh;
 };
