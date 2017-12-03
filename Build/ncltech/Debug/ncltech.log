@@ -1,24 +1,2 @@
 ﻿  CompositeCollisionShape.cpp
-  Generating Code...
-d:\gametech\build\ncltech\compositecollisionshape.cpp(33): error C4716: 'CompositeCollisionShape::GetSize': must return a value
-d:\gametech\build\ncltech\compositecollisionshape.cpp(19): error C4716: 'CompositeCollisionShape::BuildInverseInertia': must return a value
-  Compiling...
-  SphereCollisionShape.cpp
-  ScreenPicker.cpp
-  SceneManager.cpp
-  PhysicsNode.cpp
-  PhysicsEngine.cpp
-  PathFollowing.cpp
-  Octtree.cpp
-d:\gametech\build\ncltech\octtree.cpp(97): warning C4018: '>': signed/unsigned mismatch
-  NetworkBase.cpp
-  Manifold.cpp
-  Hull.cpp
-  GraphicsPipeline.cpp
-  GeometryUtils.cpp
-  CuboidCollisionShape.cpp
-  CommonUtils.cpp
-  CommonMeshes.cpp
-  CollisionDetectionSAT.cpp
-  BoundingCube.cpp
-  Generating Code...
+  ncltech.vcxproj -> D:\GameTech\Build\Debug\ncltech.lib

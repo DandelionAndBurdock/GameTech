@@ -55,7 +55,7 @@ void TestScene4::OnInitializeScene()
 		true,									//No Collision Shape Yet
 		true,									//Dragable by the user
 		CommonUtils::GenColor(0.45f, 0.5f));	//Color
-
+	
 	ball = CommonUtils::BuildSphereObject("",
 		Vector3(-4.f, 7.5f, -5.0f),				//Position
 		0.5f,									//Radius
@@ -64,7 +64,7 @@ void TestScene4::OnInitializeScene()
 		true,									//No Collision Shape Yet
 		true,									//Dragable by the user
 		CommonUtils::GenColor(0.5f, 1.0f));		//Color
-
+	
 	//Add distance constraint between the two objects
 	DistanceConstraint* constraint = new DistanceConstraint(
 		handle->Physics(),					//Physics Object A
@@ -72,7 +72,7 @@ void TestScene4::OnInitializeScene()
 		handle->Physics()->GetPosition(),	//Attachment Position on Object A	-> Currently the centre
 		ball->Physics()->GetPosition());	//Attachment Position on Object B	-> Currently the centre  
 	PhysicsEngine::Instance()->AddConstraint(constraint);
-
+	
 	// Create a box to make a double pendulum
 	GameObject* box = CommonUtils::BuildCuboidObject("",
 		Vector3(-4.f, 6.f, -5.0f),				//Position
@@ -82,16 +82,16 @@ void TestScene4::OnInitializeScene()
 		true,									//No Collision Shape Yet
 		false,									//Dragable by the user
 		CommonUtils::GenColor(0.7f, 1.0f));		//Color
-
-
+	
+	
 	PhysicsEngine::Instance()->AddConstraint(new DistanceConstraint(
 		ball->Physics(),													//Physics Object A
 		box->Physics(),													//Physics Object B
 		ball->Physics()->GetPosition(),		//Attachment Position on Object A	-> Currently the far right edge
 		box->Physics()->GetPosition() + Vector3(-0.5f, -0.5f, -0.5f)));	//Attachment Position on Object B	-> Currently the far left edge 
+	
 
-	PhysicsEngine::Instance()->AddConstraint(constraint);
-
+	
 	this->AddGameObject(handle);
 	this->AddGameObject(ball);
 	this->AddGameObject(box);
@@ -110,8 +110,8 @@ void TestScene4::OnInitializeScene()
 	const int NUM_BALLS = 5;
 	const float BALL_RADIUS = 0.75f;
 	const float STRING_LENGTH = 3.0f;
-
-
+	
+	
 	for (int i = 0; i < NUM_BALLS; ++i) {
 		Vector3 ballPos;
 		if (i == 0) {
@@ -138,9 +138,6 @@ void TestScene4::OnInitializeScene()
 			ball->Physics()->GetPosition(),		//Attachment Position on Object A	
 			handle->Physics()->GetPosition()));	//Attachment Position on Object B	
 			ball->Physics()->SetElasticity(0.99f);
-
-		PhysicsEngine::Instance()->AddConstraint(constraint);
-
 	}
 
 }
