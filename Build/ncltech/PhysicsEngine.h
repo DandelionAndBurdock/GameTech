@@ -42,6 +42,7 @@ Description:
 #include <nclgl\PerfTimer.h>
 #include <vector>
 #include <mutex>
+#include "Octtree.h"
 
 
 //Number of jacobi iterations to apply in order to
@@ -66,6 +67,9 @@ struct CollisionPair	//Forms the output of the broadphase collision detection
 {
 	PhysicsNode* pObjectA;
 	PhysicsNode* pObjectB;
+	CollisionPair(PhysicsNode* a = nullptr, PhysicsNode* b = nullptr) : 
+		pObjectA(a), pObjectB(b) 
+	{}
 };
 
 class PhysicsEngine : public TSingleton<PhysicsEngine>
@@ -112,6 +116,8 @@ public:
 
 	inline std::vector<PhysicsNode*>& GetPhysicsNodes() { return physicsNodes; }
 
+	inline void BuildTree() { tree.BuildTree(); }
+
 	void PrintPerformanceTimers(const Vector4& color)
 	{
 		perfUpdate.PrintOutputToStatusEntry(color,		"    Integration :");
@@ -153,4 +159,6 @@ protected:
 	PerfTimer perfBroadphase;
 	PerfTimer perfNarrowphase;
 	PerfTimer perfSolver;
+
+	Octtree tree; 
 };

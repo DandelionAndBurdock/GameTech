@@ -5,6 +5,7 @@
 #include "PhysicsNode.h"
 #include "BoundingCube.h"
 
+class CollisionPair;
 
 class Octtree
 {
@@ -72,6 +73,8 @@ protected:
 	float minCubeSize = 1.0f;
 	// Threshold for the max number of objects in one octant (assuming size greater than minCubeSize)
 	int maxOctantObjects = 4;
+	// Returns pairs of objects found in the same octant
+	std::vector<CollisionPair*> BuildPotentialCollisionList();
 
 protected:
 	// Divide octant into 8 further child octants
@@ -92,6 +95,10 @@ protected:
 	void UpdateRecombine(OcttreeNode* node);
 	// Sums up all objects contained by the children of this node
 	int CountChildren(OcttreeNode* node);
+	// Recursively searches tree for possibly colliding pairs adding them to pairList
+	void BuildPotentialCollisionList(OcttreeNode* node, std::vector<CollisionPair*>& pairList);
+	// Contains list of potentially colliding pairs
+	std::vector<CollisionPair*> pairList;
 protected:
 	// Recursive draw function
 	void DebugDraw(OcttreeNode* node);

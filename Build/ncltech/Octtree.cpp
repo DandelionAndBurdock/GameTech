@@ -2,6 +2,8 @@
 
 #include <set>
 
+#include "PhysicsEngine.h"
+
 Hull Octtree::cubeHull = Hull();
 
 Octtree::Octtree(Vector3 minCorner, Vector3 maxCorner) 
@@ -80,6 +82,9 @@ void Octtree::InsertObject(PhysicsNode* object, OcttreeNode* node) {
 		return;
 	}
 	// Only add if object in bounds of this node
+	if (!object->GetBroadCollisionShape()) {
+		return;
+	}
 	if (!node->region->IsSphereInCube(object->GetPosition(), object->GetBroadCollisionShape()->GetSize())) {
 		return;
 	}
@@ -183,8 +188,9 @@ void Octtree::UpdateNonStaticObjects(OcttreeNode* node) {
 		}
 	}
 	else { 
+		// If have a lot of objects that will never move e.g. buildings would benefit performance to maintain a seperate list or test for STATIONARY flag
 		for (auto iter = node->objects.begin(); iter != node->objects.end(); ) {
-				if (!node->region->IsSphereInCube((*iter)->GetPosition(), (*iter)->GetBroadCollisionShape()->GetSize())) {
+				if (!node->region->IsSphereInCube((*iter)->GetPosition(), (*iter)->GetBroadCollisionShape()->GetSize())) { 
 
 					// Reinsert without divide
 					SimpleInsertObject(*iter, root);
@@ -293,3 +299,30 @@ bool Octtree::AtMinimumSize(OcttreeNode* node) {
 
 	return false;
 }
+
+
+std::vector<CollisionPair*> Octtree::BuildPotentialCollisionList() {
+	for (auto& pair : pairList) { // Clear old pair list
+		SAFE_DELETE(pair);
+	}
+
+	BuildPotentialCollisionList(root, pairList);
+	return pairList;
+}
+
+void Octtree::BuildPotentialCollisionList(OcttreeNode* node, std::vector<CollisionPair*>& pairList) {
+	if (node->hasChildren) { 
+		for (int i = 0; i < NUM_OCTANTS; ++i) {
+			BuildPotentialCollisionList(node->children[i], pairList);
+		}
+	}
+
+	if (node->objects.size() > 1) {
+		for (int firstObj = 0; firstObj < node->objects.size(); ++firstObj) {
+			for (int secondObj = 0; secondObj < node->objects.size(); ++secondObj) {
+				pairList.push_back(new CollisionPair(node->objects[firstObj], node->objects[secondObj]));
+			}
+		}
+	}
+}
+

@@ -18,7 +18,8 @@ void PhysicsEngine::SetDefaults()
 	dampingFactor = 0.999f;
 }
 
-PhysicsEngine::PhysicsEngine()
+PhysicsEngine::PhysicsEngine() :
+	tree(Vector3(-20.0f, +0.0f, -20.0f), Vector3(20.0f)) //TODO: Make these variable
 {
 	//Variables set here will /not/ be reset with each scene
 	isPaused = false;  
@@ -35,6 +36,7 @@ PhysicsEngine::~PhysicsEngine()
 void PhysicsEngine::AddPhysicsObject(PhysicsNode* obj)
 {
 	physicsNodes.push_back(obj);
+	tree.InsertObject(obj);
 }
 
 void PhysicsEngine::RemovePhysicsObject(PhysicsNode* obj)
@@ -103,6 +105,9 @@ void PhysicsEngine::Update(float deltaTime)
 			//Drop Time in the hope that it can continue to run faster the next frame
 			updateRealTimeAccum = 0.0f;
 		}
+
+		tree.Update();
+		tree.DebugDraw();
 	}
 }
 
