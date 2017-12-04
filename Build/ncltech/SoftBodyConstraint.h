@@ -32,3 +32,4 @@ struct PairConstraint : public SoftBodyConstraint{
 // Some default constraints to make meshes with different characteristics depending which indices
 // we constrain 
 std::vector<PairConstraint*> MakeSquareLattice(int latticeDimension, float restLength);
+std::vector<PairConstraint*> MakeCubeLattice(int latticeDimension, float restLength);

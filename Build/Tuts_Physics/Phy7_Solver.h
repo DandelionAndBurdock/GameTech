@@ -37,7 +37,7 @@ public:
 		//       into rectangles :)
 		const float width_scalar = 1.0f; 
 		const float height_scalar = 1.0f; 
-		m_StackHeight = 3;
+
 		for (int y = 0; y < m_StackHeight; ++y)
 		{
 			for (int x = 0; x <= y; ++x)

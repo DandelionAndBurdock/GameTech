@@ -142,6 +142,7 @@
     <ClCompile Include="GeometryUtils.cpp" />
     <ClCompile Include="GraphicsPipeline.cpp" />
     <ClCompile Include="Hull.cpp" />
+    <ClCompile Include="Jelly.cpp" />
     <ClCompile Include="Manifold.cpp" />
     <ClCompile Include="NetworkBase.cpp" />
     <ClCompile Include="Octtree.cpp" />
@@ -170,6 +171,7 @@
     <ClInclude Include="GeometryUtils.h" />
     <ClInclude Include="GraphicsPipeline.h" />
     <ClInclude Include="Hull.h" />
+    <ClInclude Include="Jelly.h" />
     <ClInclude Include="Manifold.h" />
     <ClInclude Include="NetworkBase.h" />
     <ClInclude Include="Octtree.h" />

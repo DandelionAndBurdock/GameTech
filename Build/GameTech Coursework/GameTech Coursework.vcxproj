@@ -141,6 +141,7 @@
     <ClCompile Include="TestScene4.cpp" />
     <ClCompile Include="TestScene5.cpp" />
     <ClCompile Include="TestScene6.cpp" />
+    <ClCompile Include="TestScene7.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EmptyScene.h" />
@@ -150,6 +151,7 @@
     <ClInclude Include="TestScene4.h" />
     <ClInclude Include="TestScene5.h" />
     <ClInclude Include="TestScene6.h" />
+    <ClInclude Include="TestScene7.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

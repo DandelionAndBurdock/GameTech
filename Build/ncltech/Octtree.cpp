@@ -5,10 +5,8 @@ Hull Octtree::cubeHull = Hull();
 Octtree::Octtree(Vector3 minCorner, Vector3 maxCorner) 
 {
 	root = new OcttreeNode(minCorner, maxCorner);
-	//Divide(root);
-	//Divide(root->children[0]);
-	if (cubeHull.GetNumVertices() == 0)
-	{
+
+	if (cubeHull.GetNumVertices() == 0){
 		ConstructCubeHull();
 	}
 }
@@ -47,8 +45,8 @@ void Octtree::Divide(OcttreeNode* node) {
 	}
 	// Size of each new octant
 	Vector3 divisionSize = node->GetSize() / 2.0f; // Divide each axis in half will give 8 octants
+
 	// If cube size is too small stop division
-	std::cout << divisionSize.x << " " << divisionSize.y << " " << divisionSize.z << std::endl;
 	if (divisionSize.x < minCubeSize || divisionSize.y < minCubeSize || divisionSize.z < minCubeSize) {
 		return;
 	}
@@ -86,7 +84,7 @@ void Octtree::InsertObject(PhysicsNode* object, OcttreeNode* node) {
 	// If node has children find correct child
 	if (node->hasChildren) {
 		for (int i = 0; i < NUM_OCTANTS; ++i) {
-			InsertObject(object, node);
+			InsertObject(object, node->children[i]);
 		}
 	}
 	else { // If no children add to this node
@@ -95,9 +93,9 @@ void Octtree::InsertObject(PhysicsNode* object, OcttreeNode* node) {
 
 	// If too many objects try and divide
 	if (node->objects.size() > maxOctantObjects) {
-		Divide(node);
-		// Reinsert objects into children 
-		SendObjectsToChildren(node);
+			Divide(node);
+			// Reinsert objects into children 
+			SendObjectsToChildren(node);
 	}
 }
 

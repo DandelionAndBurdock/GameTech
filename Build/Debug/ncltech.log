@@ -1,10 +1,24 @@
-﻿  CommonUtils.cpp
-  Generating Code...
-  Compiling...
-  PhysicsEngine.cpp
-  Generating Code...
-  Skipping... (no relevant changes detected)
+﻿  SphereCollisionShape.cpp
+  SoftBodyConstraint.cpp
+  ScreenPicker.cpp
   SceneManager.cpp
   PhysicsNode.cpp
+  PhysicsEngine.cpp
+  PathFollowing.cpp
+  Octtree.cpp
+d:\gametechweek2\gametech\build\ncltech\octtree.cpp(97): warning C4018: '>': signed/unsigned mismatch
+  NetworkBase.cpp
   Manifold.cpp
-  ncltech.vcxproj -> D:\Test\GameTech\Build\Debug\ncltech.lib
+  Hull.cpp
+  GraphicsPipeline.cpp
+  GeometryUtils.cpp
+  CuboidCollisionShape.cpp
+  CompositeCollisionShape.cpp
+  CommonUtils.cpp
+  CommonMeshes.cpp
+  CollisionDetectionSAT.cpp
+  Cloth.cpp
+d:\gametechweek2\gametech\build\ncltech\cloth.cpp(75): warning C4018: '<': signed/unsigned mismatch
+  BoundingCube.cpp
+  Generating Code...
+  ncltech.vcxproj -> D:\GameTechWeek2\GameTech\Build\Debug\ncltech.lib

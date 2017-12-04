@@ -21,7 +21,7 @@ Cloth::Cloth(GLint dim, GLfloat len)
 	BuildMesh();
 	BufferData();
 
-	texture = SOIL_load_OGL_texture(TEXTUREDIR"checkerboard.tga", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_COMPRESS_TO_DXT);
+	//texture = SOIL_load_OGL_texture(TEXTUREDIR"checkerboard.tga", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_COMPRESS_TO_DXT);
 
 	// Setup distance constraints so behaves like a cloth
 	m_pairConstraints = MakeSquareLattice(dim, m_tileSize);
@@ -69,7 +69,7 @@ void Cloth::BuildMesh()
 	// Setup indices for quads
 	index = 0;
 	//numIndices = 6 * m_dimension * m_dimension - 12 * m_dimension - 1;
-	numIndices = 5766;// Unexpected number : Hardcode for now
+	numIndices = 5766;// Not the number I was expecting: Hardcode for now
 	indices = new unsigned int[numIndices];
 
 	for (GLint i = 0; i < m_dimension * m_dimension - m_dimension; ++i)
