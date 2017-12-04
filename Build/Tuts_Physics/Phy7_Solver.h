@@ -87,6 +87,8 @@ public:
 			m_StackHeight = max(m_StackHeight - 1, 1);
 			SceneManager::Instance()->JumpToScene(SceneManager::Instance()->GetCurrentSceneIndex());
 		}
+
+		tree.Update();
 	}
 
 protected:

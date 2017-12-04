@@ -52,7 +52,11 @@ public:
 	void SetMinCubeSize(float s) { minCubeSize = s; }
 	void SetMaxOctantObjects(int n) { maxOctantObjects = n; }
 
+	void Update();
+
 	void DebugDraw();
+
+	bool AtMinimumSize(OcttreeNode* node);
 protected:
 	// Lists of all objects in the octtree
 	std::vector<PhysicsNode*> objects;
@@ -65,7 +69,7 @@ protected:
 	Vector3 worldMax;
 
 	// Recusion will halt if an octant has a dimension lower minCubeSize
-	float minCubeSize = 2.0f;
+	float minCubeSize = 1.0f;
 	// Threshold for the max number of objects in one octant (assuming size greater than minCubeSize)
 	int maxOctantObjects = 4;
 
@@ -78,7 +82,16 @@ protected:
 
 	// Insert an object recursively into the correct 
 	void InsertObject(PhysicsNode* object, OcttreeNode* node);
-
+	// Inserts an object recursively into the tree but without triggering any change in the tree structure
+	void SimpleInsertObject(PhysicsNode* object, OcttreeNode* node);
+	// // Move objects into new octants (without division)
+	void UpdateNonStaticObjects(OcttreeNode* node);
+	// Divide any undivided octants which now exceed threshold					  
+	void UpdateDivision(OcttreeNode* node);
+	// Recombine any cells which no longer exceed threshold
+	void UpdateRecombine(OcttreeNode* node);
+	// Sums up all objects contained by the children of this node
+	int CountChildren(OcttreeNode* node);
 protected:
 	// Recursive draw function
 	void DebugDraw(OcttreeNode* node);
