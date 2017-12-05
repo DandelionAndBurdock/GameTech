@@ -116,7 +116,7 @@ public:
 
 	inline std::vector<PhysicsNode*>& GetPhysicsNodes() { return physicsNodes; }
 
-	inline void BuildTree() { tree.BuildTree(); }
+	void BuildTree();
 
 	void PrintPerformanceTimers(const Vector4& color)
 	{
@@ -160,5 +160,5 @@ protected:
 	PerfTimer perfNarrowphase;
 	PerfTimer perfSolver;
 
-	Octtree tree; 
+	Octtree* tree; 
 };

@@ -19,7 +19,7 @@ void PhysicsEngine::SetDefaults()
 }
 
 PhysicsEngine::PhysicsEngine() :
-	tree(Vector3(-20.0f, +0.0f, -20.0f), Vector3(20.0f)) //TODO: Make these variable
+	tree(nullptr) //TODO: Make these variable
 {
 	//Variables set here will /not/ be reset with each scene
 	isPaused = false;  
@@ -36,7 +36,6 @@ PhysicsEngine::~PhysicsEngine()
 void PhysicsEngine::AddPhysicsObject(PhysicsNode* obj)
 {
 	physicsNodes.push_back(obj);
-	tree.InsertObject(obj);
 }
 
 void PhysicsEngine::RemovePhysicsObject(PhysicsNode* obj)
@@ -106,8 +105,11 @@ void PhysicsEngine::Update(float deltaTime)
 			updateRealTimeAccum = 0.0f;
 		}
 
-		tree.Update();
-		tree.DebugDraw();
+		if (tree) {
+			tree->Update();
+			tree->DebugDraw();
+		}
+
 	}
 }
 
@@ -310,4 +312,12 @@ void PhysicsEngine::DebugRender()
 			}
 		}
 	}
+}
+
+
+void PhysicsEngine::BuildTree() {
+	SAFE_DELETE(tree);
+	tree = new Octtree(Vector3(-20.0f, +0.0f, -20.0f), Vector3(20.0f));
+	tree->InsertObjects(physicsNodes);
+	tree->BuildTree();
 }

@@ -4,7 +4,7 @@
 
 #include "PhysicsNode.h"
 #include "BoundingCube.h"
-
+#include <set>
 class CollisionPair;
 
 class Octtree
@@ -75,6 +75,9 @@ protected:
 	int maxOctantObjects = 4;
 	// Returns pairs of objects found in the same octant
 	std::vector<CollisionPair*> BuildPotentialCollisionList();
+
+	// Returns all objects in children inside set
+	void GetObjects(std::set<PhysicsNode*> s, OcttreeNode* node);
 
 protected:
 	// Divide octant into 8 further child octants

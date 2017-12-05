@@ -102,7 +102,7 @@ void Octtree::InsertObject(PhysicsNode* object, OcttreeNode* node) {
 	if (node->objects.size() > maxOctantObjects) {
 			Divide(node);
 			// Reinsert objects into children 
-			SendObjectsToChildren(node);
+			SendObjectsToChildren(node);	
 	}
 }
 
@@ -138,6 +138,8 @@ void Octtree::DebugDraw(OcttreeNode* node) {
 		}
 	}
 }
+
+
 
 void Octtree::ConstructCubeHull()
 {
@@ -230,24 +232,21 @@ void Octtree::UpdateRecombine(OcttreeNode* node) {
 		UpdateRecombine(node->children[i]);
 	}
 
-	if (CountChildren(node) < maxOctantObjects) {
-	
+	if (node != root && CountChildren(node) < maxOctantObjects) {
+		CountChildren(node);
 		// Reabsorb the children objects
 		for (int i = 0; i < NUM_OCTANTS; ++i) {
 			node->objects.insert(node->objects.end(),
 								 node->children[i]->objects.begin(), 
 								 node->children[i]->objects.end());
 		}
-
+		
 		// Delete the children
 		for (int i = 0; i < NUM_OCTANTS; ++i) {
 			SAFE_DELETE(node->children[i]);
 		}
 		node->hasChildren = false;
 	}
-
-
-
 }
 
 
@@ -255,15 +254,26 @@ int Octtree::CountChildren(OcttreeNode* node) {
 	if (!node->hasChildren) { 
 		return 0;
 	}
-	std::set<PhysicsNode*> uniqueObjects; // Use a set so that don't count same boundary objects twice
-	
-	for (int i = 0; i < NUM_OCTANTS; ++i) {
-		uniqueObjects.insert(
-			node->children[i]->objects.begin(),
-			node->children[i]->objects.end());
-	}
+
+	std::set<PhysicsNode*> uniqueObjects; 	// Use a set so that don't count same boundary objects twice
+	GetObjects(uniqueObjects, node);
 
 	return uniqueObjects.size();
+}
+
+void Octtree::GetObjects(std::set<PhysicsNode*> s, OcttreeNode* node) {
+	if (node->hasChildren) {
+		for (int i = 0; i < NUM_OCTANTS; ++i) {
+			GetObjects(s, node->children[i]);
+		}
+	}
+	else {
+		s.insert(
+			node->objects.begin(),
+			node->objects.end());
+	}
+
+
 }
 
 void Octtree::SimpleInsertObject(PhysicsNode* object, OcttreeNode* node) {
