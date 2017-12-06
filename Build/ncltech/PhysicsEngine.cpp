@@ -1,7 +1,6 @@
 #include "PhysicsEngine.h"
 #include "GameObject.h"
 #include "CollisionDetectionSAT.h"
-#include "BasicCollisionTests.h"
 #include <nclgl\NCLDebug.h>
 #include <nclgl\Window.h>
 #include <omp.h>
@@ -19,7 +18,7 @@ void PhysicsEngine::SetDefaults()
 }
 
 PhysicsEngine::PhysicsEngine() :
-	tree(nullptr) //TODO: Make these variable
+	tree(nullptr)
 {
 	//Variables set here will /not/ be reset with each scene
 	isPaused = false;  
@@ -178,15 +177,29 @@ void PhysicsEngine::BroadPhaseCollisions()
 {
 	broadphaseColPairs.clear();
 
-	PhysicsNode *pnodeA, *pnodeB;
-	//	The broadphase needs to build a list of all potentially colliding objects in the world,
-	//	which then get accurately assesed in narrowphase. If this is too coarse then the system slows down with
-	//	the complexity of narrowphase collision checking, if this is too fine then collisions may be missed.
+	tree = nullptr;
+		//The broadphase needs to build a list of all potentially colliding objects in the world,
+		//which then get accurately assesed in narrowphase. If this is too coarse then the system slows down with
+		//the complexity of narrowphase collision checking, if this is too fine then collisions may be missed.
+	if (tree) {
+		broadphaseColPairs = tree->BuildPotentialCollisionList();
+		for (const auto& pair : broadphaseColPairs) {
+			std::cout << pair->pObjectA << " " << pair->pObjectB << std::endl;
+		}
+		std::cout << "************************" << std::endl;
+	}
+	else {
+		BruteForceBroadPhase();
+	}
 
 
+}
+
+void PhysicsEngine::BruteForceBroadPhase() {
 	//	Brute force approach.
 	//  - For every object A, assume it could collide with every other object.. 
 	//    even if they are on the opposite sides of the world.
+	PhysicsNode *pnodeA, *pnodeB;
 	if (physicsNodes.size() > 0)
 	{
 		for (size_t i = 0; i < physicsNodes.size() - 1; ++i)
@@ -195,15 +208,15 @@ void PhysicsEngine::BroadPhaseCollisions()
 			{
 				pnodeA = physicsNodes[i];
 				pnodeB = physicsNodes[j];
-
-				if (AreColliding(dynamic_cast<SphereCollisionShape*>(pnodeA->GetBroadCollisionShape()), dynamic_cast<SphereCollisionShape*>(pnodeB->GetBroadCollisionShape()))) {
+	
+				if (pnodeA->GetBroadCollisionShape()->IsColliding(pnodeB->GetBroadCollisionShape())) {
 					//Check they both atleast have collision shapes
 					if (pnodeA->GetNarrowCollisionShape() != NULL
 						&& pnodeB->GetNarrowCollisionShape() != NULL)
 					{
-						CollisionPair cp;
-						cp.pObjectA = pnodeA;
-						cp.pObjectB = pnodeB;
+						CollisionPair* cp = new CollisionPair();
+						cp->pObjectA = pnodeA;
+						cp->pObjectB = pnodeB;
 						broadphaseColPairs.push_back(cp);
 					}
 				}
@@ -226,7 +239,7 @@ void PhysicsEngine::NarrowPhaseCollisions()
 		// Iterate over all possible collision pairs and perform accurate collision detection
 		for (size_t i = 0; i < broadphaseColPairs.size(); ++i)
 		{
-			CollisionPair& cp = broadphaseColPairs[i];
+			CollisionPair& cp = *broadphaseColPairs[i];
 
 			CollisionShape *shapeA = cp.pObjectA->GetNarrowCollisionShape();
 			CollisionShape *shapeB = cp.pObjectB->GetNarrowCollisionShape();

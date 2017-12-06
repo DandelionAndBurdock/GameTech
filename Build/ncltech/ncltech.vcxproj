@@ -175,6 +175,7 @@
     <ClInclude Include="Manifold.h" />
     <ClInclude Include="NetworkBase.h" />
     <ClInclude Include="Octtree.h" />
+    <ClInclude Include="Packets.h" />
     <ClInclude Include="PathFollowing.h" />
     <ClInclude Include="PhysicsEngine.h" />
     <ClInclude Include="PhysicsNode.h" />

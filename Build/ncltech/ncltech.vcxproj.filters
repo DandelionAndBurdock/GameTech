@@ -179,5 +179,8 @@
     <ClInclude Include="Jelly.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Packets.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

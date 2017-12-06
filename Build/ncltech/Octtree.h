@@ -50,6 +50,9 @@ public:
 	void InsertObject(PhysicsNode* node);
 	void BuildTree();
 
+	// Returns pairs of objects found in the same octant
+	std::vector<CollisionPair*> BuildPotentialCollisionList();
+
 	void SetMinCubeSize(float s) { minCubeSize = s; }
 	void SetMaxOctantObjects(int n) { maxOctantObjects = n; }
 
@@ -73,8 +76,7 @@ protected:
 	float minCubeSize = 1.0f;
 	// Threshold for the max number of objects in one octant (assuming size greater than minCubeSize)
 	int maxOctantObjects = 4;
-	// Returns pairs of objects found in the same octant
-	std::vector<CollisionPair*> BuildPotentialCollisionList();
+
 
 	// Returns all objects in children inside set
 	void GetObjects(std::set<PhysicsNode*> s, OcttreeNode* node);
@@ -102,6 +104,8 @@ protected:
 	void BuildPotentialCollisionList(OcttreeNode* node, std::vector<CollisionPair*>& pairList);
 	// Contains list of potentially colliding pairs
 	std::vector<CollisionPair*> pairList;
+	// Adds a collision pair if not already in pairList
+	void AddCollisionPair(PhysicsNode* a, PhysicsNode* b);
 protected:
 	// Recursive draw function
 	void DebugDraw(OcttreeNode* node);

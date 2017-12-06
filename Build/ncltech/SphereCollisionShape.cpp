@@ -4,6 +4,7 @@
 #include <nclgl\Matrix3.h>
 #include <nclgl\Vector3.h>
 
+#include "BasicCollisionTests.h"
 
 SphereCollisionShape::SphereCollisionShape()
 {
@@ -107,4 +108,13 @@ void SphereCollisionShape::DebugDraw() const
 		lastY = newY;
 		lastZ = newZ;
 	}
+}
+
+
+bool SphereCollisionShape::IsColliding(CollisionShape* shape) {
+	return shape->IsCollidingWith(this);
+}
+
+bool SphereCollisionShape::IsCollidingWith(SphereCollisionShape* shape) {
+	return AreColliding(this, shape);
 }

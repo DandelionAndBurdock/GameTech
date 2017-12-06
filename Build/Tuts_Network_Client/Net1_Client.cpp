@@ -86,7 +86,9 @@ produce satisfactory results on the networked peers.
 #include <nclgl\NCLDebug.h>
 #include <ncltech\DistanceConstraint.h>
 #include <ncltech\CommonUtils.h>
+#include <ncltech\Packets.h>
 
+using namespace Packet;
 const Vector3 status_color3 = Vector3(1.0f, 0.6f, 0.6f);
 const Vector4 status_color = Vector4(status_color3.x, status_color3.y, status_color3.z, 1.0f);
 
@@ -189,16 +191,27 @@ void Net1_Client::ProcessNetworkEvent(const ENetEvent& evnt)
 	//Server has sent us a new packet
 	case ENET_EVENT_TYPE_RECEIVE:
 		{
-			if (evnt.packet->dataLength == sizeof(Vector3))
-			{
-				Vector3 pos;
-				memcpy(&pos, evnt.packet->data, sizeof(Vector3));
-				box->Physics()->SetPosition(pos);
-			}
-			else
-			{
-				NCLERROR("Recieved Invalid Network Packet!");
-			}
+		PacketType* message = reinterpret_cast<PacketType*>(evnt.packet->data);
+		int* message2 = reinterpret_cast<int*>(evnt.packet->data);
+		switch (*message) {
+		case POS_DATA:
+			// Advance pointer to the start of the message data
+			++message;
+			Vector3* pos = reinterpret_cast<Vector3*>(message);
+			std::cout << *pos << std::endl;
+			box->Physics()->SetPosition(*pos);
+			break;
+		}
+			//if (evnt.packet->dataLength == sizeof(Vector3))
+			//{
+			//	Vector3 pos;
+			//	memcpy(&pos, evnt.packet->data, sizeof(Vector3));
+			//	box->Physics()->SetPosition(pos);
+			//}
+			//else
+			//{
+			//	NCLERROR("Recieved Invalid Network Packet!");
+			//}
 
 		}
 		break;

@@ -25,6 +25,8 @@ Description:
 #include "CollisionShape.h"
 #include "Hull.h"
 
+class SphereCollisionShape;
+
 class CuboidCollisionShape : public CollisionShape
 {
 public:
@@ -70,8 +72,13 @@ public:
 		Vector3& out_normal,
 		std::vector<Plane>& out_adjacent_planes) const override;
 
-	// TODO: Not very nice
+	// TODO: temporary until have double dispatch fully implemented
 	virtual float GetSize() { return halfDims.x; }
+
+
+	// Double dispatch
+	bool IsColliding(CollisionShape* shape) override;
+	bool IsCollidingWith(SphereCollisionShape* shape) override;
 protected:
 	//Constructs the static cube hull 
 	static void ConstructCubeHull();

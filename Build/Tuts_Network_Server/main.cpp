@@ -39,6 +39,9 @@ FOR MORE NETWORKING INFORMATION SEE "Tuts_Network_Client -> Net1_Client.h"
 #include <nclgl\Vector3.h>
 #include <nclgl\common.h>
 #include <ncltech\NetworkBase.h>
+#include <ncltech\Packets.h>
+
+using namespace Packet;
 
 //Needed to get computer adapter IPv4 addresses via windows
 #include <iphlpapi.h>
@@ -124,9 +127,15 @@ int main(int arcg, char** argv)
 				1.5f,
 				sin(rotation) * 2.0f);
 
+
+			PacketVec3 position;
+			position.vec = pos;
+			position.message = POS_DATA;
+			ENetPacket* position_updateA = enet_packet_create(&position, sizeof(PacketVec3), 0);
+			enet_host_broadcast(server.m_pNetwork, 0, position_updateA);
 			//Create the packet and broadcast it (unreliable transport) to all clients
-			ENetPacket* position_update = enet_packet_create(&pos, sizeof(Vector3), 0);
-			enet_host_broadcast(server.m_pNetwork, 0, position_update);
+			//ENetPacket* position_update = enet_packet_create(&pos, sizeof(Vector3), 0);
+			//enet_host_broadcast(server.m_pNetwork, 0, position_update);
 		}
 
 		Sleep(0);

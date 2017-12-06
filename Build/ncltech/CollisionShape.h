@@ -26,6 +26,8 @@ Description:
 #include <vector>
 #include <list>
 
+class SphereCollisionShape;
+
 using namespace GeometryUtils;
 
 class PhysicsNode;
@@ -84,6 +86,10 @@ public:
 		std::list<Vector3>& out_face,
 		Vector3& out_normal,
 		std::vector<Plane>& out_adjacent_planes) const = 0;
+
+	// Double dispatch
+	virtual bool IsColliding(CollisionShape* shape) = 0;
+	virtual bool IsCollidingWith(SphereCollisionShape* shape) = 0;
 
 protected:
 	PhysicsNode* m_Parent;

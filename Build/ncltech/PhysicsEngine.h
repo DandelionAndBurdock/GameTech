@@ -147,8 +147,11 @@ protected:
 	float		gravity;
 	float		dampingFactor;
 
+	// Makes all n! collision pairs
+	void BruteForceBroadPhase();
 
-	std::vector<CollisionPair>  broadphaseColPairs;
+
+	std::vector<CollisionPair*>  broadphaseColPairs;
 
 	std::vector<PhysicsNode*>	physicsNodes;
 

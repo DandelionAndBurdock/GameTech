@@ -60,7 +60,10 @@ public:
 		std::vector<Plane>& out_adjacent_planes) const override;
 
 	float GetSize() override { return m_Radius; }
-
+	
+	// Double dispatch
+	bool IsColliding(CollisionShape* shape) override;
+	bool IsCollidingWith(SphereCollisionShape* shape) override;
 protected:
 	float	m_Radius;
 };

@@ -224,7 +224,8 @@ void Octtree::UpdateDivision(OcttreeNode* node) {
 }
 
 void Octtree::UpdateRecombine(OcttreeNode* node) {
-	if (!node->hasChildren) { // Can't recombine undivided node
+	// Can't recombine an undivided node 
+	if (!node->hasChildren || node == root) { 
 		return;
 	}
 
@@ -232,6 +233,7 @@ void Octtree::UpdateRecombine(OcttreeNode* node) {
 		UpdateRecombine(node->children[i]);
 	}
 
+	// Don't want to recombine the root  (only its children) even if root contains few objects
 	if (node != root && CountChildren(node) < maxOctantObjects) {
 		CountChildren(node);
 		// Reabsorb the children objects
@@ -312,27 +314,37 @@ bool Octtree::AtMinimumSize(OcttreeNode* node) {
 
 
 std::vector<CollisionPair*> Octtree::BuildPotentialCollisionList() {
-	for (auto& pair : pairList) { // Clear old pair list
-		SAFE_DELETE(pair);
-	}
-
+	pairList.clear();
 	BuildPotentialCollisionList(root, pairList);
 	return pairList;
 }
 
+//TODO: This currently counts collision objects twice for pairs next to teh boundary
 void Octtree::BuildPotentialCollisionList(OcttreeNode* node, std::vector<CollisionPair*>& pairList) {
 	if (node->hasChildren) { 
 		for (int i = 0; i < NUM_OCTANTS; ++i) {
 			BuildPotentialCollisionList(node->children[i], pairList);
 		}
 	}
-
-	if (node->objects.size() > 1) {
-		for (int firstObj = 0; firstObj < node->objects.size(); ++firstObj) {
-			for (int secondObj = 0; secondObj < node->objects.size(); ++secondObj) {
-				pairList.push_back(new CollisionPair(node->objects[firstObj], node->objects[secondObj]));
+	else {
+		if (node->objects.size() > 1) {
+			for (int firstObj = 0; firstObj < node->objects.size(); ++firstObj) {
+				for (int secondObj = firstObj + 1; secondObj < node->objects.size(); ++secondObj) {
+					AddCollisionPair(node->objects[firstObj], node->objects[secondObj]);
+				}
 			}
 		}
 	}
+
 }
 
+void Octtree::AddCollisionPair(PhysicsNode* a, PhysicsNode* b) {
+	for (const auto& pair : pairList) {
+		if (pair->pObjectA == a || pair->pObjectB == a) {
+			if (pair->pObjectA == b || pair->pObjectB == b) {
+				return;
+			}
+		}
+	}
+	pairList.push_back(new CollisionPair(a, b));
+}

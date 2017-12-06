@@ -3,6 +3,8 @@
 #include "GeometryUtils.h"
 #include <nclgl/Matrix3.h>
 
+#include "SphereCollisionShape.h"
+
 Hull CuboidCollisionShape::cubeHull = Hull();
 
 CuboidCollisionShape::CuboidCollisionShape()
@@ -241,4 +243,12 @@ void CuboidCollisionShape::ConstructCubeHull()
 	cubeHull.AddFace(Vector3(0.0f, -1.0f, 0.0f), 4, face4);
 	cubeHull.AddFace(Vector3(1.0f, 0.0f, 0.0f), 4, face5);
 	cubeHull.AddFace(Vector3(-1.0f, 0.0f, 0.0f), 4, face6);
+}
+
+// Double dispatch
+bool CuboidCollisionShape::IsColliding(CollisionShape* shape) {
+	return false;
+}
+bool CuboidCollisionShape::IsCollidingWith(SphereCollisionShape* shape) {
+	return false;
 }
