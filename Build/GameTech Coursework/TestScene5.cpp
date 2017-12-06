@@ -59,8 +59,9 @@ void TestScene5::OnInitializeScene()
 	player->SetPhysics(new PhysicsNode());
 	player->Physics()->SetPosition(Vector3(0.0f, 0.5f, 0.0f));
 	CompositeCollisionShape* raptorShape = new CompositeCollisionShape();
-	raptorShape->AddShape(new CuboidCollisionShape(Vector3(0.5f, 0.5f, 1.0f)), Vector3(0.0f));
-	raptorShape->AddShape(new CuboidCollisionShape(Vector3(0.5f, 0.5f, 1.0f)), Vector3(0.5f));
+	raptorShape->AddShape(new CuboidCollisionShape(Vector3(0.2f, 0.2f, 0.5f)), Vector3(0.0f));
+	raptorShape->AddShape(new CuboidCollisionShape(Vector3(0.1f, 0.1f, 0.5f)), Vector3(0.0f, 0.2f, 1.10f));
+	//raptorShape->AddShape(new SphereCollisionShape(0.2f), Vector3(0.0f, 0.4f, -0.75f));
 	//player->Physics()->SetNarrowPhaseCollisionShape(new CuboidCollisionShape(Vector3(0.5f, 0.5f, 1.0f)));
 	player->Physics()->SetNarrowPhaseCollisionShape(raptorShape);
 	this->AddGameObject(player);

@@ -46,6 +46,24 @@ Matrix3 CuboidCollisionShape::BuildInverseInertia(float invMass) const
 	return inertia;
 }
 
+
+// Build Inertia Matrix for rotational mass
+Matrix3 CuboidCollisionShape::BuildInertia(float invMass) const {
+	// I = 1 / 12 * M * (a^2 + b^2) where a and b are the dimensions 
+	// perpendicular to the axis
+
+	Vector3 dimsSq = (halfDims + halfDims);
+	dimsSq = dimsSq * dimsSq;
+
+	Matrix3 inertia;
+	inertia._11 = (1.0f / (12.0f* invMass)) * (dimsSq.y + dimsSq.z);
+	inertia._22 = (1.0f / (12.0f* invMass)) * (dimsSq.x + dimsSq.z);
+	inertia._33 = (1.0f / (12.0f* invMass)) * (dimsSq.x + dimsSq.y);
+
+
+	return inertia;
+}
+
 void CuboidCollisionShape::GetCollisionAxes(
 	const PhysicsNode* otherObject,
 	std::vector<Vector3>& out_axes) const

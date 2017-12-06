@@ -35,6 +35,18 @@ Matrix3 SphereCollisionShape::BuildInverseInertia(float invMass) const
 	return inertia;
 }
 
+// Build Inertia Matrix for rotational mass
+Matrix3 SphereCollisionShape::BuildInertia(float invMass) const {
+	// I = 2/5 MR^2
+	float i = 0.4f / invMass * (m_Radius * m_Radius); //SOLID
+													  
+	Matrix3 inertia;
+	inertia._11 = i;
+	inertia._22 = i;
+	inertia._33 = i;
+
+	return inertia;
+}
 
 
 void SphereCollisionShape::GetCollisionAxes(const PhysicsNode* otherObject, std::vector<Vector3>& out_axes) const
@@ -80,7 +92,7 @@ void SphereCollisionShape::GetIncidentReferencePolygon(
 
 void SphereCollisionShape::DebugDraw(Vector3 offset) const
 {
-	Vector3 pos = Parent()->GetPosition() + offset;
+	Vector3 pos = Parent()->GetPosition();
 
 	//Draw Filled Circle
 	NCLDebug::DrawPointNDT(pos, m_Radius, Vector4(1.0f, 1.0f, 1.0f, 0.2f));

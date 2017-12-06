@@ -49,9 +49,10 @@ public:
 	virtual void DebugDraw(Vector3 offset = Vector3(0.0f)) const override;
 
 
-	// Build Inertia Matrix for rotational mass
+	// Build Inverse Inertia Matrix for rotational mass
 	virtual Matrix3 BuildInverseInertia(float invMass) const override;
-
+	// Build Inertia Matrix for rotational mass
+	virtual Matrix3 BuildInertia(float invMass) const override;
 
 	// Generic Collision Detection Routines
 	//  - Used in CollisionDetectionSAT to identify if two shapes overlap
