@@ -88,6 +88,7 @@ void PhysicsEngine::Update(float deltaTime)
 
 	if (!isPaused)
 	{
+		//BuildTree();
 		updateRealTimeAccum += deltaTime;
 		for (int i = 0; (updateRealTimeAccum >= updateTimestep) && i < max_updates_per_frame; ++i)
 		{
@@ -125,9 +126,6 @@ void PhysicsEngine::UpdatePhysics()
 	perfBroadphase.UpdateRealElapsedTime(updateTimestep);
 	perfNarrowphase.UpdateRealElapsedTime(updateTimestep);
 	perfSolver.UpdateRealElapsedTime(updateTimestep);
-
-
-
 
 	//A whole physics engine in 6 simple steps =D
 

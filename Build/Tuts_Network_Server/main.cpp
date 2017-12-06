@@ -103,16 +103,39 @@ int main(int arcg, char** argv)
 				break;
 
 			case ENET_EVENT_TYPE_RECEIVE:
-				printf("\t Client %d says: %s\n", evnt.peer->incomingPeerID, evnt.packet->data);
-				enet_packet_destroy(evnt.packet);
-				break;
+			{
+				PacketType* message = reinterpret_cast<PacketType*>(evnt.packet->data);
+
+				switch (*message) {
+				case GEN_MAZE:
+				{
+					// Advance pointer to the start of the message data
+					++message;
+					int* gridSize = reinterpret_cast<int*>(message);
+					++message;
+					float* mazeDensity = reinterpret_cast<float*>(message);
+					enet_packet_destroy(evnt.packet);
+					break;
+				}
+				case TEST_PACKET:
+				{
+					// Advance pointer to the start of the message data
+					++message;
+					std::string* msg = reinterpret_cast<std::string*>(message);
+					std::cout << "Client " << evnt.peer->incomingPeerID << " says " << *msg << std::endl;
+					enet_packet_destroy(evnt.packet);
+					break;
+				}
+				}
+
+			}
 
 			case ENET_EVENT_TYPE_DISCONNECT:
 				printf("- Client %d has disconnected.\n", evnt.peer->incomingPeerID);
 				break;
 			}
 		});
-		
+
 		//Broadcast update packet to all connected clients at a rate of UPDATE_TIMESTEP updates per second
 		if (accum_time >= UPDATE_TIMESTEP)
 		{
@@ -133,6 +156,9 @@ int main(int arcg, char** argv)
 			position.message = POS_DATA;
 			ENetPacket* position_updateA = enet_packet_create(&position, sizeof(PacketVec3), 0);
 			enet_host_broadcast(server.m_pNetwork, 0, position_updateA);
+
+
+
 			//Create the packet and broadcast it (unreliable transport) to all clients
 			//ENetPacket* position_update = enet_packet_create(&pos, sizeof(Vector3), 0);
 			//enet_host_broadcast(server.m_pNetwork, 0, position_update);
@@ -154,7 +180,7 @@ void Win32_PrintAllAdapterIPAddresses()
 {
 	//Initially allocate 5KB of memory to store all adapter info
 	ULONG outBufLen = 5000;
-	
+
 
 	IP_ADAPTER_INFO* pAdapters = NULL;
 	DWORD status = ERROR_BUFFER_OVERFLOW;
@@ -180,7 +206,7 @@ void Win32_PrintAllAdapterIPAddresses()
 		}
 	}
 
-	
+
 	if (pAdapters != NULL)
 	{
 		//Iterate through all Network Adapters, and print all IPv4 addresses associated with them to the console
@@ -199,5 +225,5 @@ void Win32_PrintAllAdapterIPAddresses()
 
 		free(pAdapters);
 	}
-	
+
 }

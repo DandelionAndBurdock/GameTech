@@ -19,7 +19,8 @@ class Phy4_AiCallbacks: public Scene
 public:
 	Phy4_AiCallbacks(const std::string& friendly_name)
 		: Scene(friendly_name)
-		, m_MeshPlayer(new OBJMesh(MESHDIR"raptor.obj"))
+		//, m_MeshPlayer(new OBJMesh(MESHDIR"raptor.obj"))
+		, m_MeshPlayer(new OBJMesh(MESHDIR"TIE-fighterNew.obj"))
 	{
 	}
 

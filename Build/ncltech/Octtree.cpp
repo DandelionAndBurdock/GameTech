@@ -187,9 +187,9 @@ void Octtree::Update() {
 
 	UpdateNonStaticObjects(root); 
 	
-	UpdateRecombine(root);
-
-	UpdateDivision(root);
+	//UpdateRecombine(root);
+	//
+	//UpdateDivision(root);
 }
 
 
@@ -324,6 +324,7 @@ bool Octtree::AtMinimumSize(OcttreeNode* node) {
 std::vector<CollisionPair*> Octtree::BuildPotentialCollisionList() {
 	pairList.clear();
 	BuildPotentialCollisionList(root, pairList);
+	std::cout << pairList.size() << std::endl;
 	return pairList;
 }
 
