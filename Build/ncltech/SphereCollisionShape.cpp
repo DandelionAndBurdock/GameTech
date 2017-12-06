@@ -78,9 +78,9 @@ void SphereCollisionShape::GetIncidentReferencePolygon(
 	out_normal = axis;	
 }
 
-void SphereCollisionShape::DebugDraw() const
+void SphereCollisionShape::DebugDraw(Vector3 offset) const
 {
-	Vector3 pos = Parent()->GetPosition();
+	Vector3 pos = Parent()->GetPosition() + offset;
 
 	//Draw Filled Circle
 	NCLDebug::DrawPointNDT(pos, m_Radius, Vector4(1.0f, 1.0f, 1.0f, 0.2f));

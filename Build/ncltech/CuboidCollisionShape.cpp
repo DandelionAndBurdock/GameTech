@@ -208,10 +208,10 @@ void CuboidCollisionShape::GetIncidentReferencePolygon(
 }
 
 
-void CuboidCollisionShape::DebugDraw() const
+void CuboidCollisionShape::DebugDraw(Vector3 offset) const
 {
 	// Just draw the cuboid hull-mesh at the position of our PhysicsNode
-	Matrix4 transform = Parent()->GetWorldSpaceTransform() * Matrix4::Scale(halfDims);
+	Matrix4 transform = Parent()->GetWorldSpaceTransform() * Matrix4::Translation(offset) * Matrix4::Scale(halfDims);
 	cubeHull.DebugDraw(transform);
 }
 

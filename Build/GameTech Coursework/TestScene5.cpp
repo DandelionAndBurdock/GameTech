@@ -9,6 +9,8 @@
 #include <nclgl\OBJMesh.h>
 #include "../Tuts_Physics/ObjectPlayer.h"
 #include <ncltech\CuboidCollisionShape.h>
+#include <ncltech\CompositeCollisionShape.h>
+
 using namespace CommonUtils;
 
 TestScene5::TestScene5(const std::string& friendly_name)
@@ -56,8 +58,11 @@ void TestScene5::OnInitializeScene()
 
 	player->SetPhysics(new PhysicsNode());
 	player->Physics()->SetPosition(Vector3(0.0f, 0.5f, 0.0f));
-	player->Physics()->SetNarrowPhaseCollisionShape(new CuboidCollisionShape(Vector3(0.5f, 0.5f, 1.0f)));
-
+	CompositeCollisionShape* raptorShape = new CompositeCollisionShape();
+	raptorShape->AddShape(new CuboidCollisionShape(Vector3(0.5f, 0.5f, 1.0f)), Vector3(0.0f));
+	raptorShape->AddShape(new CuboidCollisionShape(Vector3(0.5f, 0.5f, 1.0f)), Vector3(0.5f));
+	//player->Physics()->SetNarrowPhaseCollisionShape(new CuboidCollisionShape(Vector3(0.5f, 0.5f, 1.0f)));
+	player->Physics()->SetNarrowPhaseCollisionShape(raptorShape);
 	this->AddGameObject(player);
 }
 

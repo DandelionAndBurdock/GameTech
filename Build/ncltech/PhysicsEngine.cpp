@@ -177,16 +177,22 @@ void PhysicsEngine::BroadPhaseCollisions()
 {
 	broadphaseColPairs.clear();
 
-	tree = nullptr;
+	//tree = nullptr;
 		//The broadphase needs to build a list of all potentially colliding objects in the world,
 		//which then get accurately assesed in narrowphase. If this is too coarse then the system slows down with
 		//the complexity of narrowphase collision checking, if this is too fine then collisions may be missed.
 	if (tree) {
 		broadphaseColPairs = tree->BuildPotentialCollisionList();
-		for (const auto& pair : broadphaseColPairs) {
-			std::cout << pair->pObjectA << " " << pair->pObjectB << std::endl;
+
+		for (auto iter = broadphaseColPairs.begin(); iter != broadphaseColPairs.end(); ) {
+			if (!(*iter)->pObjectA->GetBroadCollisionShape()->IsColliding((*iter)->pObjectB->GetBroadCollisionShape())) {
+
+				iter = broadphaseColPairs.erase(iter);
+			}
+			else {
+				++iter;
+			}
 		}
-		std::cout << "************************" << std::endl;
 	}
 	else {
 		BruteForceBroadPhase();
@@ -329,7 +335,9 @@ void PhysicsEngine::DebugRender()
 
 
 void PhysicsEngine::BuildTree() {
-	SAFE_DELETE(tree);
+	if (tree) {
+		delete tree;
+	}
 	tree = new Octtree(Vector3(-20.0f, +0.0f, -20.0f), Vector3(20.0f));
 	tree->InsertObjects(physicsNodes);
 	tree->BuildTree();

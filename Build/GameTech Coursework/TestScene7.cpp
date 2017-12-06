@@ -23,7 +23,6 @@ void TestScene7::OnInitializeScene() {
 	this->AddGameObject(cloth);
 
 
-
 	// Sphere
 	GameObject* sphere = CommonUtils::BuildSphereObject(
 		"",					// Optional: Name

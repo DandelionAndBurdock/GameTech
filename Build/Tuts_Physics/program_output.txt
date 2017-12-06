@@ -1,53 +1,59 @@
-[09:41:52] Loading Shader:
-[09:41:52]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechVertexBasic.glsl
-[09:41:52]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechFragSuperSample.glsl
-[09:41:52]     -> Linking Shader: Success!
-[09:41:52] 
-[09:41:52] Loading Shader:
-[09:41:52]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechVertexShadow.glsl
-[09:41:53]     -> Compiling Shader: ../../Data/Shaders/Common/EmptyFragment.glsl
-[09:41:53]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechGeomShadow.glsl
-[09:41:53]     -> Linking Shader: Success!
-[09:41:53] 
-[09:41:53] Loading Shader:
-[09:41:53]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechVertexFull.glsl
-[09:41:53]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechFragForwardRender.glsl
-[09:41:53]     -> Linking Shader: Success!
-[09:41:53] 
-[09:41:53] Loading Shader:
-[09:41:53]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/PointVertex.glsl
-[09:41:53]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/PointFragment.glsl
-[09:41:53]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/PointGeometry.glsl
-[09:41:53]     -> Linking Shader: Success!
-[09:41:53] 
-[09:41:53] Loading Shader:
-[09:41:53]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/Vertex.glsl
-[09:41:53]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/Fragment.glsl
-[09:41:53]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/LineGeometry.glsl
-[09:41:53]     -> Linking Shader: Success!
-[09:41:53] 
-[09:41:53] Loading Shader:
-[09:41:53]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/VertexColOnly.glsl
-[09:41:53]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/Fragment.glsl
-[09:41:53]     -> Linking Shader: Success!
-[09:41:53] 
-[09:41:53] Loading Shader:
-[09:41:53]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/TextVertex.glsl
-[09:41:53]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/TextFragment.glsl
-[09:41:53]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/TextGeometry.glsl
-[09:41:53]     -> Linking Shader: Success!
-[09:41:53] 
-[09:41:53] Loading Shader:
-[09:41:53]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechVertexPicker.glsl
-[09:41:53]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechFragScreenPicker_nsightfix.glsl
-[09:41:53]     -> Linking Shader: Success!
-[09:41:53] 
-[09:41:53] Loading Mesh: ../../Data/Meshes/cube.obj
-[09:41:53] 
-[09:41:53] Loading Mesh: ../../Data/Meshes/sphere.obj
-[09:41:53] 
-[09:41:53] [SceneManager] - Enqueued scene: "Physics Tut #7 - Global Solver"
-[09:41:53] 
-[09:41:53] [SceneManager] - Scene switched to: "Physics Tut #7 - Global Solver"
-[09:41:53] Physics too slow to run in real time!
-[09:41:59] [SceneManager] Closing scene manager
+[11:39:26] Loading Shader:
+[11:39:26]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechVertexBasic.glsl
+[11:39:26]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechFragSuperSample.glsl
+[11:39:26]     -> Linking Shader: Success!
+[11:39:26] 
+[11:39:26] Loading Shader:
+[11:39:26]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechVertexShadow.glsl
+[11:39:26]     -> Compiling Shader: ../../Data/Shaders/Common/EmptyFragment.glsl
+[11:39:26]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechGeomShadow.glsl
+[11:39:26]     -> Linking Shader: Success!
+[11:39:26] 
+[11:39:26] Loading Shader:
+[11:39:26]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechVertexFull.glsl
+[11:39:26]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechFragForwardRender.glsl
+[11:39:26]     -> Linking Shader: Success!
+[11:39:26] 
+[11:39:26] Loading Shader:
+[11:39:26]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/PointVertex.glsl
+[11:39:26]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/PointFragment.glsl
+[11:39:26]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/PointGeometry.glsl
+[11:39:26]     -> Linking Shader: Success!
+[11:39:26] 
+[11:39:26] Loading Shader:
+[11:39:26]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/Vertex.glsl
+[11:39:26]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/Fragment.glsl
+[11:39:26]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/LineGeometry.glsl
+[11:39:26]     -> Linking Shader: Success!
+[11:39:26] 
+[11:39:26] Loading Shader:
+[11:39:26]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/VertexColOnly.glsl
+[11:39:26]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/Fragment.glsl
+[11:39:26]     -> Linking Shader: Success!
+[11:39:26] 
+[11:39:26] Loading Shader:
+[11:39:26]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/TextVertex.glsl
+[11:39:26]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/TextFragment.glsl
+[11:39:26]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/TextGeometry.glsl
+[11:39:26]     -> Linking Shader: Success!
+[11:39:26] 
+[11:39:26] Loading Shader:
+[11:39:26]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechVertexPicker.glsl
+[11:39:26]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechFragScreenPicker_nsightfix.glsl
+[11:39:26]     -> Linking Shader: Success!
+[11:39:26] 
+[11:39:26] Loading Mesh: ../../Data/Meshes/cube.obj
+[11:39:26] 
+[11:39:26] Loading Mesh: ../../Data/Meshes/sphere.obj
+[11:39:26] 
+[11:39:26] [SceneManager] - Enqueued scene: "Physics Tut #7 - Global Solver"
+[11:39:26] 
+[11:39:26] [SceneManager] - Scene switched to: "Physics Tut #7 - Global Solver"
+[11:39:27] [SceneManager] - Exiting scene -
+[11:39:27] 
+[11:39:27] [SceneManager] - Scene switched to: "Physics Tut #7 - Global Solver"
+[11:39:30] Physics too slow to run in real time!
+[11:39:30] Physics too slow to run in real time!
+[11:39:31] Physics too slow to run in real time!
+[11:39:33] Physics too slow to run in real time!
+[11:39:33] [SceneManager] Closing scene manager

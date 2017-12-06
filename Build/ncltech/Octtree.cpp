@@ -18,10 +18,10 @@ Octtree::Octtree(Vector3 minCorner, Vector3 maxCorner)
 
 Octtree::~Octtree()
 {
-	// Recursively delete all roots
+	DeleteTree(root);
 }
 
-//TODO: Remove object
+
 void Octtree::InsertObject(PhysicsNode* node) {
 	// Check if this object is already in the tree
 	if(std::find(objects.cbegin(), objects.cend(), node) == objects.cend()) {
@@ -37,6 +37,17 @@ void Octtree::InsertObjects(std::vector<PhysicsNode*> objects) {
 }
 
 void Octtree::BuildTree() {
+	// Clear any previous tree but leave root intact
+	if (root->hasChildren) {
+		for (int i = 0; i < NUM_OCTANTS; ++i) {
+			DeleteTree(root->children[i]);
+		}
+	}
+	else {
+		root->objects.clear();
+	}
+
+	// Rebuild tree
 	for (auto& object : objects) {
 		InsertObject(object, root);
 	}
@@ -235,7 +246,6 @@ void Octtree::UpdateRecombine(OcttreeNode* node) {
 
 	// Don't want to recombine the root  (only its children) even if root contains few objects
 	if (node != root && CountChildren(node) < maxOctantObjects) {
-		CountChildren(node);
 		// Reabsorb the children objects
 		for (int i = 0; i < NUM_OCTANTS; ++i) {
 			node->objects.insert(node->objects.end(),
@@ -274,8 +284,6 @@ void Octtree::GetObjects(std::set<PhysicsNode*> s, OcttreeNode* node) {
 			node->objects.begin(),
 			node->objects.end());
 	}
-
-
 }
 
 void Octtree::SimpleInsertObject(PhysicsNode* object, OcttreeNode* node) {
@@ -319,7 +327,6 @@ std::vector<CollisionPair*> Octtree::BuildPotentialCollisionList() {
 	return pairList;
 }
 
-//TODO: This currently counts collision objects twice for pairs next to teh boundary
 void Octtree::BuildPotentialCollisionList(OcttreeNode* node, std::vector<CollisionPair*>& pairList) {
 	if (node->hasChildren) { 
 		for (int i = 0; i < NUM_OCTANTS; ++i) {
@@ -347,4 +354,17 @@ void Octtree::AddCollisionPair(PhysicsNode* a, PhysicsNode* b) {
 		}
 	}
 	pairList.push_back(new CollisionPair(a, b));
+}
+
+void Octtree::DeleteTree(OcttreeNode* node) {
+	if (!node) {
+		return;
+	}
+
+	if (node->hasChildren) {
+		for (int i = 0; i < NUM_OCTANTS; ++i) {
+			DeleteTree(node->children[i]);
+		}
+	}
+	SAFE_DELETE(node);
 }

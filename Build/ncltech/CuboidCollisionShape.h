@@ -46,7 +46,7 @@ public:
 	float GetHalfDepth()	const { return halfDims.z; }
 
 	// Debug Collision Shape
-	virtual void DebugDraw() const override;
+	virtual void DebugDraw(Vector3 offset = Vector3(0.0f)) const override;
 
 
 	// Build Inertia Matrix for rotational mass

@@ -52,9 +52,9 @@ public:
 	virtual Matrix3 BuildInverseInertia(float invMass) const = 0;
 
 	// Draws this collision shape to the debug renderer
-	virtual void DebugDraw() const {};
+	virtual void DebugDraw(Vector3 offset = Vector3(0.0f)) const = 0;
 
-	inline void SetParent(PhysicsNode* node) { m_Parent = node; }
+	inline virtual void SetParent(PhysicsNode* node) { m_Parent = node; }
 	inline		 PhysicsNode* Parent()		 { return m_Parent; }
 	inline const PhysicsNode* Parent() const { return m_Parent; }
 
@@ -65,16 +65,16 @@ public:
 	// the other shape will also have it's own axes to test.
 	virtual void GetCollisionAxes(
 		const PhysicsNode* otherObject,
-		std::vector<Vector3>& out_axes) const = 0;
+		std::vector<Vector3>& out_axes) const {};
 
 	//Returns closest point on the collision shape to the given point
-	virtual Vector3 GetClosestPoint(const Vector3& point) const = 0;
+	virtual Vector3 GetClosestPoint(const Vector3& point) const= 0;
 
 	// Get the min/max vertices along a given axis
 	virtual void GetMinMaxVertexOnAxis(
-		const Vector3& axis, 
+		const Vector3& axis,
 		Vector3& out_min,
-		Vector3& out_max) const = 0;
+		Vector3& out_max) const {};
 
 
 	// Get all data needed to build manifold
@@ -85,7 +85,7 @@ public:
 		const Vector3& axis,
 		std::list<Vector3>& out_face,
 		Vector3& out_normal,
-		std::vector<Plane>& out_adjacent_planes) const = 0;
+		std::vector<Plane>& out_adjacent_planes) const {};
 
 	// Double dispatch
 	virtual bool IsColliding(CollisionShape* shape) = 0;

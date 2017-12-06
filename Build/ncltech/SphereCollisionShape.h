@@ -34,7 +34,7 @@ public:
 	float	GetRadius() const { return m_Radius; }
 
 	// Debug Collision Shape
-	virtual void DebugDraw() const override;
+	virtual void DebugDraw(Vector3 offset = Vector3(0.0f)) const override;
 
 	// Build Inertia Matrix for rotational mass
 	virtual Matrix3 BuildInverseInertia(float invMass) const override;

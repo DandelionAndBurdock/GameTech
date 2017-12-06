@@ -1,2 +1,3 @@
-﻿  PhysicsEngine.cpp
+﻿  CompositeCollisionShape.cpp
+d:\gametechnetwork\gametech\build\ncltech\compositecollisionshape.cpp(43): warning C4018: '<': signed/unsigned mismatch
   ncltech.vcxproj -> D:\GameTechNetwork\GameTech\Build\Debug\ncltech.lib

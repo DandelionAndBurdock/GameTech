@@ -106,6 +106,8 @@ protected:
 	std::vector<CollisionPair*> pairList;
 	// Adds a collision pair if not already in pairList
 	void AddCollisionPair(PhysicsNode* a, PhysicsNode* b);
+	// Recursively deletes node and all of its children
+	void DeleteTree(OcttreeNode* node);
 protected:
 	// Recursive draw function
 	void DebugDraw(OcttreeNode* node);
