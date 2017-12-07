@@ -1,4 +1,2 @@
-﻿  Octtree.cpp
-d:\gametechweek2\gametech\build\ncltech\octtree.cpp(95): warning C4018: '>': signed/unsigned mismatch
-d:\gametechweek2\gametech\build\ncltech\octtree.cpp(208): warning C4018: '>': signed/unsigned mismatch
-  ncltech.vcxproj -> D:\GameTechWeek2\GameTech\Build\Debug\ncltech.lib
+﻿  NetworkBase.cpp
+  ncltech.vcxproj -> D:\GameTechNetwork\GameTech\Build\Debug\ncltech.lib

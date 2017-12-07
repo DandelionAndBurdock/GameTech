@@ -11,13 +11,14 @@ uint RandomGridCell(uint size)
 	return y * size + x;
 }
 
-MazeGenerator::MazeGenerator()
+MazeGenerator::MazeGenerator(uint seed)
 	: size(0)
 	, start(NULL)
 	, end(NULL)
 	, allNodes(NULL)
 	, allEdges(NULL)
 {
+	srand(seed);
 }
 
 MazeGenerator::~MazeGenerator()

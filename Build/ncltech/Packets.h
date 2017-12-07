@@ -5,7 +5,7 @@
 #include <string>
 
 namespace Packet {
-	enum PacketType { TEST_PACKET, POS_DATA, GEN_MAZE,};
+	enum PacketType { TEST_PACKET, POS_DATA, GEN_MAZE, MAZE_SEED};
 
 	// All packets must derive from Packet as we will cast message to determine what type
 	// of packet we have
@@ -24,6 +24,10 @@ namespace Packet {
 
 	struct PacketString : public Packet {
 		std::string str;
+	};
+
+	struct PacketUint : public Packet {
+		uint i;
 	};
 };
 

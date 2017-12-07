@@ -39,4 +39,5 @@ public:
 
 	GraphNode* allNodes;
 	GraphEdge* allEdges;
+	uint	   seed;
 };

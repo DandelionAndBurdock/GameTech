@@ -160,7 +160,7 @@ void PhysicsEngine::UpdatePhysics()
 	perfSolver.BeginTimingSection();
 	for (size_t i = 0; i < SOLVER_ITERATIONS; ++i) {
 		for (Manifold* m : manifolds) m->ApplyImpulse();
-		for (Constraint* c : constraints) c->ApplyImpulse();
+		for (Constraint* c : constraints) c->ApplyImpulse(updateTimestep);
 	}
 
 	perfSolver.EndTimingSection();

@@ -38,7 +38,7 @@ public:
 
 	// Apply Velocity Impulse to object(s) in order to satisfy given constraint
 	//  - Called by PhysicsEngine upon resolving constraints
-	virtual void ApplyImpulse() = 0;
+	virtual void ApplyImpulse(float dt) = 0;
 	
 
 	// Optional: Pre-solver step will be triggered before any calls to ApplyImpulse

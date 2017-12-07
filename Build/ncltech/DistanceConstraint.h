@@ -47,7 +47,7 @@ public:
 
 	//Solves the constraint and applies a velocity impulse to the two
 	// objects in order to satisfy the constraint.
-	virtual void ApplyImpulse() override
+	virtual void ApplyImpulse(float dt) override
 	{
 		// Vector from centre of object to the contact point
 		Vector3 r1 = pnodeA->GetOrientation().ToMatrix3() * relPosA;

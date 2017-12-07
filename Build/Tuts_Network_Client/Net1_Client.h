@@ -4,7 +4,8 @@
 #include <ncltech\Scene.h>
 #include <ncltech\NetworkBase.h>
 
-//Basic Network Example
+class MazeGenerator;
+class MazeRenderer;
 
 class Net1_Client : public Scene
 {
@@ -23,4 +24,18 @@ protected:
 
 	NetworkBase network;
 	ENetPeer*	serverConnection;
+	
+	// Call on successful connection
+	void OnConnection();
+
+	// Create Maze with a given seed
+	void CreateMaze(uint seed);
+	
+protected:
+	//MazeGenerator* maze;
+	//MazeRenderer* mazeRenderer;
+	//= reinterpret_cast<uint*>(message)
+	//	CreateMaze(seed);
+
+
 };

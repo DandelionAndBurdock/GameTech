@@ -122,8 +122,6 @@ void Net1_Client::OnInitializeScene()
 		false,
 		Vector4(0.2f, 0.5f, 1.0f, 1.0f));
 	this->AddGameObject(box);
-
-
 }
 
 void Net1_Client::OnCleanupScene()
@@ -145,12 +143,6 @@ void Net1_Client::OnUpdateScene(float dt)
 {
 	Scene::OnUpdateScene(dt);
 
-	PacketIntFloat mazeParam;
-	mazeParam.message = GEN_MAZE;
-	mazeParam.i = 10;
-	mazeParam.f = 0.6f;
-	ENetPacket* mazeParameters = enet_packet_create(&mazeParam, sizeof(PacketIntFloat), 0);
-	enet_peer_send(serverConnection, 0, mazeParameters);
 
 	//Update Network
 	auto callback = std::bind(
@@ -186,13 +178,8 @@ void Net1_Client::ProcessNetworkEvent(const ENetEvent& evnt)
 			if (evnt.peer == serverConnection)
 			{
 				NCLDebug::Log(status_color3, "Network: Successfully connected to server!");
-
-				//Send a 'hello' packet
-				PacketString testPacket;
-				testPacket.message = TEST_PACKET;
-				testPacket.str = "Hellooooo!";
-				ENetPacket* packet = enet_packet_create(&testPacket, sizeof(PacketString), 0);
-				enet_peer_send(serverConnection, 0, packet);
+				// Fire connection events
+				OnConnection();
 			}	
 		}
 		break;
@@ -205,6 +192,7 @@ void Net1_Client::ProcessNetworkEvent(const ENetEvent& evnt)
 
 		switch (*message) {
 		case POS_DATA:
+		{
 			// Advance pointer to the start of the message data
 			++message;
 			Vector3* pos = reinterpret_cast<Vector3*>(message);
@@ -212,17 +200,19 @@ void Net1_Client::ProcessNetworkEvent(const ENetEvent& evnt)
 			enet_packet_destroy(evnt.packet);
 			break;
 		}
-		// DEFAULT
-			//if (evnt.packet->dataLength == sizeof(Vector3))
-			//{
-			//	Vector3 pos;
-			//	memcpy(&pos, evnt.packet->data, sizeof(Vector3));
-			//	box->Physics()->SetPosition(pos);
-			//}
-			//else
-			//{
-			//	NCLERROR("Recieved Invalid Network Packet!");
-			//}
+		case MAZE_SEED:
+		{
+			// Advance pointer to the start of the message data
+			++message;
+			//uint seed = reinterpret_cast<uint*>(message)
+			//CreateMaze(seed);
+			//NCLDebug::Log(status_color3, "Client: Receieved structure information!");
+		}
+		}
+
+
+	
+
 
 		}
 		break;
@@ -235,4 +225,20 @@ void Net1_Client::ProcessNetworkEvent(const ENetEvent& evnt)
 		}
 		break;
 	}
+}
+
+void Net1_Client::OnConnection() {
+	//Send a 'hello' packet
+	PacketString testPacket;
+	testPacket.message = TEST_PACKET;
+	testPacket.str = "Hellooooo!";
+	ENetPacket* packet = enet_packet_create(&testPacket, sizeof(PacketString), 0);
+	enet_peer_send(serverConnection, 0, packet);
+
+	PacketIntFloat mazeParam;
+	mazeParam.message = GEN_MAZE;
+	mazeParam.i = 10;
+	mazeParam.f = 0.6f;
+	ENetPacket* mazeParameters = enet_packet_create(&mazeParam, sizeof(PacketIntFloat), 0);
+	enet_peer_send(serverConnection, 0, mazeParameters);
 }

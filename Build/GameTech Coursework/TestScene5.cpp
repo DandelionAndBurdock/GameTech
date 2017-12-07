@@ -16,8 +16,8 @@ using namespace CommonUtils;
 TestScene5::TestScene5(const std::string& friendly_name)
 	: Scene(friendly_name)
 	, m_AccumTime(0.0f)
-	//, m_MeshPlayer(new OBJMesh(MESHDIR"raptor.obj"))
-	, m_MeshPlayer(new OBJMesh(MESHDIR"TIE-fighterNew.obj"))
+	, m_MeshPlayer(new OBJMesh(MESHDIR"raptor.obj"))
+	//, m_MeshPlayer(new OBJMesh(MESHDIR"TIE-fighterNew.obj"))
 {
 	//GLuint m_pCheckerboardTex = SOIL_load_OGL_texture(TEXTUREDIR"checkerboard.tga", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_COMPRESS_TO_DXT);
 	//m_MeshPlayer->SetTexture(m_pCheckerboardTex);

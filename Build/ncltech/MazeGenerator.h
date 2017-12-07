@@ -8,7 +8,7 @@
 class MazeGenerator
 {
 public:
-	MazeGenerator(); //Maze_density goes from 1 (single path to exit) to 0 (no walls at all)
+	MazeGenerator(uint seed = 93225); //Maze_density goes from 1 (single path to exit) to 0 (no walls at all)
 	virtual ~MazeGenerator();
 
 	void Generate(int size, float maze_density);

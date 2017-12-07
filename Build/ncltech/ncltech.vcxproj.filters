@@ -206,5 +206,8 @@
     <ClInclude Include="SearchDepthFirst.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SpringConstraint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

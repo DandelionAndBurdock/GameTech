@@ -193,6 +193,7 @@
     <ClInclude Include="SoftBodyConstants.h" />
     <ClInclude Include="SoftBodyConstraint.h" />
     <ClInclude Include="SphereCollisionShape.h" />
+    <ClInclude Include="SpringConstraint.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

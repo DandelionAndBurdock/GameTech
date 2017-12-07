@@ -4,6 +4,7 @@
 #include <ncltech\GraphicsPipeline.h>
 #include <ncltech\PhysicsEngine.h>
 #include <ncltech\DistanceConstraint.h>
+#include <ncltech\SpringConstraint.h>
 #include <ncltech\SceneManager.h>
 #include <ncltech\CommonUtils.h>
 using namespace CommonUtils;
@@ -46,7 +47,7 @@ void TestScene4::OnInitializeScene()
 
 	GameObject *handle, *ball;
 
-	//Create Double Pendulum with Spring
+	//Create Double Pendulum with String
 	handle = CommonUtils::BuildSphereObject("",
 		Vector3(-7.f, 8.f, -5.0f),				//Position
 		0.5f,									//Radius
@@ -140,6 +141,34 @@ void TestScene4::OnInitializeScene()
 			ball->Physics()->SetElasticity(0.99f);
 	}
 
+	// Spring Constraint
+	handle = CommonUtils::BuildSphereObject("",
+		Vector3(7.f, 8.f, -5.0f),				//Position
+		0.5f,									//Radius
+		true,									//Has Physics Object
+		0.0f,									//Infinite Mass
+		true,									//No Collision Shape Yet
+		true,									//Dragable by the user
+		CommonUtils::GenColor(0.45f, 0.5f));	//Color
+
+	ball = CommonUtils::BuildSphereObject("",
+		Vector3(4.f, 7.5f, -5.0f),				//Position
+		0.5f,									//Radius
+		true,									//Has Physics Object
+		1.0f,									// Inverse Mass = 1 / 1kg mass
+		true,									//No Collision Shape Yet
+		true,									//Dragable by the user
+		CommonUtils::GenColor(0.5f, 1.0f));		//Color
+
+												//Add distance constraint between the two objects
+	SpringConstraint* sprConstraint = new SpringConstraint(
+		handle->Physics(),					//Physics Object A
+		ball->Physics(),					//Physics Object B
+		handle->Physics()->GetPosition(),	//Attachment Position on Object A	-> Currently the centre
+		ball->Physics()->GetPosition());	//Attachment Position on Object B	-> Currently the centre  
+	PhysicsEngine::Instance()->AddConstraint(sprConstraint);
+	this->AddGameObject(handle);
+	this->AddGameObject(ball);
 }
 
 void TestScene4::OnCleanupScene()
