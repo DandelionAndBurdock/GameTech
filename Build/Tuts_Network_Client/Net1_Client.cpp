@@ -123,12 +123,7 @@ void Net1_Client::OnInitializeScene()
 		Vector4(0.2f, 0.5f, 1.0f, 1.0f));
 	this->AddGameObject(box);
 
-	PacketIntFloat mazeParam;
-	mazeParam.message = GEN_MAZE;
-	mazeParam.i = 10;
-	mazeParam.f = 0.6f;
-	ENetPacket* mazeParameters = enet_packet_create(&mazeParam, sizeof(PacketIntFloat), 0);
-	enet_peer_send(serverConnection, 0, mazeParameters);
+
 }
 
 void Net1_Client::OnCleanupScene()
@@ -150,6 +145,12 @@ void Net1_Client::OnUpdateScene(float dt)
 {
 	Scene::OnUpdateScene(dt);
 
+	PacketIntFloat mazeParam;
+	mazeParam.message = GEN_MAZE;
+	mazeParam.i = 10;
+	mazeParam.f = 0.6f;
+	ENetPacket* mazeParameters = enet_packet_create(&mazeParam, sizeof(PacketIntFloat), 0);
+	enet_peer_send(serverConnection, 0, mazeParameters);
 
 	//Update Network
 	auto callback = std::bind(
@@ -192,9 +193,6 @@ void Net1_Client::ProcessNetworkEvent(const ENetEvent& evnt)
 				testPacket.str = "Hellooooo!";
 				ENetPacket* packet = enet_packet_create(&testPacket, sizeof(PacketString), 0);
 				enet_peer_send(serverConnection, 0, packet);
-				//char* text_data = "Hellooo!";
-				//ENetPacket* packet = enet_packet_create(text_data, strlen(text_data) + 1, 0);
-				//enet_peer_send(serverConnection, 0, packet);
 			}	
 		}
 		break;

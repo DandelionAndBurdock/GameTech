@@ -1,1 +1,26 @@
-﻿  ncltech.vcxproj -> D:\GameTechNetwork\GameTech\Build\Debug\ncltech.lib
+﻿  BoundingCube.cpp
+  Generating Code...
+  Skipping... (no relevant changes detected)
+  SphereCollisionShape.cpp
+  SoftBodyConstraint.cpp
+  ScreenPicker.cpp
+  SceneManager.cpp
+  PhysicsNode.cpp
+  PhysicsEngine.cpp
+  PathFollowing.cpp
+  Octtree.cpp
+  NetworkBase.cpp
+  MazeRenderer.cpp
+  MazeGenerator.cpp
+  Manifold.cpp
+  Jelly.cpp
+  Hull.cpp
+  GraphicsPipeline.cpp
+  GeometryUtils.cpp
+  CuboidCollisionShape.cpp
+  CompositeCollisionShape.cpp
+  CommonUtils.cpp
+  CommonMeshes.cpp
+  CollisionDetectionSAT.cpp
+  Cloth.cpp
+  ncltech.vcxproj -> D:\GameTechNetwork\GameTech\Build\Debug\ncltech.lib

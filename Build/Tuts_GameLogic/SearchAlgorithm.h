@@ -23,6 +23,9 @@ struct GraphNode
 
 	//--- Used only by generation algorithm and debug drawing ---
 	bool _visited;		//Just used for generation algorithm
+
+	// Node positions are defined in (x,y) plane so need to do some swizzling
+	Vector3 GetPos() const { return Vector3(_pos.x, 0.0f, _pos.y); };
 };
 
 //An edge that connects two graph nodes together

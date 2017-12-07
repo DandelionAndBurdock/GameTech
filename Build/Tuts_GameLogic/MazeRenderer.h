@@ -27,7 +27,6 @@ public:
 	// and 'from' of GraphNodes.
 	void DrawSearchHistory(const SearchHistory& history, float line_width);
 
-
 protected:
 	//Turn MazeGenerator data into flat 2D map (3 size x 3 size) of boolean's
 	// - True for wall

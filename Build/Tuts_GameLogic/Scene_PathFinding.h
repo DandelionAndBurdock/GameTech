@@ -16,7 +16,9 @@ const Vector3 pos_maze1 = Vector3(-3.f, 0.f, -3.f);
 const Vector3 pos_maze2 = Vector3(3.f, 0.f, -3.f);
 const Vector3 pos_maze3 = Vector3(0.f, 0.f, 3.f);
 
-
+//Added
+#include <nclgl\OBJMesh.h>
+#include <ncltech\GameObject.h>
 
 //This class is mostly just debug/rendering chaff.
 //The Maze graph is created via the MazeGenerator class, and is then
@@ -120,6 +122,20 @@ public:
 		GraphicsPipeline::Instance()->GetCamera()->SetYaw(0);
 		
 		GenerateNewMaze();
+
+		//Added
+		playerMesh = new OBJMesh(MESHDIR"raptor.obj");
+		player = new GameObject("MazeWanderer");
+		player->SetRender(new RenderNode(playerMesh));
+		player->Render()->SetBoundingRadius(1.0f);
+		player->Render()->SetModelScale(1.0f);
+
+		player->SetPhysics(new PhysicsNode());
+		player->Physics()->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+		this->AddGameObject(player);
+
+		path = search_as->GetFinalPath();
+		// End Added
 	}
 
 
@@ -164,6 +180,7 @@ public:
 		search_df->FindBestPath(start, end);
 		search_bf->FindBestPath(start, end);
 		UpdateAStarPreset();
+
 	}
 
 	
@@ -240,5 +257,24 @@ public:
 		mazes[0]->DrawSearchHistory(search_df->GetSearchHistory(), 2.5f / float(grid_size));
 		mazes[1]->DrawSearchHistory(search_bf->GetSearchHistory(), 2.5f / float(grid_size));
 		mazes[2]->DrawSearchHistory(search_as->GetSearchHistory(), 2.5f / float(grid_size));
+
+		// Added
+		auto iter = path.begin();
+		const GraphNode* node = *iter;
+		Matrix4 maze_scalar = Matrix4::Scale(Vector3(5.f, 5.0f / float(grid_size), 5.f)) * Matrix4::Translation(Vector3(-0.5f, 0.f, -0.5f));
+		Vector3 unscaledPos = node->GetPos();
+		Matrix4 test = Matrix4::Inverse(Matrix4::Scale(Vector3(5.f, 0.0f, 5.f)));
+		Vector3 scaledPos = Matrix4::Scale(Vector3(1.0f/5.f, 0.0f, 1.0f/5.f))* unscaledPos;
+		Vector3 absMazePos = maze_scalar * pos_maze3;
+		//Matrix4 maze_scalar = 
+		player->Physics()->SetPosition(Vector3(-2.5f, 0.0f,0.0f) + scaledPos);
+		// End added
 	}
+
+	// Added (not cleaned up)
+	protected:
+		OBJMesh* playerMesh;
+		GameObject* player;
+		std::list<const GraphNode*> path;
+		// End Added
 };

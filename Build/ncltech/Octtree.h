@@ -75,7 +75,7 @@ protected:
 	// Recusion will halt if an octant has a dimension lower minCubeSize
 	float minCubeSize = 1.0f;
 	// Threshold for the max number of objects in one octant (assuming size greater than minCubeSize)
-	int maxOctantObjects = 1;
+	int maxOctantObjects = 3;
 
 
 	// Returns all objects in children inside set

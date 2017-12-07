@@ -144,6 +144,8 @@
     <ClCompile Include="Hull.cpp" />
     <ClCompile Include="Jelly.cpp" />
     <ClCompile Include="Manifold.cpp" />
+    <ClCompile Include="MazeGenerator.cpp" />
+    <ClCompile Include="MazeRenderer.cpp" />
     <ClCompile Include="NetworkBase.cpp" />
     <ClCompile Include="Octtree.cpp" />
     <ClCompile Include="PathFollowing.cpp" />
@@ -173,6 +175,8 @@
     <ClInclude Include="Hull.h" />
     <ClInclude Include="Jelly.h" />
     <ClInclude Include="Manifold.h" />
+    <ClInclude Include="MazeGenerator.h" />
+    <ClInclude Include="MazeRenderer.h" />
     <ClInclude Include="NetworkBase.h" />
     <ClInclude Include="Octtree.h" />
     <ClInclude Include="Packets.h" />
@@ -182,6 +186,10 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="ScreenPicker.h" />
+    <ClInclude Include="SearchAlgorithm.h" />
+    <ClInclude Include="SearchAStar.h" />
+    <ClInclude Include="SearchBreadthFirst.h" />
+    <ClInclude Include="SearchDepthFirst.h" />
     <ClInclude Include="SoftBodyConstants.h" />
     <ClInclude Include="SoftBodyConstraint.h" />
     <ClInclude Include="SphereCollisionShape.h" />
