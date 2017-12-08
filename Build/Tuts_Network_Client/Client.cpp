@@ -2,7 +2,7 @@
 
 #include <nclgl\NCLDebug.h>
 #include <ncltech\Packets.h>
-using namespace Packet;
+using namespace Packets;
 
 const Vector3 status_color3 = Vector3(1.0f, 0.6f, 0.6f);
 const Vector4 status_color = Vector4(status_color3.x, status_color3.y, status_color3.z, 1.0f);
