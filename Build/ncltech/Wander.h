@@ -9,14 +9,14 @@
 class Wander : public SteeringBehaviour
 {
 public:
-	Wander(AIObject* entity);
+	Wander(GameObject* entity);
 	~Wander();
 
 	void Update(float dt) override;
 	Vector3 GetVelocity() override;
 
 protected:
-	float changeTargetTime = 1.0f;
+	float changeTargetTime = 5.0f;
 	float timeSinceTargetChange = 0.0f;
 
 	Vector3 targetPos = Vector3(0.0f);

@@ -1,10 +1,15 @@
 #include "Seek.h"
 
+#include "BehaviourTypes.h"
 
+#include "GameObject.h"
 
-Seek::Seek(AIObject* entity) :
+using namespace Steering;
+
+Seek::Seek(GameObject* entity) :
 	SteeringBehaviour(entity)
 {
+	type = SEEK;
 }
 
 

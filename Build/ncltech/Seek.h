@@ -5,7 +5,7 @@
 class Seek : public SteeringBehaviour
 {
 public:
-	Seek(AIObject* entity);
+	Seek(GameObject* entity);
 	~Seek();
 
 	void Update(float dt) override;

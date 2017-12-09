@@ -11,6 +11,7 @@
 #include "TestScene5.h"
 #include "TestScene6.h"
 #include "TestScene7.h"
+#include "TestScene8.h"
 
 const Vector4 status_colour = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 const Vector4 status_colour_header = Vector4(0.8f, 0.9f, 1.0f, 1.0f);
@@ -63,6 +64,7 @@ void Initialize()
 	SceneManager::Instance()->EnqueueScene(new TestScene5("GameTech #5 - Too much peace and quiet"));
 	SceneManager::Instance()->EnqueueScene(new TestScene6("GameTech #6 - Silence"));
 	SceneManager::Instance()->EnqueueScene(new TestScene7("GameTech #7 - ??"));
+	SceneManager::Instance()->EnqueueScene(new TestScene8("GameTech #8 - ??"));
 }
 
 // Print Debug Info

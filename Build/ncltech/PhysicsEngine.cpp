@@ -6,6 +6,7 @@
 #include <omp.h>
 #include <algorithm>
 
+#include "SteeringBehaviourManager.h"
 
 void PhysicsEngine::SetDefaults()
 {
@@ -110,6 +111,15 @@ void PhysicsEngine::Update(float deltaTime)
 			tree->DebugDraw();
 		}
 
+		for (PhysicsNode* obj : physicsNodes)
+		{
+			SteeringBehaviourManager* steering = obj->GetSteering();
+			if (steering) {
+				steering->Update(updateTimestep);
+			}
+				
+		}
+
 	}
 }
 
@@ -212,7 +222,9 @@ void PhysicsEngine::BruteForceBroadPhase() {
 			{
 				pnodeA = physicsNodes[i];
 				pnodeB = physicsNodes[j];
-	
+				if (!pnodeA->GetBroadCollisionShape() || !pnodeB->GetBroadCollisionShape()) {
+					continue;
+				}
 				if (pnodeA->GetBroadCollisionShape()->IsColliding(pnodeB->GetBroadCollisionShape())) {
 					//Check they both atleast have collision shapes
 					if (pnodeA->GetNarrowCollisionShape() != NULL

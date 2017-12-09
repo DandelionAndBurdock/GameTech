@@ -35,6 +35,10 @@ Description:
 #include "CollisionShape.h"
 #include <functional>
 
+#include "BehaviourTypes.h"
+class SteeringBehaviourManager;
+
+
 class PhysicsNode;
 
 //Callback function called whenever a collision is detected between two objects
@@ -181,6 +185,10 @@ public:
 		if (onUpdateCallback) onUpdateCallback(worldTransform);
 	}
 	
+	// -------------- Steering -------------------
+	inline SteeringBehaviourManager* GetSteering() { return steering; }
+	void AddSteeringBehaviour(Steering::BehaviourType b);
+	void ChangeSeekTarget(Vector3 target);
 
 protected:
 	//Useful parameters
@@ -250,5 +258,8 @@ protected:
 	//<--------MATERIAL-------------->
 	float				elasticity;		///Value from 0-1 definiing how much the object bounces off other objects
 	float				friction;		///Value from 0-1 defining how much the object can slide off other objects
+
+	// Steering
+	SteeringBehaviourManager*  steering = nullptr;
 
 };

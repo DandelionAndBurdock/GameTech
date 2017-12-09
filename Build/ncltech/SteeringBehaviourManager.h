@@ -3,23 +3,31 @@
 
 #include <nclgl\Vector3.h>
 
+#include "BehaviourTypes.h"
+
+
+class GameObject;
 class SteeringBehaviour;
 
 
 class SteeringBehaviourManager
 {
 public:
-	SteeringBehaviourManager();
+	SteeringBehaviourManager(GameObject* owner);
 	~SteeringBehaviourManager();
 
 	void Update(float dt);
 	Vector3 GetVelocity();
 
-	inline void AddBehaviour(SteeringBehaviour* b) { behaviours.push_back(b); }
+	 void AddBehaviour(const Steering::BehaviourType b);
+
+	 void SetSeekTarget(Vector3 target);
 
 protected:
 
 	std::vector<SteeringBehaviour*> behaviours;
+
+	GameObject* owner;
 
 };
 

@@ -2,13 +2,24 @@
 
 #include "SteeringBehaviour.h"
 
-SteeringBehaviourManager::SteeringBehaviourManager()
+#include "Seek.h"
+#include "Wander.h"
+
+#include "AIObject.h"
+
+using namespace Steering;
+
+SteeringBehaviourManager::SteeringBehaviourManager(GameObject* owner)
 {
+	this->owner = owner;
 }
 
 
 SteeringBehaviourManager::~SteeringBehaviourManager()
 {
+	for (auto& behaviour : behaviours) {
+		delete behaviour;
+	}
 }
 
 
@@ -23,4 +34,33 @@ Vector3 SteeringBehaviourManager::GetVelocity() {
 		velocity += behaviour->GetVelocity();
 	}
 	return velocity;
+}
+
+void SteeringBehaviourManager::AddBehaviour(const BehaviourType b) {
+	for (auto& behaviour : behaviours) {
+		if (behaviour->GetType() == b) {
+			break;
+		}
+	}
+
+	switch (b) {
+	case SEEK:
+		behaviours.push_back(new Seek(owner));
+		break;
+	case WANDER:
+		behaviours.push_back(new Wander(owner));
+		break;
+	default: 
+		std::cout << "Warning: Unimplemented Behaviour" << std::endl;
+	}
+
+}
+
+
+void SteeringBehaviourManager::SetSeekTarget(Vector3 target) {
+	for (auto& behaviour : behaviours) {
+		if (behaviour->GetType() == SEEK) {
+			dynamic_cast<Seek*>(behaviour)->SetTarget(target);
+		}
+	}
 }

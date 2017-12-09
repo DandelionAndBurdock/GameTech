@@ -2,19 +2,21 @@
 #include <nclgl\Vector3.h>
 #include "BehaviourTypes.h"
 
-#include "AIObject.h"
+class GameObject;
 class SteeringBehaviour
 {
 public:
-	SteeringBehaviour(AIObject* entity);
+	SteeringBehaviour(GameObject* entity);
 	~SteeringBehaviour();
 
 	virtual Vector3 GetVelocity() = 0;
 	virtual void	Update(float dt) = 0;
 
+	inline Steering::BehaviourType GetType() { return type; }
+
 protected:
 	Steering::BehaviourType type;
 
-	AIObject* owner;
+	GameObject* owner;
 };
 

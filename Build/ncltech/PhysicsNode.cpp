@@ -2,6 +2,8 @@
 #include "PhysicsEngine.h"
 
 
+#include "SteeringBehaviourManager.h"
+
 void PhysicsNode::IntegrateForVelocity(float dt)
 {
 	IntegrateLinearVelocity(dt);
@@ -137,6 +139,9 @@ Vector3 PhysicsNode::PredictAcceleration(Vector3 pos) {
 }
 
 void PhysicsNode::IntegratePreSolver(float dt) {
+	if (steering) {
+		linVelocity += steering->GetVelocity();
+	}
 	if (integrationType == NONE) {
 		return;
 	}
@@ -172,4 +177,16 @@ void PhysicsNode::IntegratePostSolver(float dt) {
 	if (integrationType < MIDPOINT) { // Will not work for collisions in this framework
 		IntegrateForPosition(dt);
 	}
+}
+
+
+void PhysicsNode::AddSteeringBehaviour(Steering::BehaviourType b) {
+	if (!steering) {
+		steering = new SteeringBehaviourManager(this->GetParent());
+	}
+	steering->AddBehaviour(b);
+}
+
+void PhysicsNode::ChangeSeekTarget(Vector3 target) {
+	steering->SetSeekTarget(target);
 }
