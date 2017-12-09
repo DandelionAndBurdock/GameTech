@@ -132,6 +132,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AIObject.cpp" />
     <ClCompile Include="BoundingCube.cpp" />
     <ClCompile Include="Cloth.cpp" />
     <ClCompile Include="CollisionDetectionSAT.cpp" />
@@ -141,23 +142,33 @@
     <ClCompile Include="CuboidCollisionShape.cpp" />
     <ClCompile Include="GeometryUtils.cpp" />
     <ClCompile Include="GraphicsPipeline.cpp" />
+    <ClCompile Include="HazardStates.cpp" />
     <ClCompile Include="Hull.cpp" />
     <ClCompile Include="Jelly.cpp" />
     <ClCompile Include="Manifold.cpp" />
     <ClCompile Include="MazeGenerator.cpp" />
     <ClCompile Include="MazeRenderer.cpp" />
+    <ClCompile Include="Messenger.cpp" />
     <ClCompile Include="NetworkBase.cpp" />
     <ClCompile Include="Octtree.cpp" />
     <ClCompile Include="PathFollowing.cpp" />
     <ClCompile Include="PhysicsEngine.cpp" />
     <ClCompile Include="PhysicsNode.cpp" />
+    <ClCompile Include="Pursuit.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="ScreenPicker.cpp" />
+    <ClCompile Include="Seek.cpp" />
     <ClCompile Include="SoftBodyConstraint.cpp" />
     <ClCompile Include="SphereCollisionShape.cpp" />
+    <ClCompile Include="StateMachineManager.cpp" />
+    <ClCompile Include="SteeringBehaviour.cpp" />
+    <ClCompile Include="SteeringBehaviourManager.cpp" />
+    <ClCompile Include="Wander.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AIObject.h" />
     <ClInclude Include="BasicCollisionTests.h" />
+    <ClInclude Include="BehaviourTypes.h" />
     <ClInclude Include="BoundingBox.h" />
     <ClInclude Include="BoundingCube.h" />
     <ClInclude Include="Cloth.h" />
@@ -172,17 +183,20 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GeometryUtils.h" />
     <ClInclude Include="GraphicsPipeline.h" />
+    <ClInclude Include="HazardStates.h" />
     <ClInclude Include="Hull.h" />
     <ClInclude Include="Jelly.h" />
     <ClInclude Include="Manifold.h" />
     <ClInclude Include="MazeGenerator.h" />
     <ClInclude Include="MazeRenderer.h" />
+    <ClInclude Include="Messenger.h" />
     <ClInclude Include="NetworkBase.h" />
     <ClInclude Include="Octtree.h" />
     <ClInclude Include="Packets.h" />
     <ClInclude Include="PathFollowing.h" />
     <ClInclude Include="PhysicsEngine.h" />
     <ClInclude Include="PhysicsNode.h" />
+    <ClInclude Include="Pursuit.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="ScreenPicker.h" />
@@ -190,11 +204,17 @@
     <ClInclude Include="SearchAStar.h" />
     <ClInclude Include="SearchBreadthFirst.h" />
     <ClInclude Include="SearchDepthFirst.h" />
+    <ClInclude Include="Seek.h" />
     <ClInclude Include="Serializable.h" />
     <ClInclude Include="SoftBodyConstants.h" />
     <ClInclude Include="SoftBodyConstraint.h" />
     <ClInclude Include="SphereCollisionShape.h" />
     <ClInclude Include="SpringConstraint.h" />
+    <ClInclude Include="State.h" />
+    <ClInclude Include="StateMachineManager.h" />
+    <ClInclude Include="SteeringBehaviour.h" />
+    <ClInclude Include="SteeringBehaviourManager.h" />
+    <ClInclude Include="Wander.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
