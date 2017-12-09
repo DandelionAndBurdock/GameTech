@@ -11,14 +11,13 @@ uint RandomGridCell(uint size)
 	return y * size + x;
 }
 
-MazeGenerator::MazeGenerator(uint seed)
+MazeGenerator::MazeGenerator()
 	: size(0)
 	, start(NULL)
 	, end(NULL)
 	, allNodes(NULL)
 	, allEdges(NULL)
 {
-	srand(seed);
 }
 
 MazeGenerator::~MazeGenerator()
@@ -98,14 +97,17 @@ void MazeGenerator::GetRandomStartEndNodes()
 	switch (edge)
 	{
 	case 0: //x
-		start = &allNodes[idxS * size];
-		end = &allNodes[(idxE + 1) * size - 1];
+		startIndex = idxS * size;
+		endIndex = (idxE + 1) * size - 1;
 		break;
 	case 1: //y
-		start = &allNodes[idxS];
-		end = &allNodes[size * (size - 1) + idxE];
+		startIndex = idxS;
+		endIndex = size * (size - 1) + idxE;
 		break;
 	}
+
+	start = &allNodes[startIndex];
+	end = &allNodes[endIndex];
 }
 
 
@@ -275,10 +277,39 @@ void MazeGenerator::Generate_Sparse(float density)
 }
 
 
+
+// Would be quicker to just send the seed!
 void MazeGenerator::Serialize(std::ostream& stream) {
-	stream << size;
+	stream << size << std::endl;
+	stream << startIndex << std::endl; 
+	stream << endIndex << std::endl;
+
+	//const int numNodes = size * size;
+	//stream.write(reinterpret_cast<char*>(allNodes), numNodes * sizeof(GraphNode));
+
+	//const int numEdges = 2 * size * (size - 1);
+	//stream.write((char*)allEdges, numEdges * sizeof(GraphEdge));
 }
 
 void MazeGenerator::Deserialize(std::istream& stream) {
-	stream >> size;
+	stream >> size >> startIndex >> endIndex;
+	
+	if (allNodes) {
+		delete[] allNodes;
+	}
+	
+	//const int numNodes = size * size;
+	//allNodes = new GraphNode[numNodes];
+	//stream.read(reinterpret_cast<char*>(allNodes), numNodes * sizeof(GraphNode));
+
+	//if (allEdges) {
+	//	delete[] allEdges;
+	//}
+	//const int numEdges = 2 * size * (size - 1);
+	//allEdges = new GraphEdge[numEdges];
+	//stream.read((char*)allEdges, numEdges * sizeof(GraphEdge));
+
+
+	start = &allNodes[startIndex];
+	end = &allNodes[endIndex];
 }
