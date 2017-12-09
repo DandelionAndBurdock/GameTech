@@ -84,9 +84,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MazeClient.cpp" />
     <ClCompile Include="Net1_Client.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="MazeClient.h" />
     <ClInclude Include="Net1_Client.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

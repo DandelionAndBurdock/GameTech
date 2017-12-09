@@ -1,1 +1,17 @@
-﻿
+﻿  TestScene7.cpp
+  TestScene6.cpp
+  TestScene5.cpp
+  TestScene4.cpp
+  TestScene3.cpp
+  TestScene2.cpp
+  TestScene.cpp
+  main.cpp
+  Generating Code...
+LINK : warning LNK4075: ignoring '/INCREMENTAL' due to '/LTCG' specification
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
+  Generating code
+  All 126 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+glew32.lib(glew.obj) : warning LNK4099: PDB 'glew_static.pdb' was not found with 'glew32.lib(glew.obj)' or at 'D:\GameTechNew\GameTech\Build\Debug\glew_static.pdb'; linking object as if no debug info
+  GameTech Coursework.vcxproj -> D:\GameTechNew\GameTech\Build\Debug\GameTech Coursework.exe

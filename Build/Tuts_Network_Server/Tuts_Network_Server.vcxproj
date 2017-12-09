@@ -84,9 +84,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MazeServer.cpp" />
     <ClCompile Include="Server.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="MazeServer.h" />
     <ClInclude Include="NetworkConstants.h" />
     <ClInclude Include="Server.h" />
   </ItemGroup>

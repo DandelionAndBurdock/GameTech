@@ -44,7 +44,7 @@ FOR MORE NETWORKING INFORMATION SEE "Tuts_Network_Client -> Net1_Client.h"
 
 // Remove
 #include "NetworkConstants.h"
-#include "Server.h"
+#include "MazeServer.h"
 
 
 GameTimer timer;
@@ -69,7 +69,7 @@ int main(int arcg, char** argv)
 		return EXIT_FAILURE;
 	}
 
-	Server server(SERVER_PORT, 32);
+	MazeServer server(SERVER_PORT, 32);
 	if (!server.IsInitalised())
 	{
 		fprintf(stderr, "An error occurred while trying to create an ENet server host.\n");

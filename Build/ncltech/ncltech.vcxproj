@@ -190,6 +190,7 @@
     <ClInclude Include="SearchAStar.h" />
     <ClInclude Include="SearchBreadthFirst.h" />
     <ClInclude Include="SearchDepthFirst.h" />
+    <ClInclude Include="Serializable.h" />
     <ClInclude Include="SoftBodyConstants.h" />
     <ClInclude Include="SoftBodyConstraint.h" />
     <ClInclude Include="SphereCollisionShape.h" />

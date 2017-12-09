@@ -8,7 +8,7 @@
 #include <nclgl\NCLDebug.h>
 #include <nclgl\PerfTimer.h>
 
-#include "Net1_Client.h"
+#include "MazeClient.h"
 
 void Quit(bool error = false, const string &reason = "");
 
@@ -33,7 +33,7 @@ void Initialize()
 
 								//Enqueue All Scenes
 								// - Add any new scenes you want here =D
-	SceneManager::Instance()->EnqueueScene(new Net1_Client("Network #1 - Example Client"));
+	SceneManager::Instance()->EnqueueScene(new MazeClient("Network #1 - Example Client"));
 }
 
 

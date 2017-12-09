@@ -2,7 +2,7 @@
 
 #include "NetworkConstants.h"
 #include <nclgl\Vector3.h>
-
+#include <nclgl\NCLDebug.h>
 
 using namespace Packets;
 
@@ -58,7 +58,8 @@ void Server::BroadcastOutgoingTraffic() {
 		sin(rotation) * 2.0f);
 
 	//Create the packet and broadcast it (unreliable transport) to all clients
-	ENetPacket* position_update = enet_packet_create(&pos, sizeof(Vector3), 0);
+	PacketVec3 positionUpdate(POS_DATA, pos);
+	ENetPacket* position_update = enet_packet_create(&positionUpdate, sizeof(PacketVec3), 0);
 	enet_host_broadcast(serverNetwork.m_pNetwork, 0, position_update);
 }
 
@@ -77,5 +78,5 @@ void Server::ReceiveMessage(const ENetEvent& evnt) {
 
 void Server::HandleTestPacket(int clientID, PacketType* message) {
 	std::string* info = reinterpret_cast<std::string*>(message);
-	std::cout << "Client " << clientID << " says " << *info;
+	std::cout << "Client " << clientID << " says " << *info << std::endl;
 }

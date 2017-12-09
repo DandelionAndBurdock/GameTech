@@ -16,11 +16,13 @@ public:
 	virtual void OnUpdateScene(float dt) override;
 
 
-	void ProcessNetworkEvent(const ENetEvent& evnt);
+	virtual void ProcessNetworkEvent(const ENetEvent& evnt);
 
 protected:
 	// Fire any events on successful server connection
-	void OnConnection();
+	virtual void OnConnection();
+
+	virtual void ReceiveMessage(const ENetEvent& evnt);
 
 	GameObject* box;
 

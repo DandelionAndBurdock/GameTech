@@ -21,9 +21,15 @@
     <ClCompile Include="Net1_Client.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MazeClient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Net1_Client.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MazeClient.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

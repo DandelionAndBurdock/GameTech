@@ -3,9 +3,9 @@
 #include <ncltech\Scene.h>
 #include "SearchAlgorithm.h"
 
+#include <ncltech\Serializable.h>
 
-
-class MazeGenerator
+class MazeGenerator : public Serializable
 {
 public:
 	MazeGenerator(uint seed = 93225); //Maze_density goes from 1 (single path to exit) to 0 (no walls at all)
@@ -23,6 +23,9 @@ public:
 	//Used as a hack for the MazeRenderer to generate the walls more effeciently
 	GraphNode* GetAllNodesArr() { return allNodes; }
 
+	void Serialize(std::ostream& stream);
+	void Deserialize(std::istream& stream);
+
 protected:
 	void GetRandomStartEndNodes();
 
@@ -35,6 +38,10 @@ protected:
 
 public:
 	uint size;
+	uint numEdges;
+
+	uint startIndex;
+	uint endIndex;
 	GraphNode *start, *end;
 
 	GraphNode* allNodes;

@@ -275,3 +275,10 @@ void MazeGenerator::Generate_Sparse(float density)
 }
 
 
+void MazeGenerator::Serialize(std::ostream& stream) {
+	stream << size;
+}
+
+void MazeGenerator::Deserialize(std::istream& stream) {
+	stream >> size;
+}

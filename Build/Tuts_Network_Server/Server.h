@@ -17,12 +17,12 @@ protected:
 
 	bool isInitialised = false;
 
-	void HandleIncomingTraffic(float dt);
-	void BroadcastOutgoingTraffic();
+	virtual void HandleIncomingTraffic(float dt);
+	virtual void BroadcastOutgoingTraffic();
 
-	void ReceiveMessage(const ENetEvent& evnt);
+	virtual void ReceiveMessage(const ENetEvent& evnt);
 
-	void HandleTestPacket(int clientID, Packets::PacketType* message);
+	virtual void HandleTestPacket(int clientID, Packets::PacketType* message);
 
 	// Temporary: Useful to check server is still working in early development
 	float rotation = 0.0f;

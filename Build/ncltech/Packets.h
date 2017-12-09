@@ -3,9 +3,10 @@
 #include <limits>
 #include <nclgl/Vector3.h>
 #include <string>
+#include <sstream>
 
 namespace Packets {
-	enum PacketType { TEST_PACKET, POS_DATA, GEN_MAZE, MAZE_SEED};
+	enum PacketType { TEST_PACKET, POS_DATA, MAZE_PARAM, MAZE_STRUCTURE};
 
 	// All packets must derive from Packet as we will cast message to determine what type
 	// of packet we have
@@ -36,5 +37,6 @@ namespace Packets {
 		PacketString(PacketType m, std::string s) :
 			Packet(m), str(s) {}
 	};
+
 };
 

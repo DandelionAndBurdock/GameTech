@@ -172,43 +172,26 @@ void Net1_Client::ProcessNetworkEvent(const ENetEvent& evnt)
 {
 	switch (evnt.type)
 	{
-	//New connection request or an existing peer accepted our connection request
+		//New connection request or an existing peer accepted our connection request
 	case ENET_EVENT_TYPE_CONNECT:
+	{
+		if (evnt.peer == serverConnection)
 		{
-			if (evnt.peer == serverConnection)
-			{
-				NCLDebug::Log(status_color3, "Network: Successfully connected to server!");
+			NCLDebug::Log(status_color3, "Network: Successfully connected to server!");
+			OnConnection();
 
-				OnConnection();
-				
-			}	
 		}
-		break;
-
+	}
+	break;
 
 	//Server has sent us a new packet
 	case ENET_EVENT_TYPE_RECEIVE:
-		{
-			if (evnt.packet->dataLength == sizeof(Vector3))
-			{
-				Vector3 pos;
-				memcpy(&pos, evnt.packet->data, sizeof(Vector3));
-				box->Physics()->SetPosition(pos);
-			}
-			else
-			{
-				NCLERROR("Recieved Invalid Network Packet!");
-			}
-
-		}
+		ReceiveMessage(evnt);
 		break;
 
-
-	//Server has disconnected
+		//Server has disconnected
 	case ENET_EVENT_TYPE_DISCONNECT:
-		{
-			NCLDebug::Log(status_color3, "Network: Server has disconnected!");
-		}
+		NCLDebug::Log(status_color3, "Network: Server has disconnected!");
 		break;
 	}
 }
@@ -220,4 +203,8 @@ void Net1_Client::OnConnection() {
 	PacketString hello(TEST_PACKET, "Helloooo!");
 	ENetPacket* packet = enet_packet_create(&hello, sizeof(hello), 0);
 	enet_peer_send(serverConnection, 0, packet);
+
+}
+
+void Net1_Client::ReceiveMessage(const ENetEvent& evnt) {
 }
