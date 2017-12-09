@@ -16,6 +16,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Server.h" />
-    <ClInclude Include="ServerConstants.h" />
+    <ClInclude Include="NetworkConstants.h" />
   </ItemGroup>
 </Project>

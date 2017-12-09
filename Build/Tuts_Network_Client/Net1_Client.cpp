@@ -84,11 +84,11 @@ produce satisfactory results on the networked peers.
 #include <ncltech\SceneManager.h>
 #include <ncltech\PhysicsEngine.h>
 #include <nclgl\NCLDebug.h>
-#include <ncltech\DistanceConstraint.h>
 #include <ncltech\CommonUtils.h>
 #include <ncltech\Packets.h>
 
 using namespace Packets;
+
 const Vector3 status_color3 = Vector3(1.0f, 0.6f, 0.6f);
 const Vector4 status_color = Vector4(status_color3.x, status_color3.y, status_color3.z, 1.0f);
 
@@ -178,37 +178,27 @@ void Net1_Client::ProcessNetworkEvent(const ENetEvent& evnt)
 			if (evnt.peer == serverConnection)
 			{
 				NCLDebug::Log(status_color3, "Network: Successfully connected to server!");
-				// Fire connection events
+
 				OnConnection();
+				
 			}	
 		}
 		break;
 
+
 	//Server has sent us a new packet
 	case ENET_EVENT_TYPE_RECEIVE:
 		{
-		PacketType* message = reinterpret_cast<PacketType*>(evnt.packet->data);
-
-		switch (*message) {
-		case POS_DATA:
-		{
-			// Advance pointer to the start of the message data
-			++message;
-			Vector3* pos = reinterpret_cast<Vector3*>(message);
-			box->Physics()->SetPosition(*pos);
-			enet_packet_destroy(evnt.packet);
-			NCLDebug::Log(status_color3, "Client: Receieved position data!");
-			break;
-		}
-		case MAZE_SEED:
-		{
-			// Advance pointer to the start of the message data
-			++message;
-			//uint seed = reinterpret_cast<uint*>(message)
-			//CreateMaze(seed);
-			NCLDebug::Log(status_color3, "Client: Receieved maze seed!");
-		}
-		}
+			if (evnt.packet->dataLength == sizeof(Vector3))
+			{
+				Vector3 pos;
+				memcpy(&pos, evnt.packet->data, sizeof(Vector3));
+				box->Physics()->SetPosition(pos);
+			}
+			else
+			{
+				NCLERROR("Recieved Invalid Network Packet!");
+			}
 
 		}
 		break;
@@ -223,20 +213,11 @@ void Net1_Client::ProcessNetworkEvent(const ENetEvent& evnt)
 	}
 }
 
-void Net1_Client::OnConnection() {
-	//Send a 'hello' packet
-	PacketString testPacket;
-	testPacket.message = TEST_PACKET;
-	testPacket.str = "Hellooooo!";
-	ENetPacket* packet = enet_packet_create(&testPacket, sizeof(PacketString), 0);
-	enet_peer_send(serverConnection, 0, packet);
-	NCLDebug::Log(status_color3, "Client: Sent test packet!");
 
-	PacketIntFloat mazeParam;
-	mazeParam.message = GEN_MAZE;
-	mazeParam.i = 10;
-	mazeParam.f = 0.6f;
-	ENetPacket* mazeParameters = enet_packet_create(&mazeParam, sizeof(PacketIntFloat), 0);
-	enet_peer_send(serverConnection, 0, mazeParameters);
-	NCLDebug::Log(status_color3, "Client: Sent maze parameters!");
+void Net1_Client::OnConnection() {
+
+	//Send a 'hello' packet
+	PacketString hello(TEST_PACKET, "Helloooo!");
+	ENetPacket* packet = enet_packet_create(&hello, sizeof(hello), 0);
+	enet_peer_send(serverConnection, 0, packet);
 }

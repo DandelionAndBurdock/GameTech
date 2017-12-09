@@ -10,34 +10,31 @@ namespace Packets {
 	// All packets must derive from Packet as we will cast message to determine what type
 	// of packet we have
 	struct Packet {
-		Packet::PacketType  message;
+		PacketType  message;
 
-		virtual uint GetSize() = 0; // Return size in bytes
+		Packet(PacketType m) : message(m) {}
 	};
 
 	struct PacketVec3 : public Packet {
 		Vector3 vec;
 
-		uint GetSize() override { return sizeof(this); }
+		PacketVec3(PacketType m, Vector3 v) : 
+			Packet(m), vec(v) {}
 	};
 
 	struct PacketIntFloat : public Packet {
 		int i;
 		float f;
 
-		uint GetSize() override { return sizeof(this); }
+		PacketIntFloat(PacketType m, int i, float f) :
+			Packet(m), i(i), f(f) {}
 	};
 
 	struct PacketString : public Packet {
 		std::string str;
 
-		uint GetSize() override { return sizeof(this); }
-	};
-
-	struct PacketUint : public Packet {
-		uint i;
-
-		uint GetSize() override { return sizeof(this); }
+		PacketString(PacketType m, std::string s) :
+			Packet(m), str(s) {}
 	};
 };
 

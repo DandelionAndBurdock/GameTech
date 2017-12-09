@@ -87,8 +87,8 @@
     <ClCompile Include="Server.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="NetworkConstants.h" />
     <ClInclude Include="Server.h" />
-    <ClInclude Include="ServerConstants.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

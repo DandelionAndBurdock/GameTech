@@ -36,27 +36,27 @@ FOR MORE NETWORKING INFORMATION SEE "Tuts_Network_Client -> Net1_Client.h"
 
 #include <enet\enet.h>
 #include <nclgl\GameTimer.h>
-#include <nclgl\Vector3.h>
 #include <nclgl\common.h>
-#include "Server.h"
-
-#include "ServerConstants.h"
 
 //Needed to get computer adapter IPv4 addresses via windows
 #include <iphlpapi.h>
 #pragma comment(lib, "IPHLPAPI.lib")
 
-
+// Remove
+#include "NetworkConstants.h"
+#include "Server.h"
 
 
 GameTimer timer;
 float accum_time = 0.0f;
 
 
+
 void Win32_PrintAllAdapterIPAddresses();
 
 int onExit(int exitcode)
 {
+
 	system("pause");
 	exit(exitcode);
 }
@@ -69,15 +69,14 @@ int main(int arcg, char** argv)
 		return EXIT_FAILURE;
 	}
 
-	Server server;
-	
-	//Initialize Server on Port 1234, with a possible 32 clients connected at any time
-	if (!server.Initialise()) {
+	Server server(SERVER_PORT, 32);
+	if (!server.IsInitalised())
+	{
 		fprintf(stderr, "An error occurred while trying to create an ENet server host.\n");
 		onExit(EXIT_FAILURE);
 	}
-
 	printf("Server Initiated\n");
+
 
 	Win32_PrintAllAdapterIPAddresses();
 
@@ -85,22 +84,8 @@ int main(int arcg, char** argv)
 	while (true)
 	{
 		float dt = timer.GetTimedMS() * 0.001f;
-		accum_time += dt;
 
-
-		server.HandleInputTraffic(dt);
-
-		//Broadcast update packet to all connected clients at a rate of UPDATE_TIMESTEP updates per second
-		if (accum_time >= UPDATE_TIMESTEP)
-		{
-			server.BroadcastTraffic();
-			//Packet data
-			// - At the moment this is just a position update that rotates around the origin of the world
-			//   though this can be any variable, structure or class you wish. Just remember that everything 
-			//   you send takes up valuable network bandwidth so no sending every PhysicsObject struct each frame ;)
-			accum_time = 0.0f;
-			
-		}
+		server.Update(dt);
 
 		Sleep(0);
 	}
@@ -118,7 +103,7 @@ void Win32_PrintAllAdapterIPAddresses()
 {
 	//Initially allocate 5KB of memory to store all adapter info
 	ULONG outBufLen = 5000;
-
+	
 
 	IP_ADAPTER_INFO* pAdapters = NULL;
 	DWORD status = ERROR_BUFFER_OVERFLOW;
@@ -144,7 +129,7 @@ void Win32_PrintAllAdapterIPAddresses()
 		}
 	}
 
-
+	
 	if (pAdapters != NULL)
 	{
 		//Iterate through all Network Adapters, and print all IPv4 addresses associated with them to the console
@@ -163,5 +148,5 @@ void Win32_PrintAllAdapterIPAddresses()
 
 		free(pAdapters);
 	}
-
+	
 }
