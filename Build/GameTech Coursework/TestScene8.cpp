@@ -69,6 +69,25 @@ void TestScene8::OnInitializeScene()
 	//player->Physics()->SetNarrowPhaseCollisionShape(raptorShape);
 	player->Physics()->AddSteeringBehaviour(Steering::WANDER);
 	this->AddGameObject(player);
+
+
+	//Create spaceShip
+	ObjectPlayer* player2 = new ObjectPlayer("Player2");
+	player2->SetRender(new RenderNode(m_MeshPlayer));
+	player2->Render()->SetBoundingRadius(1.0f);
+	player2->Render()->SetColor(Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+	player2->Render()->SetModelScale(Vector3(0.5f));
+	player2->SetPhysics(new PhysicsNode());
+	player2->Physics()->SetPosition(Vector3(20.0f, 0.5f, 20.0f));
+	//CompositeCollisionShape* raptorShape = new CompositeCollisionShape();
+	//raptorShape->AddShape(new CuboidCollisionShape(Vector3(0.2f, 0.2f, 0.5f)), Vector3(0.0f));
+	//raptorShape->AddShape(new CuboidCollisionShape(Vector3(0.1f, 0.1f, 0.5f)), Vector3(0.0f, 0.2f, 1.10f));
+	//raptorShape->AddShape(new SphereCollisionShape(0.2f), Vector3(0.0f, 0.4f, -0.75f));
+	//player->Physics()->SetNarrowPhaseCollisionShape(new CuboidCollisionShape(Vector3(0.5f, 0.5f, 1.0f)));
+	//player->Physics()->SetNarrowPhaseCollisionShape(raptorShape);
+	player2->Physics()->AddSteeringBehaviour(Steering::PURSUIT);
+	player2->Physics()->ChangePursuitTarget(player);
+	this->AddGameObject(player2);
 }
 
 void TestScene8::OnCleanupScene()

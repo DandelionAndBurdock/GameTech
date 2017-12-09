@@ -2,8 +2,10 @@
 
 #include "SteeringBehaviour.h"
 
+#include "Pursuit.h"
 #include "Seek.h"
 #include "Wander.h"
+
 
 #include "AIObject.h"
 
@@ -50,6 +52,9 @@ void SteeringBehaviourManager::AddBehaviour(const BehaviourType b) {
 	case WANDER:
 		behaviours.push_back(new Wander(owner));
 		break;
+	case PURSUIT:
+		behaviours.push_back(new Pursuit(owner));
+		break;
 	default: 
 		std::cout << "Warning: Unimplemented Behaviour" << std::endl;
 	}
@@ -61,6 +66,14 @@ void SteeringBehaviourManager::SetSeekTarget(Vector3 target) {
 	for (auto& behaviour : behaviours) {
 		if (behaviour->GetType() == SEEK) {
 			dynamic_cast<Seek*>(behaviour)->SetTarget(target);
+		}
+	}
+}
+
+void SteeringBehaviourManager::SetPursuitTarget(GameObject* target) {
+	for (auto& behaviour : behaviours) {
+		if (behaviour->GetType() == PURSUIT) {
+			dynamic_cast<Pursuit*>(behaviour)->SetTarget(target);
 		}
 	}
 }

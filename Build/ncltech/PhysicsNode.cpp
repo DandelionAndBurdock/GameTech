@@ -190,3 +190,7 @@ void PhysicsNode::AddSteeringBehaviour(Steering::BehaviourType b) {
 void PhysicsNode::ChangeSeekTarget(Vector3 target) {
 	steering->SetSeekTarget(target);
 }
+
+void  PhysicsNode::ChangePursuitTarget(GameObject* target) {
+	steering->SetPursuitTarget(target);
+}

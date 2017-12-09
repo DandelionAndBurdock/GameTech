@@ -22,6 +22,7 @@ public:
 	 void AddBehaviour(const Steering::BehaviourType b);
 
 	 void SetSeekTarget(Vector3 target);
+	 void SetPursuitTarget(GameObject* target);
 
 protected:
 
