@@ -142,6 +142,8 @@
     <ClCompile Include="CuboidCollisionShape.cpp" />
     <ClCompile Include="GeometryUtils.cpp" />
     <ClCompile Include="GraphicsPipeline.cpp" />
+    <ClCompile Include="GroupAIObject.cpp" />
+    <ClCompile Include="GroupSteering.cpp" />
     <ClCompile Include="HazardStates.cpp" />
     <ClCompile Include="Hull.cpp" />
     <ClCompile Include="Jelly.cpp" />
@@ -158,6 +160,7 @@
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="ScreenPicker.cpp" />
     <ClCompile Include="Seek.cpp" />
+    <ClCompile Include="Seperation.cpp" />
     <ClCompile Include="SoftBodyConstraint.cpp" />
     <ClCompile Include="SphereCollisionShape.cpp" />
     <ClCompile Include="StateMachineManager.cpp" />
@@ -183,6 +186,8 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GeometryUtils.h" />
     <ClInclude Include="GraphicsPipeline.h" />
+    <ClInclude Include="GroupAIObject.h" />
+    <ClInclude Include="GroupSteering.h" />
     <ClInclude Include="HazardStates.h" />
     <ClInclude Include="Hull.h" />
     <ClInclude Include="Jelly.h" />
@@ -205,6 +210,7 @@
     <ClInclude Include="SearchBreadthFirst.h" />
     <ClInclude Include="SearchDepthFirst.h" />
     <ClInclude Include="Seek.h" />
+    <ClInclude Include="Seperation.h" />
     <ClInclude Include="Serializable.h" />
     <ClInclude Include="SoftBodyConstants.h" />
     <ClInclude Include="SoftBodyConstraint.h" />

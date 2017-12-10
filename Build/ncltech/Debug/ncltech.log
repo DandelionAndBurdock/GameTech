@@ -1,26 +1,2 @@
-﻿  SteeringBehaviourManager.cpp
-d:\gametechnew\gametech\build\ncltech\messenger.h(15): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-  Pursuit.cpp
-  PhysicsNode.cpp
-  Generating Code...
-  Skipping... (no relevant changes detected)
-  SteeringBehaviour.cpp
-  Wander.cpp
-  SphereCollisionShape.cpp
-  Seek.cpp
-  SceneManager.cpp
-  PhysicsEngine.cpp
-  PathFollowing.cpp
-  Octtree.cpp
-  Messenger.cpp
-  MazeRenderer.cpp
-  MazeGenerator.cpp
-  Manifold.cpp
-  Jelly.cpp
-  HazardStates.cpp
-  CuboidCollisionShape.cpp
-  CommonUtils.cpp
-  CollisionDetectionSAT.cpp
-  Cloth.cpp
-  AIObject.cpp
+﻿  Jelly.cpp
   ncltech.vcxproj -> D:\GameTechNew\GameTech\Build\Debug\ncltech.lib

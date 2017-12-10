@@ -280,27 +280,35 @@ void MazeGenerator::Generate_Sparse(float density)
 
 // Would be quicker to just send the seed!
 void MazeGenerator::Serialize(std::ostream& stream) {
-	stream << size << std::endl;
-	stream << startIndex << std::endl; 
-	stream << endIndex << std::endl;
+	//stream << size << std::endl;
+	//stream << startIndex << std::endl; 
+	//stream << endIndex << std::endl;
+
+	stream.write((const char*)&size, sizeof(int));
+
 
 	//const int numNodes = size * size;
-	//stream.write(reinterpret_cast<char*>(allNodes), numNodes * sizeof(GraphNode));
+	//for (int node = 0; node < numNodes; ++node) {
+	//	stream.write(reinterpret_cast<const char*>(allNodes + node), sizeof(GraphNode));
+	//}
+	
+	stream.write(reinterpret_cast<const char*>(allNodes), sizeof(GraphNode));
 
 	//const int numEdges = 2 * size * (size - 1);
 	//stream.write((char*)allEdges, numEdges * sizeof(GraphEdge));
 }
 
 void MazeGenerator::Deserialize(std::istream& stream) {
-	stream >> size >> startIndex >> endIndex;
-	
+	//stream >> size >> startIndex >> endIndex;
+	stream.read((char*)&size, sizeof(int));
+	stream.read((char*)allNodes, sizeof(GraphNode));
 	if (allNodes) {
 		delete[] allNodes;
 	}
 	
-	//const int numNodes = size * size;
-	//allNodes = new GraphNode[numNodes];
-	//stream.read(reinterpret_cast<char*>(allNodes), numNodes * sizeof(GraphNode));
+	const int numNodes = size * size;
+	allNodes = new GraphNode[numNodes];
+	stream.read(reinterpret_cast<char*>(allNodes), numNodes * sizeof(GraphNode));
 
 	//if (allEdges) {
 	//	delete[] allEdges;
