@@ -265,8 +265,15 @@ void CuboidCollisionShape::ConstructCubeHull()
 
 // Double dispatch
 bool CuboidCollisionShape::IsColliding(CollisionShape* shape) {
-	return false;
+	return shape->IsCollidingWith(this);
 }
 bool CuboidCollisionShape::IsCollidingWith(SphereCollisionShape* shape) {
+	return false;
+}
+
+bool CuboidCollisionShape::IsCollidingWith(CuboidCollisionShape* shape) {
+	return false;
+}
+bool CuboidCollisionShape::IsCollidingWith(CompositeCollisionShape* shape) {
 	return false;
 }

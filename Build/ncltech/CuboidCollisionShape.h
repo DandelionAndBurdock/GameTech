@@ -80,6 +80,8 @@ public:
 	// Double dispatch
 	bool IsColliding(CollisionShape* shape) override;
 	bool IsCollidingWith(SphereCollisionShape* shape) override;
+	bool IsCollidingWith(CuboidCollisionShape* shape) override;
+	bool IsCollidingWith(CompositeCollisionShape* shape) override;
 protected:
 	//Constructs the static cube hull 
 	static void ConstructCubeHull();

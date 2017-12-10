@@ -1,7 +1,5 @@
 #include "CompositeCollisionShape.h"
 
-
-
 CompositeCollisionShape::CompositeCollisionShape()
 {
 }
@@ -14,10 +12,33 @@ CompositeCollisionShape::~CompositeCollisionShape()
 
 // Double dispatch
 bool CompositeCollisionShape::IsColliding(CollisionShape* shape) {
-	return false;
+	return shape->IsCollidingWith(this);
 }
 
 bool CompositeCollisionShape::IsCollidingWith(SphereCollisionShape* shape) {
+	for (auto& compShape : shapes) {
+		if (shape->IsColliding(compShape))
+			return true;
+	}
+	return false;
+}
+
+
+bool CompositeCollisionShape::IsCollidingWith(CuboidCollisionShape* shape) {
+	for (auto& compShape : shapes) {
+		if (shape->IsColliding(compShape))
+			return true;
+	}
+	return false;
+}
+
+bool CompositeCollisionShape::IsCollidingWith(CompositeCollisionShape* shape) {
+	for (auto& compShapeA : shapes) {
+		for (auto& compShapeB : shape->shapes) {
+			if (compShapeA->IsColliding(compShapeB))
+				return true;
+		}
+	}
 	return false;
 }
 
@@ -80,3 +101,4 @@ void CompositeCollisionShape::SetParent(PhysicsNode* node) {
 		shape->SetParent(node);
 	}
 }
+

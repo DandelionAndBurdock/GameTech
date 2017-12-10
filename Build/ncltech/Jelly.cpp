@@ -216,6 +216,127 @@ void Jelly::AddToScene(Scene* s) {
 		PhysicsEngine::Instance()->AddConstraint(constraint);
 	}
 
+
+	// Right face
+	spheresLF.clear();
+	constraintsLF.clear();
+	for (int row = 1; row < dimension; ++row) {
+		for (int col = 0; col < dimension; ++col) {
+			float invMass = 1.0f;
+			if (col + 1 == dimension) { // Pin top row
+				invMass = 0.0f;
+			}
+
+			GameObject* obj = CommonUtils::BuildSphereObject(
+				"",
+				Vector3((dimension - 1) * length, col * length, row * length),
+				0.1f,
+				true,
+				invMass,
+				false,
+				false,
+				Vector4(float(row) / (dimension), float(col) / (dimension), float(i) / (dimension * dimension), 1.0f)
+			);
+			obj->Physics()->SetElasticity(0.00f);
+			obj->Physics()->SetFriction(1.00f);
+			spheresLF.push_back(obj);
+		}
+	}
+
+	//Add diagonal and square distance constraints
+	numNodes = dimension * dimension - dimension; // Already have some of our nodes in the frontface-layer
+	for (int i = 0; i < numNodes; ++i) {
+		// Horizontal constraints
+		if (i < numNodes - dimension) { // Not for last column
+			DistanceConstraint* constraint = new DistanceConstraint(
+				spheresLF[i]->Physics(),					//Physics Object A
+				spheresLF[i + dimension]->Physics(),					//Physics Object B
+				spheresLF[i]->Physics()->GetPosition(),	//Attachment Position on Object A	-> Currently the centre
+				spheresLF[i + dimension]->Physics()->GetPosition());	//Attachment Position on Object B	-> Currently the centre  
+
+			constraintsLF.push_back(constraint);
+			//PhysicsEngine::Instance()->AddConstraint(constraint);
+		}
+
+		// Vertical Constraints
+		if ((i + 1) % dimension) { // Not for top row
+			DistanceConstraint* constraint = new DistanceConstraint(
+				spheresLF[i]->Physics(),					//Physics Object A
+				spheresLF[i + 1]->Physics(),					//Physics Object B
+				spheresLF[i]->Physics()->GetPosition(),	//Attachment Position on Object A	-> Currently the centre
+				spheresLF[i + 1]->Physics()->GetPosition());	//Attachment Position on Object B	-> Currently the centre  
+
+			constraintsLF.push_back(constraint);
+			//PhysicsEngine::Instance()->AddConstraint(constraint);
+		}
+
+		// Backward Diagonal Constraints
+		if ((i + 1) % dimension && i < numNodes - dimension) { // Not for top row or last column 
+			DistanceConstraint* constraint = new DistanceConstraint(
+				spheresLF[i]->Physics(),					//Physics Object A
+				spheresLF[i + dimension + 1]->Physics(),					//Physics Object B
+				spheresLF[i]->Physics()->GetPosition(),	//Attachment Position on Object A	-> Currently the centre
+				spheresLF[i + dimension + 1]->Physics()->GetPosition());	//Attachment Position on Object B	-> Currently the centre  
+
+			constraintsLF.push_back(constraint);
+			//PhysicsEngine::Instance()->AddConstraint(constraint);
+		}
+
+		// Forward Diagonal Constraints
+		if ((i + 1) % dimension && i >= dimension) { // Not for top row or first column 
+			DistanceConstraint* constraint = new DistanceConstraint(
+				spheresLF[i]->Physics(),					//Physics Object A
+				spheresLF[i - dimension + 1]->Physics(),					//Physics Object B
+				spheresLF[i]->Physics()->GetPosition(),	//Attachment Position on Object A	-> Currently the centre
+				spheresLF[i - dimension + 1]->Physics()->GetPosition());	//Attachment Position on Object B	-> Currently the centre  
+
+			constraintsLF.push_back(constraint);
+			//PhysicsEngine::Instance()->AddConstraint(constraint);
+		}
+	}
+
+	// Connect front and left face together
+	for (int i = 1; i <= dimension; ++i) {
+		// Horizontal
+		DistanceConstraint* constraint = new DistanceConstraint(
+			spheres[dimension * dimension - i]->Physics(),					//Physics Object A
+			spheresLF[numNodes - i]->Physics(),					//Physics Object B
+			spheres[dimension * dimension - i]->Physics()->GetPosition(),	//Attachment Position on Object A	-> Currently the centre
+			spheresLF[numNodes - i]->Physics()->GetPosition());	//Attachment Position on Object B	-> Currently the centre  
+
+		constraintsLF.push_back(constraint);
+
+		// Diagonal
+		if (i > 1) {
+			DistanceConstraint* constraint = new DistanceConstraint(
+				spheres[dimension * dimension - i + 1]->Physics(),					//Physics Object A
+				spheresLF[dimension - i]->Physics(),					//Physics Object B
+				spheres[dimension * dimension - i + 1]->Physics()->GetPosition(),	//Attachment Position on Object A	-> Currently the centre
+				spheresLF[dimension - i ]->Physics()->GetPosition());	//Attachment Position on Object B	-> Currently the centre  
+
+			constraintsLF.push_back(constraint);
+
+			constraint = new DistanceConstraint(
+				spheres[dimension * dimension - i + 1]->Physics(),					//Physics Object A
+				spheresLF[dimension - i + 1]->Physics(),					//Physics Object B
+				spheres[dimension * dimension - i + 1]->Physics()->GetPosition(),	//Attachment Position on Object A	-> Currently the centre
+				spheresLF[dimension - i + 1]->Physics()->GetPosition());	//Attachment Position on Object B	-> Currently the centre  
+			
+			constraintsLF.push_back(constraint);
+		}
+
+	}
+
+
+	for (auto& sphere : spheresLF) {
+		s->AddGameObject(sphere);
+	}
+	for (auto& constraint : constraintsLF) {
+		PhysicsEngine::Instance()->AddConstraint(constraint);
+	}
+
+	// Back Face
+
 }
 //#include "PhysicsEngine.h"
 //

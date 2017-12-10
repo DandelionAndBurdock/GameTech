@@ -22,9 +22,10 @@ public:
 	float GetSize() override;
 
 	// Double dispatch
-	virtual bool IsColliding(CollisionShape* shape);
-	virtual bool IsCollidingWith(SphereCollisionShape* shape);
-
+	bool IsColliding(CollisionShape* shape) override;
+	bool IsCollidingWith(SphereCollisionShape* shape) override;
+	bool IsCollidingWith(CuboidCollisionShape* shape) override;
+	bool IsCollidingWith(CompositeCollisionShape* shape) override;
 private:
 	// Shapes making up this object
 	std::vector<CollisionShape*> shapes;

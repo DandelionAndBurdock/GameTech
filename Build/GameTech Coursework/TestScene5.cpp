@@ -62,9 +62,10 @@ void TestScene5::OnInitializeScene()
 	CompositeCollisionShape* raptorShape = new CompositeCollisionShape();
 	raptorShape->AddShape(new CuboidCollisionShape(Vector3(0.2f, 0.2f, 0.5f)), Vector3(0.0f));
 	raptorShape->AddShape(new CuboidCollisionShape(Vector3(0.1f, 0.1f, 0.5f)), Vector3(0.0f, 0.2f, 1.10f));
-	//raptorShape->AddShape(new SphereCollisionShape(0.2f), Vector3(0.0f, 0.4f, -0.75f));
+	raptorShape->AddShape(new SphereCollisionShape(0.2f), Vector3(0.0f, 0.5f, -0.7f));
 	//player->Physics()->SetNarrowPhaseCollisionShape(new CuboidCollisionShape(Vector3(0.5f, 0.5f, 1.0f)));
 	player->Physics()->SetNarrowPhaseCollisionShape(raptorShape);
+	player->Physics()->SetBroadPhaseCollisionShape(raptorShape);
 	this->AddGameObject(player);
 }
 

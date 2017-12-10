@@ -92,7 +92,7 @@ void SphereCollisionShape::GetIncidentReferencePolygon(
 
 void SphereCollisionShape::DebugDraw(Vector3 offset) const
 {
-	Vector3 pos = Parent()->GetPosition();
+	Vector3 pos = Parent()->GetPosition() + Matrix3(Parent()->GetWorldSpaceTransform()) * offset;
 
 	//Draw Filled Circle
 	NCLDebug::DrawPointNDT(pos, m_Radius, Vector4(1.0f, 1.0f, 1.0f, 0.2f));
@@ -128,5 +128,12 @@ bool SphereCollisionShape::IsColliding(CollisionShape* shape) {
 }
 
 bool SphereCollisionShape::IsCollidingWith(SphereCollisionShape* shape) {
+	return AreColliding(this, shape);
+}
+
+bool SphereCollisionShape::IsCollidingWith(CuboidCollisionShape* shape) {
+	return AreColliding(this, shape);
+}
+bool SphereCollisionShape::IsCollidingWith(CompositeCollisionShape* shape) {
 	return AreColliding(this, shape);
 }

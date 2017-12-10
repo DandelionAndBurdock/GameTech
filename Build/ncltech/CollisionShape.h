@@ -27,6 +27,8 @@ Description:
 #include <list>
 
 class SphereCollisionShape;
+class CuboidCollisionShape;
+class CompositeCollisionShape;
 
 using namespace GeometryUtils;
 
@@ -93,6 +95,8 @@ public:
 	// Double dispatch
 	virtual bool IsColliding(CollisionShape* shape) = 0;
 	virtual bool IsCollidingWith(SphereCollisionShape* shape) = 0;
+	virtual bool IsCollidingWith(CuboidCollisionShape* shape) = 0;
+	virtual bool IsCollidingWith(CompositeCollisionShape* shape) = 0;
 
 protected:
 	PhysicsNode* m_Parent;
