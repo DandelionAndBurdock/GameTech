@@ -6,7 +6,7 @@
 #include <sstream>
 
 namespace Packets {
-	enum PacketType { TEST_PACKET, POS_DATA, MAZE_PARAM, MAZE_STRUCTURE};
+	enum PacketType { TEST_PACKET, POS_DATA, MAZE_PARAM, MAZE_STRUCTURE, REGEN_MAZE};
 
 	// All packets must derive from Packet as we will cast message to determine what type
 	// of packet we have
@@ -14,6 +14,7 @@ namespace Packets {
 		PacketType  message;
 
 		Packet(PacketType m) : message(m) {}
+		Packet() {}
 	};
 
 	struct PacketVec3 : public Packet {
@@ -29,6 +30,7 @@ namespace Packets {
 
 		PacketIntFloat(PacketType m, int i, float f) :
 			Packet(m), i(i), f(f) {}
+		PacketIntFloat() {}
 	};
 
 	struct PacketString : public Packet {
@@ -36,6 +38,13 @@ namespace Packets {
 
 		PacketString(PacketType m, std::string s) :
 			Packet(m), str(s) {}
+	};
+
+	struct PacketInt : public Packet {
+		int i;
+
+		PacketInt(PacketType m, int i) :
+			Packet(m), i(i) {}
 	};
 
 };

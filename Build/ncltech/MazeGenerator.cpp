@@ -88,6 +88,64 @@ void MazeGenerator::Generate(int grid_size, float maze_density)
 	GetRandomStartEndNodes();
 }
 
+void MazeGenerator::Generate(int seed, int grid_size, float maze_density)
+{
+	srand(seed);
+	if (allNodes)
+	{
+		delete[] allNodes;
+		delete[] allEdges;
+	}
+
+	size = grid_size;
+	Initiate_Arrays();
+
+	Generate_Sparse(maze_density);
+
+	//Final step is de-randomise the neighbours list
+	// - This isn't normally needed, but for the sake of the maze demonstration it is nice to see that
+	//   breadth first always does '+x, -x, +y, -y' and depth first always searches all '+x'then all '-x' etc
+	// Order of neighbours: 
+	//   0: -x
+	//   1: +x
+	//   2: -y
+	//   3: +y
+#pragma omp parallel for
+	for (int y = 0; y < (int)size; ++y)
+	{
+		GraphEdge* lookup[4];
+		for (int x = 0; x < (int)size; ++x)
+		{
+			GraphNode* on = &allNodes[y * size + x];
+
+			memset(lookup, 0, 4 * sizeof(GraphEdge*));
+
+			for (GraphEdge* e : on->_neighbours)
+			{
+				GraphNode* nn = (e->_a == on) ? e->_b : e->_a;
+
+				int xOffset = on->_pos.x > nn->_pos.x;
+				int yOffset = (on->_pos.y > nn->_pos.y);
+				if (on->_pos.x != nn->_pos.x)
+					lookup[xOffset] = e;	 //0 or 1
+				else
+					lookup[yOffset + 2] = e; //2 or 3
+			}
+
+			on->_neighbours.clear();
+
+			for (int i = 0; i < 4; ++i)
+			{
+				if (lookup[i])
+					on->_neighbours.push_back(lookup[i]);
+			}
+
+		}
+	}
+
+	GetRandomStartEndNodes();
+}
+
 void MazeGenerator::GetRandomStartEndNodes()
 {
 	//Traditional Maze one side to the other
@@ -284,15 +342,18 @@ void MazeGenerator::Serialize(std::ostream& stream) {
 	//stream << startIndex << std::endl; 
 	//stream << endIndex << std::endl;
 
-	stream.write((const char*)&size, sizeof(int));
-
+	//stream.write((const char*)&size, sizeof(int));
+	//stream.write(reinterpret_cast<char*>(&size), sizeof(int));
+	//stream.write(reinterpret_cast<char*>(&allNodes[0]), sizeof(GraphNode));
+	//stream.write((const char*)(allNodes), sizeof(GraphNode));
+	stream.write(reinterpret_cast<char*>(&allNodes[0]), sizeof(GraphNode));
 
 	//const int numNodes = size * size;
 	//for (int node = 0; node < numNodes; ++node) {
 	//	stream.write(reinterpret_cast<const char*>(allNodes + node), sizeof(GraphNode));
 	//}
-	
-	stream.write(reinterpret_cast<const char*>(allNodes), sizeof(GraphNode));
+
+	//stream.write(reinterpret_cast<const char*>(allNodes), sizeof(GraphNode));
 
 	//const int numEdges = 2 * size * (size - 1);
 	//stream.write((char*)allEdges, numEdges * sizeof(GraphEdge));
@@ -301,14 +362,14 @@ void MazeGenerator::Serialize(std::ostream& stream) {
 void MazeGenerator::Deserialize(std::istream& stream) {
 	//stream >> size >> startIndex >> endIndex;
 	stream.read((char*)&size, sizeof(int));
-	stream.read((char*)allNodes, sizeof(GraphNode));
-	if (allNodes) {
-		delete[] allNodes;
-	}
-	
-	const int numNodes = size * size;
-	allNodes = new GraphNode[numNodes];
-	stream.read(reinterpret_cast<char*>(allNodes), numNodes * sizeof(GraphNode));
+	stream.read((char*)&allNodes[0], sizeof(GraphNode));
+	//if (allNodes) {
+	//	delete[] allNodes;
+	//}
+	//
+	//const int numNodes = size * size;
+	//allNodes = new GraphNode[numNodes];
+	//stream.read(reinterpret_cast<char*>(allNodes), numNodes * sizeof(GraphNode));
 
 	//if (allEdges) {
 	//	delete[] allEdges;

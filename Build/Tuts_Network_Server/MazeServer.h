@@ -16,6 +16,10 @@ protected:
 
 	void HandleMazeParams(int clientID, Packets::PacketType* message);
 
+	void RegenerateMaze(int clientID, Packets::PacketType* message);
+
+	void BroadcastMazeStructure();
+
 	MazeGenerator* maze = nullptr;
 };
 

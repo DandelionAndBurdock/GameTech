@@ -172,6 +172,9 @@ public:
 	}
 	// Some scenes will handle projectiles a little differently
 	virtual void AddProjectile(GameObject* object) { AddGameObject(object); }
+
+	virtual void HandleKeyboardInput(KeyboardKeys key) {};
+	virtual void HandleMouseInput(MouseButtons button) {};
 protected:
 	// Delete all contained Objects
 	//    - This is the default action upon firing OnCleanupScene()

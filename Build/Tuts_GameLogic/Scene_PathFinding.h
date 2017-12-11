@@ -128,7 +128,7 @@ public:
 		player = new GameObject("MazeWanderer");
 		player->SetRender(new RenderNode(playerMesh));
 		player->Render()->SetBoundingRadius(1.0f);
-		player->Render()->SetModelScale(1.0f);
+		player->Render()->SetModelScale(0.1f);
 
 		player->SetPhysics(new PhysicsNode());
 		player->Physics()->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
@@ -238,6 +238,19 @@ public:
 			UpdateAStarPreset();
 		}
 
+
+		// Added Mouse
+		if (Window::GetMouse()->ButtonDown(MOUSE_LEFT)) {
+
+			std::cout << "Clickity click" << std::endl;
+
+		}
+		if (Window::GetMouse()->ButtonDown(MOUSE_RIGHT)) {
+			std::cout << "Clockity click" << std::endl;
+		}
+
+		// End added
+
 		NCLDebug::AddStatusEntry(Vector4(1.0f, 0.9f, 0.8f, 1.0f), "");
 		NCLDebug::AddStatusEntry(Vector4(1.0f, 0.9f, 0.8f, 1.0f), "--- Number of nodes searched ---");
 		NCLDebug::AddStatusEntry(Vector4(1.0f, 0.9f, 0.8f, 1.0f), "   Depth-First  : %4d nodes", search_df->GetSearchHistory().size());
@@ -268,6 +281,7 @@ public:
 		Vector3 absMazePos = maze_scalar * pos_maze3;
 		//Matrix4 maze_scalar = 
 		player->Physics()->SetPosition(Vector3(-2.5f, 0.0f,0.0f) + scaledPos);
+		//player->Physics()->SetPosition(mazes[2]->Render()->GetWorldTransform() * unscaledPos);
 		// End added
 	}
 

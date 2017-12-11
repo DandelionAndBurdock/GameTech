@@ -1,4 +1,6 @@
-﻿  CompositeCollisionShape.cpp
-d:\gametechnew\gametech\build\ncltech\compositecollisionshape.cpp(58): warning C4018: '<': signed/unsigned mismatch
-d:\gametechnew\gametech\build\ncltech\compositecollisionshape.cpp(80): warning C4018: '<': signed/unsigned mismatch
-  ncltech.vcxproj -> D:\GameTechNew\GameTech\Build\Debug\ncltech.lib
+﻿  MazeGenerator.cpp
+  Generating Code...
+  Compiling...
+  MazeRenderer.cpp
+  Generating Code...
+  ncltech.vcxproj -> D:\GameTechNewNew\GameTech\Build\Debug\ncltech.lib

@@ -23,6 +23,8 @@ public:
 	//Used as a hack for the MazeRenderer to generate the walls more effeciently
 	GraphNode* GetAllNodesArr() { return allNodes; }
 
+	void Generate(int seed, int grid_size, float maze_density);
+
 	void Serialize(std::ostream& stream);
 	void Deserialize(std::istream& stream);
 
