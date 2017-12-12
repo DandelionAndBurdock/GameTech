@@ -4,11 +4,13 @@
 using namespace Packets;
 
 #include <ncltech\MazeGenerator.h>
+#include <ncltech\SearchAStar.h>
 
 #include <sstream>
 
 MazeServer::MazeServer(int portNumber, int maxClients) :
-	Server(portNumber, maxClients)
+	Server(portNumber, maxClients),
+	graphSearch(new SearchAStar())
 {
 }
 
@@ -34,8 +36,16 @@ void MazeServer::ReceiveMessage(const ENetEvent& evnt) {
 		++message;
 		RegenerateMaze(evnt.peer->incomingPeerID, message);
 		break;
+	case ROUTE_REQUEST:
+		// Move pointer to the start of the data
+		++message;
+		//GraphNode* start = reinterpret_cast<GraphNode*>(message);
+		//++message;
+		//GraphNode* end = reinterpret_cast<GraphNode*>(message);
+		//ss.read();
+		HandleRouteRequest(evnt.peer->incomingPeerID, message);
+		break;
 	}
-
 
 	Server::ReceiveMessage(evnt);
 }
@@ -90,7 +100,40 @@ void MazeServer::BroadcastMazeStructure() {
 	std::stringstream ss(std::stringstream::out);
 	maze->Serialize(ss);
 
+
 	PacketString mazeParams(MAZE_STRUCTURE, ss.str());
 	ENetPacket* packet = enet_packet_create(&mazeParams, sizeof(mazeParams), 0);
 	enet_host_broadcast(serverNetwork.m_pNetwork, 0, packet);
 }
+
+
+void MazeServer::SendMazeRoute(int client) {
+	std::list<const GraphNode*> path = graphSearch->GetFinalPath();
+	// Put into a string
+	
+	// Send
+
+}
+
+void  MazeServer::HandleRouteRequest(int clientID, Packets::PacketType* message) {
+	std::cout << "Received route request from client " << clientID << std::endl;
+	std::istringstream ss(*reinterpret_cast<std::string*>(message));
+	int startIdx, endIdx;
+	ss >> startIdx >> endIdx;
+	
+	graphSearch->FindBestPath(maze->GetNodeFromIndex(startIdx), maze->GetNodeFromIndex(endIdx));
+}
+
+//struct MyPacketNodeData;
+//struct MyPacket
+//{
+//	int packet_type;
+//	int numNodes;
+//};
+//MyPacket header;
+//ENetPacket* packet = enet_packet_create(&header, sizeof(header) + sizeof(MyPacketNodeData) * 100, 0);
+
+//MyPacket* header;
+//header = reinterpret_cast<MyPacket*>(packetData); //memcpy this also otherwise when enet packet goers out of scope will delete mry|
+//MyPacketNodeData* tmpArr = new MyPacketNodeData[header->numNodes];
+//memcpy(tmpArr, reinterpret_cast<char*>(packetData) + sizeof(MyPacket), sizeof(MyPacketNodeData) * header->numNodes);

@@ -292,3 +292,4 @@ public:
 		std::list<const GraphNode*> path;
 		// End Added
 };
+

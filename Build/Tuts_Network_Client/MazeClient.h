@@ -5,6 +5,7 @@
 
 class MazeGenerator;
 class MazeRenderer;
+class GraphNode;
 
 class MazeClient : public Net1_Client
 {
@@ -27,6 +28,17 @@ protected:
 protected:
 	// Send maze params to the server
 	void SendMazeParams(bool resend = false);
+
+	void CreateAvatar();
+
+	// Make maze nodes clickable
+	void RegisterMazeWithScreenPicker();
+
+	// Draw path between current start and end points
+	void DrawPath();
+
+	void SendRouteRequest(GraphNode* const start, GraphNode* const end);
+
 	MazeGenerator* mazeGenerator = nullptr;
 	MazeRenderer* mazeRenderer = nullptr;
 

@@ -3,6 +3,7 @@
 
 #include <list>
 #include <algorithm>
+#include <iterator>
 
 uint RandomGridCell(uint size)
 {
@@ -381,4 +382,20 @@ void MazeGenerator::Deserialize(std::istream& stream) {
 
 	start = &allNodes[startIndex];
 	end = &allNodes[endIndex];
+}
+
+
+int MazeGenerator::GetIndexFromNode(GraphNode* node) {
+	for (int idx = 0; idx < size * size; ++idx) {
+		if (allNodes + idx == node) {
+			return idx;
+		}
+	}
+
+	return -1;
+}
+
+
+GraphNode* MazeGenerator::GetNodeFromIndex(int index) {
+	return allNodes + index;
 }

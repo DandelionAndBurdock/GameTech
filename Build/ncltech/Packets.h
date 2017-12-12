@@ -5,8 +5,17 @@
 #include <string>
 #include <sstream>
 
+#include "MazeGenerator.h"
+
 namespace Packets {
-	enum PacketType { TEST_PACKET, POS_DATA, MAZE_PARAM, MAZE_STRUCTURE, REGEN_MAZE};
+	enum PacketType { TEST_PACKET,
+					  POS_DATA, 
+					  MAZE_PARAM,	  // Contains dimensions and density of the maze
+					  MAZE_STRUCTURE, // Contains nodes and edges of the maze
+					  REGEN_MAZE,	  // Create a new maze with current parameter
+					  ROUTE_REQUEST,  // Contains start and end node
+					  ROUTE_NODES,	  // Contains a list of root nodes
+	};	
 
 	// All packets must derive from Packet as we will cast message to determine what type
 	// of packet we have
@@ -43,8 +52,15 @@ namespace Packets {
 	struct PacketInt : public Packet {
 		int i;
 
-		PacketInt(PacketType m, int i) :
+	PacketInt(PacketType m, int i) :
 			Packet(m), i(i) {}
+	};
+
+	struct PacketNode : public Packet {
+		GraphNode* node;
+
+		PacketNode(PacketType m, GraphNode* n) :
+			Packet(m), node(n) {}
 	};
 
 };

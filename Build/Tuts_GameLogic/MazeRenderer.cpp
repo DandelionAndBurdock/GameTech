@@ -255,7 +255,7 @@ void MazeRenderer::Generate_BuildRenderNodes()
 		scalar * 2
 	);
 
-	cube = new RenderNode(mesh, Vector4(0.0f, 1.0f, 0.0f, 1.0f));
+	cube = new RenderNode(mesh, Vector4(0.0f, 1.0f, 0.0f, 0.5f));
 	cube->SetTransform(Matrix4::Translation(cellpos + cellsize * 0.5f) * Matrix4::Scale(cellsize * 0.5f));
 	root->AddChild(cube);
 
@@ -264,7 +264,7 @@ void MazeRenderer::Generate_BuildRenderNodes()
 		0.0f,
 		end->_pos.y * 3
 	) * scalar;
-	cube = new RenderNode(mesh, Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+	cube = new RenderNode(mesh, Vector4(1.0f, 0.0f, 0.0f, 0.5f));
 	cube->SetTransform(Matrix4::Translation(cellpos + cellsize * 0.5f) * Matrix4::Scale(cellsize * 0.5f));
 	root->AddChild(cube);
 

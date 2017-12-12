@@ -3,6 +3,8 @@
 #include "Server.h"
 
 class MazeGenerator;
+class GraphNode;
+class SearchAStar;
 
 class MazeServer : public Server
 {
@@ -20,7 +22,12 @@ protected:
 
 	void BroadcastMazeStructure();
 
+	void SendMazeRoute(int client);
+	void HandleRouteRequest(int clientID, Packets::PacketType* message);
+
 	MazeGenerator* maze = nullptr;
+
+	SearchAStar* graphSearch = nullptr;
 };
 
 

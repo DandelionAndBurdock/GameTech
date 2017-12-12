@@ -188,6 +188,8 @@ void MazeRenderer::Generate_ConstructWalls()
 
 }
 
+
+
 void MazeRenderer::Generate_BuildRenderNodes()
 {
 	//Turn compacted walls into RenderNodes
@@ -249,14 +251,14 @@ void MazeRenderer::Generate_BuildRenderNodes()
 		0.0f,
 		start->_pos.y * 3
 	) * scalar;
-	Vector3 cellsize = Vector3(
+	cellSize = Vector3(
 		scalar * 2,
 		1.0f,
 		scalar * 2
 	);
 
-	cube = new RenderNode(mesh, Vector4(0.0f, 1.0f, 0.0f, 1.0f));
-	cube->SetTransform(Matrix4::Translation(cellpos + cellsize * 0.5f) * Matrix4::Scale(cellsize * 0.5f));
+	cube = new RenderNode(mesh, Vector4(0.0f, 1.0f, 0.0f, 0.5f));
+	cube->SetTransform(Matrix4::Translation(cellpos + cellSize * 0.5f) * Matrix4::Scale(cellSize * 0.5f));
 	root->AddChild(cube);
 
 	cellpos = Vector3(
@@ -264,8 +266,8 @@ void MazeRenderer::Generate_BuildRenderNodes()
 		0.0f,
 		end->_pos.y * 3
 	) * scalar;
-	cube = new RenderNode(mesh, Vector4(1.0f, 0.0f, 0.0f, 1.0f));
-	cube->SetTransform(Matrix4::Translation(cellpos + cellsize * 0.5f) * Matrix4::Scale(cellsize * 0.5f));
+	cube = new RenderNode(mesh, Vector4(1.0f, 0.0f, 0.0f, 0.5f));
+	cube->SetTransform(Matrix4::Translation(cellpos + cellSize * 0.5f) * Matrix4::Scale(cellSize * 0.5f));
 	root->AddChild(cube);
 
 	this->SetRender(root);

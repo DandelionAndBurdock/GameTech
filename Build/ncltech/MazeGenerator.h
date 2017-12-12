@@ -28,6 +28,9 @@ public:
 	void Serialize(std::ostream& stream);
 	void Deserialize(std::istream& stream);
 
+	// Returns index in allnodes or -1 if not present
+	int GetIndexFromNode(GraphNode* node);
+	GraphNode* GetNodeFromIndex(int index);
 protected:
 	void GetRandomStartEndNodes();
 

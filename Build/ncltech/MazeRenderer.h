@@ -27,6 +27,9 @@ public:
 	// and 'from' of GraphNodes.
 	void DrawSearchHistory(const SearchHistory& history, float line_width);
 
+	// Size of one cell
+	inline Vector3 GetCellSize() { return cellSize; }
+
 
 protected:
 	//Turn MazeGenerator data into flat 2D map (3 size x 3 size) of boolean's
@@ -50,4 +53,8 @@ protected:
 	uint	flat_maze_size;
 
 	WallDescriptorVec	wall_descriptors;
+
+
+	Vector3 cellSize = Vector3(0.0f);
+
 };
