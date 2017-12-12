@@ -12,6 +12,7 @@ using namespace Packets;
 MazeClient::MazeClient(std::string name) :
 	Net1_Client(name), avatar(nullptr)
 {
+	nodeClickMesh = CommonMeshes::Cube();
 }
 
 
@@ -108,7 +109,7 @@ void MazeClient::HandleMazeRoute(Packets::PacketType* message) {
 		routeIndices.push_back(index);
 	}
 	std::cout << "Received maze route from server" << std::endl;
-	//path = MakePathFromIndices(routeIndices);
+	path = MakePathFromIndices(routeIndices);
 }
 
 void MazeClient::CreateAvatar() {
@@ -177,38 +178,33 @@ void MazeClient::OnUpdateScene(float dt) {
 }
 
 void MazeClient::RegisterMazeWithScreenPicker() {
+	const float grid_scalar = 1.0f / (float)mazeGenerator->GetSize();
+	const float scalar = 1.f / (float)mazeRenderer->GetFlatMazeSize();
 
-	float grid_scalar = 1.0f / (float)mazeGenerator->GetSize();
+	Vector3 cellSize = Vector3(
+		scalar * 2,
+		1.0f,
+		scalar * 2
+	);
 
-	Matrix4 transform = mazeRenderer->Render()->GetWorldTransform();
+
 	GraphNode* node = mazeGenerator->GetAllNodesArr();
-	GameObject* cube;
+
 	// Add a transparent cube object with callback to each node
 	for (int i = 0; i < mazeDim * mazeDim; ++i) {
-		Vector3 nodePos = transform * Vector3(
-			((node + i)->_pos.x + 0.5f) * grid_scalar,
-			0.1f,
-			((node + i)->_pos.y + 0.5f) * grid_scalar);
-
-		cube = CommonUtils::BuildCuboidObject(
-			std::string("MazeNode:") + std::to_string(i),
-			nodePos,
-			1.1f,
-			true,
+		Vector3 cellpos = Vector3(
+			(node + i)->_pos.x * 3,
 			0.0f,
-			false,
-			false,
-			Vector4(0.0f, 1.0f, 1.0f, 1.0f)
-		);
-		this->AddGameObject(cube);
+			(node + i)->_pos.y * 3
+		) * scalar;
 
-		using namespace placeholders;	
+		RenderNode* cube = new RenderNode(nodeClickMesh, Vector4(0.0f, 1.0f, 0.0f, 0.5f));
+		cube->SetTransform(Matrix4::Translation(cellpos + cellSize * 0.5f) * Matrix4::Scale(cellSize * 0.5f));
+		mazeRenderer->Render()->AddChild(cube);
+
+		using namespace placeholders;
 		//ScreenPicker::Instance()->RegisterNodeForMouseCallback(cube->Render(), std::bind(&MazeClient::NodeSelectedCallback, this, _1, _2, _3, _4, _5));
-	//	mazeRenderer->Render()->AddChild(cube->Render());
-	//	cube->Render()->SetTransform(Matrix4::Translation(mazeRenderer->GetCellSize() * 0.5f) *
-	//		Matrix4::Scale(mazeRenderer->GetCellSize() * 0.5f));
 	}
-
 }
 
 void MazeClient::DrawPath() {
@@ -256,24 +252,10 @@ void MazeClient::NodeSelectedCallback(GameObject* obj, float dt, const Vector3& 
 	}
 		if (Window::GetMouse()->ButtonDown(MOUSE_LEFT))
 		{
-			//Position
-			obj->Physics()->SetPosition(newWsPos);
-			obj->Physics()->SetLinearVelocity(wsMovedAmount / dt);
-			obj->Physics()->SetAngularVelocity(Vector3(0, 0, 0));
+			std::cout << "Left click" << index << std::endl;
 		}
 		else if (Window::GetMouse()->ButtonDown(MOUSE_RIGHT))
 		{
-			Matrix3 viewRot = (Matrix3(GraphicsPipeline::Instance()->GetCamera()->BuildViewMatrix()));
-			Matrix3 invViewRot = Matrix3::Transpose(viewRot);
-
-			//Rotation
-			Vector3 angVel = invViewRot * Vector3::Cross(Vector3(0, 0, 1), viewRot * wsMovedAmount * 25.f);
-
-			obj->Physics()->SetAngularVelocity(angVel);
-			Quaternion quat = obj->Physics()->GetOrientation();
-			quat = quat + Quaternion(angVel * dt * 0.5f, 0.0f) * quat;
-			quat.Normalise();
-			obj->Physics()->SetOrientation(quat);
-			obj->Physics()->SetLinearVelocity(Vector3(0, 0, 0));
+			std::cout << "Right click" << index << std::endl;
 		}
 }

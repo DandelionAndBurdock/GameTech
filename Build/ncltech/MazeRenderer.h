@@ -5,7 +5,6 @@
 #include "MazeGenerator.h"
 #include "SearchAlgorithm.h"
 
-
 struct WallDescriptor
 {
 	uint _xs, _xe;
@@ -30,7 +29,10 @@ public:
 	// Size of one cell
 	inline Vector3 GetCellSize() { return cellSize; }
 
+	inline uint GetFlatMazeSize() { return flat_maze_size; }
 
+
+	void RegisterMazeWithScreenPicker();
 protected:
 	//Turn MazeGenerator data into flat 2D map (3 size x 3 size) of boolean's
 	// - True for wall
@@ -45,6 +47,7 @@ protected:
 	// to be seen on screen.
 	void Generate_BuildRenderNodes();
 
+	
 protected:
 	MazeGenerator*	maze;
 	Mesh*			mesh;

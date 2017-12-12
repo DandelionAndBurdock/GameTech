@@ -59,5 +59,8 @@ protected:
 private:
 	// Helper function: Makes a list of edges joining nodes together TODO: Move somewhere else
 	std::vector<GraphEdge> MakePathFromIndices(std::vector<int>& nodeIndices);
+
+	// Mesh defining where a node can be selected with mouse
+	Mesh*			nodeClickMesh;
 };
 
