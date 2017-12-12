@@ -22,8 +22,8 @@ protected:
 
 	void BroadcastMazeStructure();
 
-	void SendMazeRoute(int client);
-	void HandleRouteRequest(int clientID, Packets::PacketType* message);
+	void SendMazeRoute(int client, ENetPeer * peer);
+	void HandleRouteRequest(int clientID, ENetPeer * peer, Packets::PacketType* message);
 
 	MazeGenerator* maze = nullptr;
 

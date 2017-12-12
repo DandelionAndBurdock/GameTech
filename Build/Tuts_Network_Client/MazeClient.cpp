@@ -7,6 +7,7 @@ using namespace Packets;
 #include <ncltech\MazeRenderer.h>
 
 #include <ncltech\CommonUtils.h>
+#include <ncltech\ScreenPicker.h>
 
 MazeClient::MazeClient(std::string name) :
 	Net1_Client(name), avatar(nullptr)
@@ -20,7 +21,6 @@ MazeClient::~MazeClient()
 
 void MazeClient::OnConnection() {
 	Net1_Client::OnConnection();
-
 	// Send server maze parameters
 	SendMazeParams();
 }
@@ -38,6 +38,10 @@ void MazeClient::ReceiveMessage(const ENetEvent& evnt) {
 		++message;
 		HandleMazeStructure(message);
 		break;
+	case MAZE_ROUTE:
+		++message;
+		HandleMazeRoute(message);
+		break;
 	default:
 		std::cout << "Recieved Uncategorised Network Packet!" << std::endl;
 	}
@@ -49,6 +53,7 @@ void MazeClient::HandlePosData(PacketType* message) {
 }
 
 void MazeClient::HandleMazeStructure(Packets::PacketType* message) {
+
 	//TeMP
 	mazeGenerator = new MazeGenerator();
 	int* seed = reinterpret_cast<int*>(message);
@@ -68,7 +73,7 @@ void MazeClient::HandleMazeStructure(Packets::PacketType* message) {
 
 	CreateAvatar();
 	SendRouteRequest(mazeGenerator->GetStartNode(), mazeGenerator->GetGoalNode());
-	//RegisterMazeWithScreenPicker();
+	RegisterMazeWithScreenPicker();
 }
 
 void MazeClient::SendRouteRequest(GraphNode* const start, GraphNode* const end) {
@@ -84,6 +89,26 @@ void MazeClient::SendRouteRequest(GraphNode* const start, GraphNode* const end) 
 	PacketString routeRequest(ROUTE_REQUEST, ss.str());
 	ENetPacket* packet = enet_packet_create(&routeRequest, sizeof(routeRequest), 0);
 	enet_peer_send(serverConnection, 0, packet);
+}
+
+
+void MazeClient::HandleMazeRoute(Packets::PacketType* message) {
+	//std::istringstream ss(*reinterpret_cast<std::string*>(message));
+	//std::vector<int> routeIndices;
+	//int index;
+	//while (ss >> index) {
+	//	routeIndices.push_back(index);
+	//}
+	char* route = reinterpret_cast<char*>(message);
+	std::string s = std::string(route);
+	std::istringstream ss(s);
+	std::vector<int> routeIndices;
+	int index;
+	while (ss >> index) {
+		routeIndices.push_back(index);
+	}
+	std::cout << "Received maze route from server" << std::endl;
+	//path = MakePathFromIndices(routeIndices);
 }
 
 void MazeClient::CreateAvatar() {
@@ -108,6 +133,8 @@ void MazeClient::HandleKeyboardInput(KeyboardKeys key) {
 	switch (key) {
 	case KEYBOARD_G:
 		SendMazeParams(true);
+	case KEYBOARD_M:
+		//avatarPathIndex
 	default:
 		break;
 	}
@@ -131,7 +158,7 @@ void MazeClient::SendMazeParams(bool resend) {
 	}
 	else {
 		std::cout << "Sending maze parameters" << std::endl;
-		mazeParams= PacketIntFloat(MAZE_PARAM, mazeDim, mazeDensity);
+		mazeParams = PacketIntFloat(MAZE_PARAM, mazeDim, mazeDensity);
 	}
 
 	ENetPacket* packet = enet_packet_create(&mazeParams, sizeof(mazeParams), 0);
@@ -140,35 +167,64 @@ void MazeClient::SendMazeParams(bool resend) {
 
 void MazeClient::OnUpdateScene(float dt) {
 	Net1_Client::OnUpdateScene(dt);
+	if (!path.empty()) {
+		DrawPath();
+	}
+	if (avatar) {
+		UpdateAvatar();
+	}
+
 }
 
 void MazeClient::RegisterMazeWithScreenPicker() {
+
+	float grid_scalar = 1.0f / (float)mazeGenerator->GetSize();
+
+	Matrix4 transform = mazeRenderer->Render()->GetWorldTransform();
 	GraphNode* node = mazeGenerator->GetAllNodesArr();
 	GameObject* cube;
 	// Add a transparent cube object with callback to each node
 	for (int i = 0; i < mazeDim * mazeDim; ++i) {
+		Vector3 nodePos = transform * Vector3(
+			((node + i)->_pos.x + 0.5f) * grid_scalar,
+			0.1f,
+			((node + i)->_pos.y + 0.5f) * grid_scalar);
+
 		cube = CommonUtils::BuildCuboidObject(
-			"MazeNode",
-			Matrix4::Translation(mazeRenderer->GetCellSize() * 0.5f) * (node + i)->GetPos(),
-			0.6f,
-			false,
+			std::string("MazeNode:") + std::to_string(i),
+			nodePos,
+			1.1f,
+			true,
 			0.0f,
 			false,
 			false,
 			Vector4(0.0f, 1.0f, 1.0f, 1.0f)
 		);
 		this->AddGameObject(cube);
-		//cube->Render()->SetTransform(Matrix4::Translation(mazeRenderer->GetCellSize() * 0.5f));
-		cube->Render()->SetTransform(Matrix4::Scale(mazeRenderer->GetCellSize() * 0.5f));
-		mazeRenderer->Render()->AddChild(cube->Render());
-		//ScreenPicker::RegisterNodeForMouseCallback()
-		//cube->Render()->Register
+
+		using namespace placeholders;	
+		//ScreenPicker::Instance()->RegisterNodeForMouseCallback(cube->Render(), std::bind(&MazeClient::NodeSelectedCallback, this, _1, _2, _3, _4, _5));
+	//	mazeRenderer->Render()->AddChild(cube->Render());
+	//	cube->Render()->SetTransform(Matrix4::Translation(mazeRenderer->GetCellSize() * 0.5f) *
+	//		Matrix4::Scale(mazeRenderer->GetCellSize() * 0.5f));
 	}
 
 }
 
 void MazeClient::DrawPath() {
+	mazeRenderer->DrawPath(path);
+}
 
+// Helper function: Makes a list of edges joining nodes together TODO: Move somewhere else
+std::vector<GraphEdge> MazeClient::MakePathFromIndices(std::vector<int>& nodeIndices) {
+	std::vector<GraphEdge> path;
+	for (uint i = 0; i < nodeIndices.size() - 1; ++i){
+		GraphEdge edge;
+		edge._a = mazeGenerator->GetNodeFromIndex(nodeIndices[i]);
+		edge._b = mazeGenerator->GetNodeFromIndex(nodeIndices[i + 1]);
+		path.push_back(edge);
+	}
+	return path;
 }
 
 
@@ -180,3 +236,44 @@ void MazeClient::DrawPath() {
 //header = reinterpret_cast<MyPacket*>(packetData); //memcpy this also otherwise when enet packet goers out of scope will delete mry|
 //MyPacketNodeData* tmpArr = new MyPacketNodeData[header->numNodes];
 //memcpy(tmpArr, reinterpret_cast<char*>(packetData) + sizeof(MyPacket), sizeof(MyPacketNodeData) * header->numNodes);
+
+
+void MazeClient::UpdateAvatar() {
+}
+
+void MazeClient::NodeSelectedCallback(GameObject* obj, float dt, const Vector3& newWsPos, const Vector3& wsMovedAmount, bool stopDragging)
+{
+	// Get index from name
+	int index;
+	std::string name = obj->GetName();
+	auto iter = name.find_first_of(':');
+	if (iter = std::string::npos) {
+		return;
+	}
+	else {
+		++iter;
+		index = std::stoi(name.substr(iter));
+	}
+		if (Window::GetMouse()->ButtonDown(MOUSE_LEFT))
+		{
+			//Position
+			obj->Physics()->SetPosition(newWsPos);
+			obj->Physics()->SetLinearVelocity(wsMovedAmount / dt);
+			obj->Physics()->SetAngularVelocity(Vector3(0, 0, 0));
+		}
+		else if (Window::GetMouse()->ButtonDown(MOUSE_RIGHT))
+		{
+			Matrix3 viewRot = (Matrix3(GraphicsPipeline::Instance()->GetCamera()->BuildViewMatrix()));
+			Matrix3 invViewRot = Matrix3::Transpose(viewRot);
+
+			//Rotation
+			Vector3 angVel = invViewRot * Vector3::Cross(Vector3(0, 0, 1), viewRot * wsMovedAmount * 25.f);
+
+			obj->Physics()->SetAngularVelocity(angVel);
+			Quaternion quat = obj->Physics()->GetOrientation();
+			quat = quat + Quaternion(angVel * dt * 0.5f, 0.0f) * quat;
+			quat.Normalise();
+			obj->Physics()->SetOrientation(quat);
+			obj->Physics()->SetLinearVelocity(Vector3(0, 0, 0));
+		}
+}

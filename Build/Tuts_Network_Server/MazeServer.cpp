@@ -43,7 +43,7 @@ void MazeServer::ReceiveMessage(const ENetEvent& evnt) {
 		//++message;
 		//GraphNode* end = reinterpret_cast<GraphNode*>(message);
 		//ss.read();
-		HandleRouteRequest(evnt.peer->incomingPeerID, message);
+		HandleRouteRequest(evnt.peer->incomingPeerID, evnt.peer, message);
 		break;
 	}
 
@@ -55,7 +55,7 @@ void MazeServer::HandleMazeParams(int clientID, Packets::PacketType* message) {
 	//TEMP
 	int* dim = reinterpret_cast<int*>(message);
 	++message;
-
+	
 	float* density = reinterpret_cast<float*>(message);
 	maze = new MazeGenerator();
 	maze->Generate(10, *dim, *density);
@@ -100,28 +100,41 @@ void MazeServer::BroadcastMazeStructure() {
 	std::stringstream ss(std::stringstream::out);
 	maze->Serialize(ss);
 
-
 	PacketString mazeParams(MAZE_STRUCTURE, ss.str());
 	ENetPacket* packet = enet_packet_create(&mazeParams, sizeof(mazeParams), 0);
 	enet_host_broadcast(serverNetwork.m_pNetwork, 0, packet);
 }
 
 
-void MazeServer::SendMazeRoute(int client) {
+void MazeServer::SendMazeRoute(int client, ENetPeer * peer) {
+	//Get route
 	std::list<const GraphNode*> path = graphSearch->GetFinalPath();
 	// Put into a string
+	std::ostringstream ss;
+	for (auto iter = path.begin(); iter != path.end(); ++iter) {
+		ss << maze->GetIndexFromNode(*iter) << std::endl;
+	}
 	
 	// Send
+	//PacketString mazeRoute(MAZE_ROUTE, ss.str());
+	
+	PacketCharArray mazeRoute(MAZE_ROUTE);
+	memcpy(mazeRoute.data, ss.str().c_str(), ss.str().size() * sizeof(char));
 
+	ENetPacket* packet = enet_packet_create(&mazeRoute, sizeof(mazeRoute), 0);
+	enet_peer_send(peer, 0, packet);
+	//enet_host_broadcast(serverNetwork.m_pNetwork, 0, packet);
+	std::cout << "Sent maze route to Client " << client << std::endl;
 }
 
-void  MazeServer::HandleRouteRequest(int clientID, Packets::PacketType* message) {
+void  MazeServer::HandleRouteRequest(int clientID, ENetPeer * peer, Packets::PacketType* message) {
 	std::cout << "Received route request from client " << clientID << std::endl;
 	std::istringstream ss(*reinterpret_cast<std::string*>(message));
 	int startIdx, endIdx;
 	ss >> startIdx >> endIdx;
 	
 	graphSearch->FindBestPath(maze->GetNodeFromIndex(startIdx), maze->GetNodeFromIndex(endIdx));
+	SendMazeRoute(clientID, peer);
 }
 
 //struct MyPacketNodeData;

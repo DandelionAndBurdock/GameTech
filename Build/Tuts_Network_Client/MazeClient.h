@@ -20,6 +20,7 @@ protected:
 	void ReceiveMessage(const ENetEvent& evnt) override;
 
 	void HandleMazeStructure(Packets::PacketType* message);
+	void HandleMazeRoute(Packets::PacketType* message);
 
 	void HandleKeyboardInput(KeyboardKeys key) override;
 	void HandleMouseInput(MouseButtons button) override;
@@ -30,6 +31,7 @@ protected:
 	void SendMazeParams(bool resend = false);
 
 	void CreateAvatar();
+	void UpdateAvatar();
 
 	// Make maze nodes clickable
 	void RegisterMazeWithScreenPicker();
@@ -47,5 +49,15 @@ protected:
 
 
 	GameObject* avatar;
+	int avatarPathIndex = 0;
+	std::vector<GraphEdge> path;
+
+	// Callback function which can be called when a node is clicked
+	void NodeSelectedCallback(GameObject* obj, float dt, const Vector3& newWsPos, const Vector3& wsMovedAmount, bool stopDragging);
+
+
+private:
+	// Helper function: Makes a list of edges joining nodes together TODO: Move somewhere else
+	std::vector<GraphEdge> MakePathFromIndices(std::vector<int>& nodeIndices);
 };
 

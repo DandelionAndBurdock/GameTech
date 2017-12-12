@@ -14,7 +14,7 @@ namespace Packets {
 					  MAZE_STRUCTURE, // Contains nodes and edges of the maze
 					  REGEN_MAZE,	  // Create a new maze with current parameter
 					  ROUTE_REQUEST,  // Contains start and end node
-					  ROUTE_NODES,	  // Contains a list of root nodes
+					  MAZE_ROUTE,	  // Contains a list of indices to route nodes
 	};	
 
 	// All packets must derive from Packet as we will cast message to determine what type
@@ -54,6 +54,13 @@ namespace Packets {
 
 	PacketInt(PacketType m, int i) :
 			Packet(m), i(i) {}
+	};
+
+	struct PacketCharArray : public Packet {
+		char data[1024];
+
+		PacketCharArray(PacketType m) :
+			Packet(m)  {}
 	};
 
 	struct PacketNode : public Packet {

@@ -64,6 +64,7 @@ void MazeRenderer::DrawSearchHistory(const SearchHistory& history, float line_wi
 	}
 }
 
+
 uint MazeRenderer::Generate_FlatMaze()
 {
 	//Generates a 3xsize by 3xsize array of booleans, where 

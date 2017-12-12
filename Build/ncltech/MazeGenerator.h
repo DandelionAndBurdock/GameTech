@@ -29,7 +29,7 @@ public:
 	void Deserialize(std::istream& stream);
 
 	// Returns index in allnodes or -1 if not present
-	int GetIndexFromNode(GraphNode* node);
+	int GetIndexFromNode(const GraphNode* const node);
 	GraphNode* GetNodeFromIndex(int index);
 protected:
 	void GetRandomStartEndNodes();

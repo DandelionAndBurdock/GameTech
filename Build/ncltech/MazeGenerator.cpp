@@ -347,7 +347,7 @@ void MazeGenerator::Serialize(std::ostream& stream) {
 	//stream.write(reinterpret_cast<char*>(&size), sizeof(int));
 	//stream.write(reinterpret_cast<char*>(&allNodes[0]), sizeof(GraphNode));
 	//stream.write((const char*)(allNodes), sizeof(GraphNode));
-	stream.write(reinterpret_cast<char*>(&allNodes[0]), sizeof(GraphNode));
+	//stream.write(reinterpret_cast<char*>(&allNodes[0]), sizeof(GraphNode));
 
 	//const int numNodes = size * size;
 	//for (int node = 0; node < numNodes; ++node) {
@@ -358,6 +358,15 @@ void MazeGenerator::Serialize(std::ostream& stream) {
 
 	//const int numEdges = 2 * size * (size - 1);
 	//stream.write((char*)allEdges, numEdges * sizeof(GraphEdge));
+
+	const int numEdges = 2 * size * (size - 1);
+	// Maze can be defined entirely by its walls
+	for (int i = 0; i < numEdges; ++i) {
+		if (allEdges[i]._iswall) {
+			stream << i << std::endl;
+		}
+	}
+
 }
 
 void MazeGenerator::Deserialize(std::istream& stream) {
@@ -385,7 +394,7 @@ void MazeGenerator::Deserialize(std::istream& stream) {
 }
 
 
-int MazeGenerator::GetIndexFromNode(GraphNode* node) {
+int MazeGenerator::GetIndexFromNode(const GraphNode* const node) {
 	for (int idx = 0; idx < size * size; ++idx) {
 		if (allNodes + idx == node) {
 			return idx;

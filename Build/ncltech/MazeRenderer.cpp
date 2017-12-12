@@ -64,6 +64,28 @@ void MazeRenderer::DrawSearchHistory(const SearchHistory& history, float line_wi
 	}
 }
 
+void MazeRenderer::DrawPath(const std::vector<GraphEdge>& path, float line_width, float colour) {
+	float grid_scalar = 1.0f / (float)maze->GetSize();
+
+	Matrix4 transform = this->Render()->GetWorldTransform();
+
+	float index = 0.0f;
+	for (const GraphEdge& edge : path)
+	{
+		Vector3 start = transform * Vector3(
+			(edge._a->_pos.x + 0.5f) * grid_scalar,
+			0.1f,
+			(edge._a->_pos.y + 0.5f) * grid_scalar);
+
+		Vector3 end = transform * Vector3(
+			(edge._b->_pos.x + 0.5f) * grid_scalar,
+			0.1f,
+			(edge._b->_pos.y + 0.5f) * grid_scalar);
+
+		NCLDebug::DrawThickLine(start, end, line_width, CommonUtils::GenColor(colour));
+	}
+}
+
 uint MazeRenderer::Generate_FlatMaze()
 {
 	//Generates a 3xsize by 3xsize array of booleans, where 
@@ -272,3 +294,5 @@ void MazeRenderer::Generate_BuildRenderNodes()
 
 	this->SetRender(root);
 }
+
+

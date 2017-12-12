@@ -26,7 +26,7 @@ public:
 	//The search history draws from edges because they already store the 'to'
 	// and 'from' of GraphNodes.
 	void DrawSearchHistory(const SearchHistory& history, float line_width);
-
+	void DrawPath(const std::vector<GraphEdge>& path, float line_width = 0.7f, float colour = 0.6f);
 	// Size of one cell
 	inline Vector3 GetCellSize() { return cellSize; }
 
