@@ -144,9 +144,10 @@ void MazeClient::HandleKeyboardInput(KeyboardKeys key) {
 void MazeClient::HandleMouseInput(MouseButtons button) {
 	switch (button) {
 	case MOUSE_LEFT:
-		
+		ChangeStartPoint(rand() % 30);
 		break;
 	case MOUSE_RIGHT:
+		ChangeEndPoint(rand() % 30);
 		break;
 	}
 }
@@ -178,6 +179,7 @@ void MazeClient::OnUpdateScene(float dt) {
 }
 
 void MazeClient::RegisterMazeWithScreenPicker() {
+	return;
 	const float grid_scalar = 1.0f / (float)mazeGenerator->GetSize();
 	const float scalar = 1.f / (float)mazeRenderer->GetFlatMazeSize();
 
@@ -203,7 +205,7 @@ void MazeClient::RegisterMazeWithScreenPicker() {
 		mazeRenderer->Render()->AddChild(cube);
 
 		using namespace placeholders;
-		//ScreenPicker::Instance()->RegisterNodeForMouseCallback(cube->Render(), std::bind(&MazeClient::NodeSelectedCallback, this, _1, _2, _3, _4, _5));
+		//ScreenPicker::Instance()->RegisterNodeForMouseCallback(cube, std::bind(&MazeClient::NodeSelectedCallback, this, cube, _1, _2, _3, _4));
 	}
 }
 
@@ -258,4 +260,35 @@ void MazeClient::NodeSelectedCallback(GameObject* obj, float dt, const Vector3& 
 		{
 			std::cout << "Right click" << index << std::endl;
 		}
+}
+
+
+void MazeClient::ChangeStartPoint(int newIndex) {
+	std::cout << "Changing start point " << std::endl;
+	mazeGenerator->SetStartIndex(newIndex);
+	//TODO: A little inefficient
+	//SAFE_DELETE(mazeRenderer);
+	//mazeRenderer = new MazeRenderer(mazeGenerator);
+	//mazeRenderer->Render()->SetTransform(Matrix4::Scale(Vector3(10.0f, 1.0f, 10.0f))); //TODO: Define this scale factor
+	std::ostringstream ss;
+	ss << newIndex << std::endl;
+	ss << mazeGenerator->GetGoalIndex() << std::endl;
+	PacketString routeRequest(ROUTE_REQUEST, ss.str());
+	ENetPacket* packet = enet_packet_create(&routeRequest, sizeof(routeRequest), 0);
+	enet_peer_send(serverConnection, 0, packet);
+}
+
+void MazeClient::ChangeEndPoint(int newIndex) {
+	std::cout << "Changing end point " << std::endl;
+	mazeGenerator->SetGoalIndex(newIndex);
+	//TODO: A little inefficient
+	//SAFE_DELETE(mazeRenderer);
+	//mazeRenderer = new MazeRenderer(mazeGenerator);
+	//mazeRenderer->Render()->SetTransform(Matrix4::Scale(Vector3(10.0f, 1.0f, 10.0f))); //TODO: Define this scale factor
+	std::ostringstream ss;
+	ss << mazeGenerator->GetStartIndex() << std::endl;
+	ss << newIndex << std::endl;
+	PacketString routeRequest(ROUTE_REQUEST, ss.str());
+	ENetPacket* packet = enet_packet_create(&routeRequest, sizeof(routeRequest), 0);
+	enet_peer_send(serverConnection, 0, packet);
 }

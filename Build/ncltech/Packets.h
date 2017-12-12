@@ -15,6 +15,7 @@ namespace Packets {
 					  REGEN_MAZE,	  // Create a new maze with current parameter
 					  ROUTE_REQUEST,  // Contains start and end node
 					  MAZE_ROUTE,	  // Contains a list of indices to route nodes
+					  CREATE_AVATAR,  // Contains a node index to create an avatar
 	};	
 
 	// All packets must derive from Packet as we will cast message to determine what type

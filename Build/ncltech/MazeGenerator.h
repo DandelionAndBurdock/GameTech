@@ -31,6 +31,11 @@ public:
 	// Returns index in allnodes or -1 if not present
 	int GetIndexFromNode(const GraphNode* const node);
 	GraphNode* GetNodeFromIndex(int index);
+
+	void SetStartIndex(int idx);
+	void SetGoalIndex(int idx);
+	int GetStartIndex() { return startIndex; }
+	int GetGoalIndex() { return endIndex; }
 protected:
 	void GetRandomStartEndNodes();
 

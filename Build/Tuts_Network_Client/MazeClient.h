@@ -39,6 +39,8 @@ protected:
 	// Draw path between current start and end points
 	void DrawPath();
 
+	void ChangeStartPoint(int index);
+	void ChangeEndPoint(int index);
 	void SendRouteRequest(GraphNode* const start, GraphNode* const end);
 
 	MazeGenerator* mazeGenerator = nullptr;

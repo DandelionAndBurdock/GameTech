@@ -408,3 +408,12 @@ int MazeGenerator::GetIndexFromNode(const GraphNode* const node) {
 GraphNode* MazeGenerator::GetNodeFromIndex(int index) {
 	return allNodes + index;
 }
+
+void MazeGenerator::SetStartIndex(int idx) {
+	startIndex = idx;
+	start = GetNodeFromIndex(idx);
+}
+void MazeGenerator::SetGoalIndex(int idx) {
+	endIndex = idx;
+	end = GetNodeFromIndex(idx);
+}
