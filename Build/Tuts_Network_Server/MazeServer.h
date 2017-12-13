@@ -13,6 +13,7 @@ public:
 	MazeServer(int portNumber, int maxClients);
 	~MazeServer();
 
+	void BroadcastOutgoingTraffic() override;
 protected:
 
 	void ReceiveMessage(const ENetEvent& evnt) override;
@@ -22,6 +23,7 @@ protected:
 	void RegenerateMaze(int clientID, Packets::PacketType* message);
 
 	void BroadcastMazeStructure();
+	void BroadcastAvatarPositions();
 
 	void SendMazeRoute(int client, ENetPeer * peer);
 	void HandleRouteRequest(int clientID, ENetPeer * peer, Packets::PacketType* message);

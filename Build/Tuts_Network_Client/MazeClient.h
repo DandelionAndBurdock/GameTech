@@ -32,6 +32,7 @@ protected:
 
 	void CreateAvatar();
 	void UpdateAvatar();
+	void SetAvatarTransform(Packets::PacketType* message);
 
 	// Make maze nodes clickable
 	void RegisterMazeWithScreenPicker();
@@ -42,6 +43,9 @@ protected:
 	void ChangeStartPoint(int index);
 	void ChangeEndPoint(int index);
 	void SendRouteRequest(GraphNode* const start, GraphNode* const end);
+	void SendRouteRequest(int startIdx, int endIdx);
+
+	void DrawNavMesh();
 
 	MazeGenerator* mazeGenerator = nullptr;
 	MazeRenderer* mazeRenderer = nullptr;
@@ -57,6 +61,12 @@ protected:
 	// Callback function which can be called when a node is clicked
 	void NodeSelectedCallback(GameObject* obj, float dt, const Vector3& newWsPos, const Vector3& wsMovedAmount, bool stopDragging);
 
+	Vector3 mazeRenderScale = Vector3(10.0f, 1.0f, 10.0f);
+
+	bool showRoute = false;
+	bool showNavMesh = false;
+
+	void RefreshMazeRenderer();
 
 private:
 	// Helper function: Makes a list of edges joining nodes together TODO: Move somewhere else

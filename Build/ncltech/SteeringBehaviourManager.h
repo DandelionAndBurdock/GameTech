@@ -6,14 +6,14 @@
 #include "BehaviourTypes.h"
 
 
-class GameObject;
+class PhysicsNode;
 class SteeringBehaviour;
 
 
 class SteeringBehaviourManager
 {
 public:
-	SteeringBehaviourManager(GameObject* owner);
+	SteeringBehaviourManager(PhysicsNode* owner);
 	~SteeringBehaviourManager();
 
 	void Update(float dt);
@@ -22,13 +22,13 @@ public:
 	 void AddBehaviour(const Steering::BehaviourType b);
 
 	 void SetSeekTarget(Vector3 target);
-	 void SetPursuitTarget(GameObject* target);
+	 void SetPursuitTarget(PhysicsNode* target);
 
 protected:
 
 	std::vector<SteeringBehaviour*> behaviours;
 
-	GameObject* owner;
+	PhysicsNode* owner;
 
 };
 

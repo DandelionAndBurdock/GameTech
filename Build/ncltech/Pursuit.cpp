@@ -5,7 +5,7 @@
 
 using namespace Steering;
 
-Pursuit::Pursuit(GameObject* entity) :
+Pursuit::Pursuit(PhysicsNode* entity) :
 	SteeringBehaviour(entity),
 	seek(new Seek(entity))
 {
@@ -31,7 +31,7 @@ Vector3 Pursuit::GetVelocity() {
 
 void Pursuit::Update(float dt) {
 	if (target) {
-		seek->SetTarget(target->Physics()->GetPosition());
+		seek->SetTarget(target->GetPosition());
 	}
 
 }

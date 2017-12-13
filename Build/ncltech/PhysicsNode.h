@@ -189,7 +189,8 @@ public:
 	inline SteeringBehaviourManager* GetSteering() { return steering; }
 	void AddSteeringBehaviour(Steering::BehaviourType b);
 	void ChangeSeekTarget(Vector3 target);
-	void ChangePursuitTarget(GameObject* target);
+	void ChangePursuitTarget(PhysicsNode* target);
+	void ChangeSteeringSpeed(float vel);
 
 protected:
 	//Useful parameters

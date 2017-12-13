@@ -85,7 +85,7 @@ public:
 
 	//Add/Remove Render objects to renderable object lists
 	void AddRenderNode(RenderNode* node);
-	void RemoveRenderNode(RenderNode* node);
+	void RemoveRenderNode(RenderNode* node, bool recursive = false);
 
 
 

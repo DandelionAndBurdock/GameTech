@@ -4,7 +4,7 @@ using namespace Steering;
 
 #include "GameObject.h"
 
-Wander::Wander(GameObject* entity) :
+Wander::Wander(PhysicsNode* entity) :
 	SteeringBehaviour(entity),
 	seek(new Seek(entity))
 {
@@ -23,7 +23,7 @@ void Wander::Update(float dt) {
 	if (timeSinceTargetChange >= changeTargetTime) {
 		timeSinceTargetChange -= changeTargetTime;
 		targetPos = GetRandTargetPos();
-		seek->SetTarget(owner->Physics()->GetPosition() + targetPos);
+		seek->SetTarget(owner->GetPosition() + targetPos);
 	}
 
 }

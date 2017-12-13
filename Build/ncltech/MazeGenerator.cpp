@@ -339,9 +339,9 @@ void MazeGenerator::Generate_Sparse(float density)
 
 // Would be quicker to just send the seed!
 void MazeGenerator::Serialize(std::ostream& stream) {
-	//stream << size << std::endl;
-	//stream << startIndex << std::endl; 
-	//stream << endIndex << std::endl;
+	stream << size << std::endl;
+	stream << startIndex << std::endl; 
+	stream << endIndex << std::endl;
 
 	//stream.write((const char*)&size, sizeof(int));
 	//stream.write(reinterpret_cast<char*>(&size), sizeof(int));
@@ -362,17 +362,14 @@ void MazeGenerator::Serialize(std::ostream& stream) {
 	const int numEdges = 2 * size * (size - 1);
 	// Maze can be defined entirely by its walls
 	for (int i = 0; i < numEdges; ++i) {
-		if (allEdges[i]._iswall) {
-			stream << i << std::endl;
-		}
+		stream << allEdges[i]._iswall << std::endl;
 	}
-
 }
 
 void MazeGenerator::Deserialize(std::istream& stream) {
 	//stream >> size >> startIndex >> endIndex;
-	stream.read((char*)&size, sizeof(int));
-	stream.read((char*)&allNodes[0], sizeof(GraphNode));
+	//stream.read((char*)&size, sizeof(int));
+	//stream.read((char*)&allNodes[0], sizeof(GraphNode));
 	//if (allNodes) {
 	//	delete[] allNodes;
 	//}
@@ -389,8 +386,19 @@ void MazeGenerator::Deserialize(std::istream& stream) {
 	//stream.read((char*)allEdges, numEdges * sizeof(GraphEdge));
 
 
-	start = &allNodes[startIndex];
-	end = &allNodes[endIndex];
+	//start = &allNodes[startIndex];
+	//end = &allNodes[endIndex];
+	stream >> size;
+	int startIndex, endIndex;
+	stream >> startIndex;
+	stream >> endIndex;
+	SetStartIndex(startIndex);
+	SetGoalIndex(endIndex);
+	const int numEdges = 2 * size * (size - 1);
+	// Maze can be defined entirely by its walls
+	for (int i = 0; i < numEdges; ++i) {
+		stream >> allEdges[i]._iswall;
+	}
 }
 
 

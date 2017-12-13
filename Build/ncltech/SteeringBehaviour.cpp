@@ -2,7 +2,7 @@
 
 
 
-SteeringBehaviour::SteeringBehaviour(GameObject* entity)
+SteeringBehaviour::SteeringBehaviour(PhysicsNode* entity)
 {
 	owner = entity;
 }

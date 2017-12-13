@@ -7,14 +7,14 @@ class Seek;
 class Pursuit : public SteeringBehaviour
 {
 public:
-	Pursuit(GameObject* entity);
+	Pursuit(PhysicsNode* entity);
 	~Pursuit();
 
 	Vector3 GetVelocity() override;
 	void Update(float dt) override;
 
-	inline void SetTarget(GameObject* tgt) { target = tgt; }
+	inline void SetTarget(PhysicsNode* tgt) { target = tgt; }
 protected:
-	GameObject* target = nullptr;
+	PhysicsNode* target = nullptr;
 	Seek* seek = nullptr;;
 };

@@ -9,7 +9,7 @@
 class Wander : public SteeringBehaviour
 {
 public:
-	Wander(GameObject* entity);
+	Wander(PhysicsNode* entity);
 	~Wander();
 
 	void Update(float dt) override;

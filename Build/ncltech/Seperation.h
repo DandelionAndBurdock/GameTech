@@ -4,7 +4,7 @@
 class Seperation : public SteeringBehaviour
 {
 public:
-	Seperation(GameObject* entity);
+	Seperation(PhysicsNode* entity);
 	~Seperation();
 
 	Vector3 GetVelocity() override;

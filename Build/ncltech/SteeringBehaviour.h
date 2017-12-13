@@ -2,11 +2,11 @@
 #include <nclgl\Vector3.h>
 #include "BehaviourTypes.h"
 
-class GameObject;
+class PhysicsNode;
 class SteeringBehaviour
 {
 public:
-	SteeringBehaviour(GameObject* entity);
+	SteeringBehaviour(PhysicsNode* entity);
 	~SteeringBehaviour();
 
 	virtual Vector3 GetVelocity() = 0;
@@ -17,6 +17,6 @@ public:
 protected:
 	Steering::BehaviourType type;
 
-	GameObject* owner;
+	PhysicsNode* owner;
 };
 

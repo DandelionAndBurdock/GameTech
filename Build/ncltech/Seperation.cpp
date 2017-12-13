@@ -2,7 +2,7 @@
 
 
 
-Seperation::Seperation(GameObject* entity) :
+Seperation::Seperation(PhysicsNode* entity) :
 	SteeringBehaviour(entity)
 {
 }

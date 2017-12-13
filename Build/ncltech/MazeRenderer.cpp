@@ -297,33 +297,33 @@ void MazeRenderer::Generate_BuildRenderNodes()
 
 
 void MazeRenderer::RegisterMazeWithScreenPicker() {
+	return;
+	float grid_scalar = 1.0f / (float)maze->GetSize();
+	const float scalar = 1.f / (float)flat_maze_size;
 
-	//float grid_scalar = 1.0f / (float)maze->GetSize();
-	//const float scalar = 1.f / (float)flat_maze_size;
-
-	//Vector3 cellSize = Vector3(
-	//	scalar * 2,
-	//	1.0f,
-	//	scalar * 2
-	//);
+	Vector3 cellSize = Vector3(
+		scalar * 2,
+		1.0f,
+		scalar * 2
+	);
 
 
-	//GraphNode* node = maze->GetAllNodesArr();
+	GraphNode* node = maze->GetAllNodesArr();
 
-	//// Add a transparent cube object with callback to each node
-	//for (int i = 0; i < maze->GetSize() *  maze->GetSize(); ++i) {
-	//	Vector3 cellpos = Vector3(
-	//		(node + i)->_pos.x * 3,
-	//		0.0f,
-	//		(node + i)->_pos.y * 3
-	//	) * scalar;
+	// Add a transparent cube object with callback to each node
+	for (int i = 0; i < maze->GetSize() *  maze->GetSize(); ++i) {
+		Vector3 cellpos = Vector3(
+			(node + i)->_pos.x * 3,
+			0.0f,
+			(node + i)->_pos.y * 3
+		) * scalar;
 
-	//	RenderNode* cube = new RenderNode(mesh, Vector4(0.0f, 1.0f, 0.0f, 0.5f));
-	//	cube->SetTransform(Matrix4::Translation(cellpos + cellSize * 0.5f) * Matrix4::Scale(cellSize * 0.5f));
-	//	Render()->AddChild(cube);
+		RenderNode* cube = new RenderNode(mesh, Vector4(0.0f, 1.0f, 0.0f, 0.5f));
+		cube->SetTransform(Matrix4::Translation(cellpos + cellSize * 0.5f) * Matrix4::Scale(cellSize * 0.5f));
+		Render()->AddChild(cube);
 
-	//	using namespace placeholders;
-	//	ScreenPicker::Instance()->RegisterNodeForMouseCallback(cube->Render(), std::bind(&MazeClient::NodeSelectedCallback, this, _1, _2, _3, _4, _5));
-	//}
+		using namespace placeholders;
+		//ScreenPicker::Instance()->RegisterNodeForMouseCallback(cube->Render(), std::bind(&MazeClient::NodeSelectedCallback, this, _1, _2, _3, _4, _5));
+	}
 
 }

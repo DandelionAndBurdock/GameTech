@@ -86,7 +86,7 @@ void TestScene8::OnInitializeScene()
 	//player->Physics()->SetNarrowPhaseCollisionShape(new CuboidCollisionShape(Vector3(0.5f, 0.5f, 1.0f)));
 	//player->Physics()->SetNarrowPhaseCollisionShape(raptorShape);
 	player2->Physics()->AddSteeringBehaviour(Steering::PURSUIT);
-	player2->Physics()->ChangePursuitTarget(player);
+	player2->Physics()->ChangePursuitTarget(player->Physics());
 	this->AddGameObject(player2);
 }
 

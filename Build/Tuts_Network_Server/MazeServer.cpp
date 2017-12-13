@@ -27,6 +27,10 @@ MazeServer::~MazeServer()
 }
 
 
+void MazeServer::BroadcastOutgoingTraffic() {
+	BroadcastAvatarPositions();
+	Server::BroadcastOutgoingTraffic();
+}
 
 void MazeServer::ReceiveMessage(const ENetEvent& evnt) {
 	PacketType* message = reinterpret_cast<PacketType*>(evnt.packet->data);
@@ -36,7 +40,6 @@ void MazeServer::ReceiveMessage(const ENetEvent& evnt) {
 		// Move pointer to the start of the data
 		++message;
 		HandleMazeParams(evnt.peer->incomingPeerID, message);
-
 		break;
 	case REGEN_MAZE:
 		// Move pointer to the start of the data
@@ -47,6 +50,7 @@ void MazeServer::ReceiveMessage(const ENetEvent& evnt) {
 		// Move pointer to the start of the data
 		++message;
 		HandleRouteRequest(evnt.peer->incomingPeerID, evnt.peer, message);
+		break;
 	case CREATE_AVATAR:
 		// Move pointer to the start of the data
 		++message;
@@ -60,16 +64,18 @@ void MazeServer::ReceiveMessage(const ENetEvent& evnt) {
 void MazeServer::HandleMazeParams(int clientID, Packets::PacketType* message) {
 	std::cout << "Received maze parameters from client " << clientID << std::endl;
 	//TEMP
-	int* dim = reinterpret_cast<int*>(message);
-	++message;
-	
-	float* density = reinterpret_cast<float*>(message);
-	maze = new MazeGenerator();
-	maze->Generate(10, *dim, *density);
-	PacketInt mazeParams(MAZE_STRUCTURE, 10);
-	ENetPacket* packet = enet_packet_create(&mazeParams, sizeof(mazeParams), 0);
-	enet_host_broadcast(serverNetwork.m_pNetwork, 0, packet);
+	//int* dim = reinterpret_cast<int*>(message);
+	//++message;
+	//
+	//float* density = reinterpret_cast<float*>(message);
+	//maze = new MazeGenerator();
+	//
+	//maze->Generate(10, *dim, *density);
+	//PacketInt mazeParams(MAZE_STRUCTURE, 10);
+	//ENetPacket* packet = enet_packet_create(&mazeParams, sizeof(mazeParams), 0);
+	//enet_host_broadcast(serverNetwork.m_pNetwork, 0, packet);
 	// End Temp
+
 
 	if (!maze) {
 		int* dim = reinterpret_cast<int*>(message);
@@ -89,29 +95,28 @@ void MazeServer::HandleMazeParams(int clientID, Packets::PacketType* message) {
 
 void MazeServer::RegenerateMaze(int clientID, Packets::PacketType* message) {
 	std::cout << "Received regen maze request from client " << clientID << std::endl;
-	if (maze) {
-		delete maze;
-	}
+	SAFE_DELETE(maze);
 	int* dim = reinterpret_cast<int*>(message);
 	++message;
 
 	float* density = reinterpret_cast<float*>(message);
 	maze = new MazeGenerator();
 	maze->Generate(*dim, *density);
+	BroadcastMazeStructure();
 	std::cout << "Generated maze" << std::endl;
 }
 
 
 void MazeServer::BroadcastMazeStructure() {
 	std::cout << "Broadcasting Maze Structure" << std::endl;
-	std::stringstream ss(std::stringstream::out);
+	std::ostringstream ss;
 	maze->Serialize(ss);
 
-	PacketString mazeParams(MAZE_STRUCTURE, ss.str());
+	PacketCharArray mazeParams(MAZE_STRUCTURE);
+	memcpy(mazeParams.data, ss.str().c_str(), ss.str().size() * sizeof(char));
 	ENetPacket* packet = enet_packet_create(&mazeParams, sizeof(mazeParams), 0);
 	enet_host_broadcast(serverNetwork.m_pNetwork, 0, packet);
 }
-
 
 void MazeServer::SendMazeRoute(int client, ENetPeer * peer) {
 	//Get route
@@ -130,7 +135,6 @@ void MazeServer::SendMazeRoute(int client, ENetPeer * peer) {
 
 	ENetPacket* packet = enet_packet_create(&mazeRoute, sizeof(mazeRoute), 0);
 	enet_peer_send(peer, 0, packet);
-	//enet_host_broadcast(serverNetwork.m_pNetwork, 0, packet);
 	std::cout << "Sent maze route to Client " << client << std::endl;
 }
 
@@ -169,11 +173,21 @@ bool MazeServer::SetAvatarPath(int clientID, ENetPeer * peer, int startIdx, int 
 	else {
 		graphSearch->FindBestPath(maze->GetNodeFromIndex(startIdx), maze->GetNodeFromIndex(endIdx));
 		(*avatarIter)->SetPath(graphSearch->GetFinalPath());
+
 		SendMazeRoute(clientID, peer);
 		return true;
 	}
 }
 
+void MazeServer::BroadcastAvatarPositions() {
+	for (auto& avatar : avatars) {
+		ENetPeer* sendClient = avatar->GetClient();
+		PacketVec3 positionUpdate(AVATAR_POS, avatar->GetPosition());
+		ENetPacket* position_update = enet_packet_create(&positionUpdate, sizeof(PacketVec3), 0);
+		enet_peer_send(sendClient, 0, position_update);
+		std::cout << "Sent avatar position update" << std::endl;
+	}
+}
 
 //struct MyPacketNodeData;
 //struct MyPacket

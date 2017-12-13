@@ -1,78 +1,69 @@
-[16:08:12] Loading Shader:
-[16:08:12]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechVertexBasic.glsl
-[16:08:12]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechFragSuperSample.glsl
-[16:08:12]     -> Linking Shader: Success!
-[16:08:12] 
-[16:08:12] Loading Shader:
-[16:08:12]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechVertexShadow.glsl
-[16:08:12]     -> Compiling Shader: ../../Data/Shaders/Common/EmptyFragment.glsl
-[16:08:12]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechGeomShadow.glsl
-[16:08:12]     -> Linking Shader: Success!
-[16:08:12] 
-[16:08:12] Loading Shader:
-[16:08:12]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechVertexFull.glsl
-[16:08:12]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechFragForwardRender.glsl
-[16:08:12]     -> Linking Shader: Success!
-[16:08:12] 
-[16:08:12] Loading Shader:
-[16:08:12]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/PointVertex.glsl
-[16:08:12]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/PointFragment.glsl
-[16:08:12]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/PointGeometry.glsl
-[16:08:12]     -> Linking Shader: Success!
-[16:08:12] 
-[16:08:12] Loading Shader:
-[16:08:12]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/Vertex.glsl
-[16:08:12]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/Fragment.glsl
-[16:08:12]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/LineGeometry.glsl
-[16:08:12]     -> Linking Shader: Success!
-[16:08:12] 
-[16:08:12] Loading Shader:
-[16:08:12]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/VertexColOnly.glsl
-[16:08:12]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/Fragment.glsl
-[16:08:12]     -> Linking Shader: Success!
-[16:08:12] 
-[16:08:12] Loading Shader:
-[16:08:12]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/TextVertex.glsl
-[16:08:12]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/TextFragment.glsl
-[16:08:12]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/TextGeometry.glsl
-[16:08:12]     -> Linking Shader: Success!
-[16:08:12] 
-[16:08:12] Loading Shader:
-[16:08:12]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechVertexPicker.glsl
-[16:08:12]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechFragScreenPicker_nsightfix.glsl
-[16:08:12]     -> Linking Shader: Success!
-[16:08:12] 
-[16:08:12] Loading Mesh: ../../Data/Meshes/cube.obj
-[16:08:12] 
-[16:08:12] Loading Mesh: ../../Data/Meshes/sphere.obj
-[16:08:13] 
-[16:08:13] [SceneManager] - Enqueued scene: "GameTech #1 - Framework Sandbox!"
-[16:08:13] 
-[16:08:13] This is a log entry - It will printed to the console, on screen log and <project_dir>\program_output.txt
-[16:08:13] [SceneManager] - Scene switched to: "GameTech #1 - Framework Sandbox!"
-[16:08:13] [SceneManager] - Enqueued scene: "GameTech #2 - Peace and quiet"
-[16:08:13] [SceneManager] - Enqueued scene: "GameTech #3 - More peace and quiet"
-[16:08:13] [SceneManager] - Enqueued scene: "GameTech #4 - Even More peace and quiet"
-[16:08:13] Loading Mesh: ../../Data/Meshes/raptor.obj
-[16:08:13]     -> Loading Texture: ../../Data/Textures/raptor.jpg
-[16:08:13] 
-[16:08:13] [SceneManager] - Enqueued scene: "GameTech #5 - Too much peace and quiet"
-[16:08:13] [SceneManager] - Enqueued scene: "GameTech #6 - Silence"
-[16:08:13] [SceneManager] - Enqueued scene: "GameTech #7 - ??"
-[16:08:13] Loading Mesh: ../../Data/Meshes/raptor.obj
-[16:08:14]     -> Loading Texture: ../../Data/Textures/raptor.jpg
-[16:08:14] 
-[16:08:14] [SceneManager] - Enqueued scene: "GameTech #8 - ??"
-[16:08:14] [SceneManager] - Exiting scene -
-[16:08:14] 
-[16:08:14] [SceneManager] - Scene switched to: "GameTech #8 - ??"
-[16:08:14] [SceneManager] - Exiting scene -
-[16:08:14] 
-[16:08:14] [SceneManager] - Scene switched to: "GameTech #7 - ??"
-[16:08:15] [SceneManager] - Exiting scene -
-[16:08:15] 
-[16:08:15] [SceneManager] - Scene switched to: "GameTech #6 - Silence"
-[16:08:15] [SceneManager] - Exiting scene -
-[16:08:15] 
-[16:08:15] [SceneManager] - Scene switched to: "GameTech #5 - Too much peace and quiet"
-[16:08:52] [SceneManager] Closing scene manager
+[13:47:42] Loading Shader:
+[13:47:42]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechVertexBasic.glsl
+[13:47:42]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechFragSuperSample.glsl
+[13:47:42]     -> Linking Shader: Success!
+[13:47:42] 
+[13:47:42] Loading Shader:
+[13:47:42]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechVertexShadow.glsl
+[13:47:42]     -> Compiling Shader: ../../Data/Shaders/Common/EmptyFragment.glsl
+[13:47:42]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechGeomShadow.glsl
+[13:47:42]     -> Linking Shader: Success!
+[13:47:42] 
+[13:47:42] Loading Shader:
+[13:47:42]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechVertexFull.glsl
+[13:47:42]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechFragForwardRender.glsl
+[13:47:42]     -> Linking Shader: Success!
+[13:47:42] 
+[13:47:42] Loading Shader:
+[13:47:42]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/PointVertex.glsl
+[13:47:42]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/PointFragment.glsl
+[13:47:42]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/PointGeometry.glsl
+[13:47:42]     -> Linking Shader: Success!
+[13:47:42] 
+[13:47:42] Loading Shader:
+[13:47:42]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/Vertex.glsl
+[13:47:42]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/Fragment.glsl
+[13:47:42]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/LineGeometry.glsl
+[13:47:42]     -> Linking Shader: Success!
+[13:47:42] 
+[13:47:42] Loading Shader:
+[13:47:42]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/VertexColOnly.glsl
+[13:47:42]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/Fragment.glsl
+[13:47:42]     -> Linking Shader: Success!
+[13:47:42] 
+[13:47:42] Loading Shader:
+[13:47:42]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/TextVertex.glsl
+[13:47:42]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/TextFragment.glsl
+[13:47:42]     -> Compiling Shader: ../../Data/Shaders/DebugShaders/TextGeometry.glsl
+[13:47:42]     -> Linking Shader: Success!
+[13:47:42] 
+[13:47:42] Loading Shader:
+[13:47:42]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechVertexPicker.glsl
+[13:47:42]     -> Compiling Shader: ../../Data/Shaders/SceneRenderer/TechFragScreenPicker_nsightfix.glsl
+[13:47:42]     -> Linking Shader: Success!
+[13:47:42] 
+[13:47:43] Loading Mesh: ../../Data/Meshes/cube.obj
+[13:47:43] 
+[13:47:43] Loading Mesh: ../../Data/Meshes/sphere.obj
+[13:47:43] 
+[13:47:43] [SceneManager] - Enqueued scene: "GameTech #1 - Framework Sandbox!"
+[13:47:43] 
+[13:47:43] This is a log entry - It will printed to the console, on screen log and <project_dir>\program_output.txt
+[13:47:43] [SceneManager] - Scene switched to: "GameTech #1 - Framework Sandbox!"
+[13:47:43] [SceneManager] - Enqueued scene: "GameTech #2 - Peace and quiet"
+[13:47:43] [SceneManager] - Enqueued scene: "GameTech #3 - More peace and quiet"
+[13:47:43] [SceneManager] - Enqueued scene: "GameTech #4 - Even More peace and quiet"
+[13:47:43] Loading Mesh: ../../Data/Meshes/raptor.obj
+[13:47:43]     -> Loading Texture: ../../Data/Textures/raptor.jpg
+[13:47:43] 
+[13:47:43] [SceneManager] - Enqueued scene: "GameTech #5 - Too much peace and quiet"
+[13:47:43] [SceneManager] - Enqueued scene: "GameTech #6 - Silence"
+[13:47:43] [SceneManager] - Enqueued scene: "GameTech #7 - ??"
+[13:47:43] Loading Mesh: ../../Data/Meshes/raptor.obj
+[13:47:44]     -> Loading Texture: ../../Data/Textures/raptor.jpg
+[13:47:44] 
+[13:47:44] [SceneManager] - Enqueued scene: "GameTech #8 - ??"
+[13:47:46] [SceneManager] - Exiting scene -
+[13:47:46] 
+[13:47:46] [SceneManager] - Scene switched to: "GameTech #8 - ??"
+[13:47:57] [SceneManager] Closing scene manager

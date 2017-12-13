@@ -43,6 +43,10 @@ void MazeClient::ReceiveMessage(const ENetEvent& evnt) {
 		++message;
 		HandleMazeRoute(message);
 		break;
+	case AVATAR_POS:
+		++message;
+		SetAvatarTransform(message);
+		break;
 	default:
 		std::cout << "Recieved Uncategorised Network Packet!" << std::endl;
 	}
@@ -56,42 +60,36 @@ void MazeClient::HandlePosData(PacketType* message) {
 void MazeClient::HandleMazeStructure(Packets::PacketType* message) {
 
 	//TeMP
-	mazeGenerator = new MazeGenerator();
-	int* seed = reinterpret_cast<int*>(message);
-	mazeGenerator->Generate(*seed, mazeDim, mazeDensity);
+	//mazeGenerator = new MazeGenerator();
+	//int* seed = reinterpret_cast<int*>(message);
+	//mazeGenerator->Generate(*seed, mazeDim, mazeDensity);
 	//End Temp
-	if (!mazeGenerator) {
-		std::string* mazeData = reinterpret_cast<std::string*>(message);
-		std::stringstream ss(*mazeData, std::stringstream::in);
-		mazeGenerator = new MazeGenerator();
-		mazeGenerator->Deserialize(ss);
-		std::cout << "Client has received maze parameters" << std::endl;
-	}
+	char* mazeData = reinterpret_cast<char*>(message);
+	std::string s(mazeData);
+	std::istringstream ss(mazeData);
+	SAFE_DELETE(mazeGenerator);
+	mazeGenerator = new MazeGenerator();
+	// Generate an empty maze
+	mazeGenerator->Generate(mazeDim, 0.0f);
+	mazeGenerator->Deserialize(ss);
+	std::cout << "Client has received maze parameters" << std::endl;
 
-	mazeRenderer = new MazeRenderer(mazeGenerator);
-	mazeRenderer->Render()->SetTransform(Matrix4::Scale(Vector3(10.0f, 1.0f, 10.0f)));
-	this->AddGameObject(mazeRenderer);
-	RegisterMazeWithScreenPicker();
-
-	//SendRouteRequest(mazeGenerator->GetStartNode(), mazeGenerator->GetGoalNode());
-	CreateAvatar();
+	RefreshMazeRenderer();
 }
 
 void MazeClient::SendRouteRequest(GraphNode* const start, GraphNode* const end) {
-	//GraphNode startEnd[2] = { *start, *end };
-	//PacketNode endPoints(ROUTE_REQUEST, startEnd);
-	//
-	//ENetPacket* packet = enet_packet_create(&endPoints, sizeof(PacketType) + sizeof(GraphNode) * 2, 0);
-	//enet_peer_send(serverConnection, 0, packet);
+	SendRouteRequest(mazeGenerator->GetIndexFromNode(start), mazeGenerator->GetIndexFromNode(end));
+}
+
+void MazeClient::SendRouteRequest(int startIdx, int endIdx) {
 	std::cout << "Sending route request to server" << std::endl;
-	std::ostringstream ss; 
-	ss << mazeGenerator->GetIndexFromNode(start) << std::endl;
-	ss << mazeGenerator->GetIndexFromNode(end) << std::endl;
+	std::ostringstream ss;
+	ss << startIdx << std::endl;
+	ss << endIdx << std::endl;
 	PacketString routeRequest(ROUTE_REQUEST, ss.str());
 	ENetPacket* packet = enet_packet_create(&routeRequest, sizeof(routeRequest), 0);
 	enet_peer_send(serverConnection, 0, packet);
 }
-
 
 void MazeClient::HandleMazeRoute(Packets::PacketType* message) {
 	char* route = reinterpret_cast<char*>(message);
@@ -110,7 +108,7 @@ void MazeClient::CreateAvatar() {
 
 	avatar = CommonUtils::BuildSphereObject(
 		"avatar",
-		mazeGenerator->GetStartNode()->GetPos(),
+		Vector3(0.0f),
 		0.6f,
 		false,
 		0.0f,
@@ -119,6 +117,7 @@ void MazeClient::CreateAvatar() {
 		Vector4(1.0f, 0.0f, 1.0f, 1.0f)
 	);
 	this->AddGameObject(avatar);
+	mazeRenderer->Render()->AddChild(avatar->Render());
 
 	PacketCharArray avatarPacket(CREATE_AVATAR);
 	std::ostringstream ss;
@@ -135,8 +134,13 @@ void MazeClient::HandleKeyboardInput(KeyboardKeys key) {
 	switch (key) {
 	case KEYBOARD_G:
 		SendMazeParams(true);
+		break;
+	case KEYBOARD_R:
+		showRoute = !showRoute;
+		break;
 	case KEYBOARD_M:
-		//avatarPathIndex
+		showNavMesh = !showNavMesh;
+		break;
 	default:
 		break;
 	}
@@ -145,10 +149,10 @@ void MazeClient::HandleKeyboardInput(KeyboardKeys key) {
 void MazeClient::HandleMouseInput(MouseButtons button) {
 	switch (button) {
 	case MOUSE_LEFT:
-		ChangeStartPoint(rand() % 30);
+		//ChangeStartPoint(rand() % 30);
 		break;
 	case MOUSE_RIGHT:
-		ChangeEndPoint(rand() % 30);
+		//ChangeEndPoint(rand() % 30);
 		break;
 	}
 }
@@ -170,8 +174,11 @@ void MazeClient::SendMazeParams(bool resend) {
 
 void MazeClient::OnUpdateScene(float dt) {
 	Net1_Client::OnUpdateScene(dt);
-	if (!path.empty()) {
+	if (showRoute && !path.empty()) {
 		DrawPath();
+	}
+	if (showNavMesh) {
+		DrawNavMesh();
 	}
 	if (avatar) {
 		UpdateAvatar();
@@ -201,12 +208,15 @@ void MazeClient::RegisterMazeWithScreenPicker() {
 			(node + i)->_pos.y * 3
 		) * scalar;
 
-		RenderNode* cube = new RenderNode(nodeClickMesh, Vector4(0.0f, 1.0f, 0.0f, 0.5f));
+	
+		RenderNode* cube = new RenderNode(nodeClickMesh, Vector4(0.0f, 1.0f, 0.0f, 0.0f));
+		GameObject* cubeObj = new GameObject(std::string("ClickNode:") + std::to_string(i), cube);
 		cube->SetTransform(Matrix4::Translation(cellpos + cellSize * 0.5f) * Matrix4::Scale(cellSize * 0.5f));
+
 		mazeRenderer->Render()->AddChild(cube);
 
 		using namespace placeholders;
-		//ScreenPicker::Instance()->RegisterNodeForMouseCallback(cube, std::bind(&MazeClient::NodeSelectedCallback, this, cube, _1, _2, _3, _4));
+		ScreenPicker::Instance()->RegisterNodeForMouseCallback(cube, std::bind(&MazeClient::NodeSelectedCallback, this, cubeObj, _1, _2, _3, _4));
 	}
 }
 
@@ -225,6 +235,97 @@ std::vector<GraphEdge> MazeClient::MakePathFromIndices(std::vector<int>& nodeInd
 	}
 	return path;
 }
+
+
+void MazeClient::UpdateAvatar() {
+	//avatar->SetTransform(mazeRenderer->Render()->GetWorldTransform());
+}
+
+void MazeClient::NodeSelectedCallback(GameObject* obj, float dt, const Vector3& newWsPos, const Vector3& wsMovedAmount, bool stopDragging)
+{
+	// Get index from name
+	int index;
+	std::string name = obj->GetName();
+	auto iter = name.find_first_of(':');
+	if (iter == std::string::npos) {
+		return;
+	}
+	else {
+		++iter;
+		index = std::stoi(name.substr(iter));
+	}
+		if (Window::GetMouse()->ButtonDown(MOUSE_LEFT))
+		{
+			ChangeStartPoint(index);
+		}
+		else if (Window::GetMouse()->ButtonDown(MOUSE_RIGHT))
+		{
+			ChangeEndPoint(index);
+		}
+}
+
+
+void MazeClient::ChangeStartPoint(int newIndex) {
+	std::cout << "Changing start point " << std::endl;
+	mazeGenerator->SetStartIndex(newIndex);
+
+	// Change start and end positions on the renderer is tricky, easier to make a new render
+	RefreshMazeRenderer();
+
+
+	SendRouteRequest(mazeGenerator->GetStartIndex(), mazeGenerator->GetGoalIndex());
+}
+
+void MazeClient::ChangeEndPoint(int newIndex) {
+	std::cout << "Changing end point " << std::endl;
+	mazeGenerator->SetGoalIndex(newIndex);
+
+	RefreshMazeRenderer();
+
+	SendRouteRequest(mazeGenerator->GetStartIndex(), mazeGenerator->GetGoalIndex());
+}
+
+void MazeClient::SetAvatarTransform(Packets::PacketType* message) {
+	if (!avatar) {
+		return;
+	}
+	Vector3* pos = reinterpret_cast<Vector3*>(message);
+
+	const float grid_scalar = 1.0f / (float)mazeGenerator->GetSize();
+	const float scalar = 1.f / (float)mazeRenderer->GetFlatMazeSize();
+
+	Vector3 cellpos = Vector3(
+		pos->x * 3,
+		0.0f,
+		pos->z * 3
+	) * scalar;
+
+
+	Vector3 cellSize = Vector3(
+		scalar * 2,
+		1.0f,
+		scalar * 2
+	);
+
+	avatar->Render()->SetTransform(Matrix4::Translation(cellpos + cellSize * 0.5f) * Matrix4::Scale(cellSize * 0.5f));
+}
+
+void MazeClient::DrawNavMesh() {
+
+}
+
+void MazeClient::RefreshMazeRenderer() {
+	this->RemoveGameObject(mazeRenderer, true);
+
+	SAFE_DELETE(mazeRenderer);
+	mazeRenderer = new MazeRenderer(mazeGenerator);
+	mazeRenderer->Render()->SetTransform(Matrix4::Scale(mazeRenderScale));
+	this->AddGameObject(mazeRenderer);
+	RegisterMazeWithScreenPicker();
+
+	CreateAvatar();
+}
+
 
 //std::istringstream ss(*reinterpret_cast<std::string*>(message));
 //std::vector<int> routeIndices;
@@ -246,60 +347,12 @@ std::vector<GraphEdge> MazeClient::MakePathFromIndices(std::vector<int>& nodeInd
 //	Matrix4::Scale(mazeRenderer->GetCellSize() * 0.5f));
 //this->AddGameObject(avatar);
 
-void MazeClient::UpdateAvatar() {
-	//avatar->SetTransform(mazeRenderer->Render()->GetWorldTransform());
-}
-
-void MazeClient::NodeSelectedCallback(GameObject* obj, float dt, const Vector3& newWsPos, const Vector3& wsMovedAmount, bool stopDragging)
-{
-	// Get index from name
-	int index;
-	std::string name = obj->GetName();
-	auto iter = name.find_first_of(':');
-	if (iter = std::string::npos) {
-		return;
-	}
-	else {
-		++iter;
-		index = std::stoi(name.substr(iter));
-	}
-		if (Window::GetMouse()->ButtonDown(MOUSE_LEFT))
-		{
-			std::cout << "Left click" << index << std::endl;
-		}
-		else if (Window::GetMouse()->ButtonDown(MOUSE_RIGHT))
-		{
-			std::cout << "Right click" << index << std::endl;
-		}
-}
-
-
-void MazeClient::ChangeStartPoint(int newIndex) {
-	std::cout << "Changing start point " << std::endl;
-	mazeGenerator->SetStartIndex(newIndex);
-	//TODO: A little inefficient
-	//SAFE_DELETE(mazeRenderer);
-	//mazeRenderer = new MazeRenderer(mazeGenerator);
-	//mazeRenderer->Render()->SetTransform(Matrix4::Scale(Vector3(10.0f, 1.0f, 10.0f))); //TODO: Define this scale factor
-	std::ostringstream ss;
-	ss << newIndex << std::endl;
-	ss << mazeGenerator->GetGoalIndex() << std::endl;
-	PacketString routeRequest(ROUTE_REQUEST, ss.str());
-	ENetPacket* packet = enet_packet_create(&routeRequest, sizeof(routeRequest), 0);
-	enet_peer_send(serverConnection, 0, packet);
-}
-
-void MazeClient::ChangeEndPoint(int newIndex) {
-	std::cout << "Changing end point " << std::endl;
-	mazeGenerator->SetGoalIndex(newIndex);
-	//TODO: A little inefficient
-	//SAFE_DELETE(mazeRenderer);
-	//mazeRenderer = new MazeRenderer(mazeGenerator);
-	//mazeRenderer->Render()->SetTransform(Matrix4::Scale(Vector3(10.0f, 1.0f, 10.0f))); //TODO: Define this scale factor
-	std::ostringstream ss;
-	ss << mazeGenerator->GetStartIndex() << std::endl;
-	ss << newIndex << std::endl;
-	PacketString routeRequest(ROUTE_REQUEST, ss.str());
-	ENetPacket* packet = enet_packet_create(&routeRequest, sizeof(routeRequest), 0);
-	enet_peer_send(serverConnection, 0, packet);
-}
+//TODO: A little inefficient
+//SAFE_DELETE(mazeRenderer);
+//mazeRenderer = new MazeRenderer(mazeGenerator);
+//mazeRenderer->Render()->SetTransform(Matrix4::Scale(Vector3(10.0f, 1.0f, 10.0f))); //TODO: Define this scale factor
+//GraphNode startEnd[2] = { *start, *end };
+//PacketNode endPoints(ROUTE_REQUEST, startEnd);
+//
+//ENetPacket* packet = enet_packet_create(&endPoints, sizeof(PacketType) + sizeof(GraphNode) * 2, 0);
+//enet_peer_send(serverConnection, 0, packet);

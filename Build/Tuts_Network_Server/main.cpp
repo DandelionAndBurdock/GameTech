@@ -56,13 +56,15 @@ void Win32_PrintAllAdapterIPAddresses();
 
 int onExit(int exitcode)
 {
-
+	PhysicsEngine::Release();
 	system("pause");
 	exit(exitcode);
 }
 
 int main(int arcg, char** argv)
 {
+	PhysicsEngine::Instance();
+
 	if (enet_initialize() != 0)
 	{
 		fprintf(stderr, "An error occurred while initializing ENet.\n");
@@ -84,7 +86,7 @@ int main(int arcg, char** argv)
 	while (true)
 	{
 		float dt = timer.GetTimedMS() * 0.001f;
-
+		PhysicsEngine::Instance()->Update(dt);
 		server.Update(dt);
 
 		Sleep(0);

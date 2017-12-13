@@ -182,7 +182,7 @@ void PhysicsNode::IntegratePostSolver(float dt) {
 
 void PhysicsNode::AddSteeringBehaviour(Steering::BehaviourType b) {
 	if (!steering) {
-		steering = new SteeringBehaviourManager(this->GetParent());
+		steering = new SteeringBehaviourManager(this);
 	}
 	steering->AddBehaviour(b);
 }
@@ -191,6 +191,11 @@ void PhysicsNode::ChangeSeekTarget(Vector3 target) {
 	steering->SetSeekTarget(target);
 }
 
-void  PhysicsNode::ChangePursuitTarget(GameObject* target) {
+void  PhysicsNode::ChangePursuitTarget(PhysicsNode* target) {
 	steering->SetPursuitTarget(target);
+}
+
+
+void PhysicsNode::ChangeSteeringSpeed(float vel) {
+	//steering->SetVelocity(vel);
 }

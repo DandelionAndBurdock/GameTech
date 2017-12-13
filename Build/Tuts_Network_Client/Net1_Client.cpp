@@ -168,6 +168,7 @@ void Net1_Client::OnUpdateScene(float dt)
 	NCLDebug::AddStatusEntry(status_color, "    Outgoing: %5.2fKbps", network.m_OutgoingKb);
 	NCLDebug::AddStatusEntry(status_color, "");
 	NCLDebug::AddStatusEntry(status_color, "Press 'G' to generate new maze");
+	NCLDebug::AddStatusEntry(status_color, "Press 'R' to toggle path display");
 }
 
 void Net1_Client::ProcessNetworkEvent(const ENetEvent& evnt)

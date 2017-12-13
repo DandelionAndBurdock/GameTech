@@ -11,7 +11,7 @@
 
 using namespace Steering;
 
-SteeringBehaviourManager::SteeringBehaviourManager(GameObject* owner)
+SteeringBehaviourManager::SteeringBehaviourManager(PhysicsNode* owner)
 {
 	this->owner = owner;
 }
@@ -70,7 +70,7 @@ void SteeringBehaviourManager::SetSeekTarget(Vector3 target) {
 	}
 }
 
-void SteeringBehaviourManager::SetPursuitTarget(GameObject* target) {
+void SteeringBehaviourManager::SetPursuitTarget(PhysicsNode* target) {
 	for (auto& behaviour : behaviours) {
 		if (behaviour->GetType() == PURSUIT) {
 			dynamic_cast<Pursuit*>(behaviour)->SetTarget(target);
