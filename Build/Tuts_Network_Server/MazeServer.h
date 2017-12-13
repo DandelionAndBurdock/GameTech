@@ -6,7 +6,7 @@ class MazeGenerator;
 class GraphNode;
 class SearchAStar;
 class Avatar;
-class AIObject;
+class Hazard;
 
 class MazeServer : public Server
 {
@@ -25,12 +25,18 @@ protected:
 
 	void BroadcastMazeStructure();
 	void BroadcastAvatarPositions();
+	void BroadcastHazardPositions();
+
 
 	void SendMazeRoute(int client, ENetPeer * peer);
 	void HandleRouteRequest(int clientID, ENetPeer * peer, Packets::PacketType* message);
 	void HandleAvatarRequest(int clientID, ENetPeer * peer, Packets::PacketType* message);
 
 	bool SetAvatarPath(int clientID, ENetPeer * peer, int startIdx, int endIdx);
+
+	// Returns the index of a random node which is unoccupied
+	int FindFreeNode();
+
 	MazeGenerator* maze = nullptr;
 
 	SearchAStar* graphSearch = nullptr;
@@ -38,9 +44,9 @@ protected:
 	std::vector<Avatar*> avatars;
 
 	// Hazards
-	std::vector<AIObject*> hazards;
-	int numHazards = 5; // Hardcode for now
-	void CreateHazards();
+	std::vector<Hazard*> hazards;
+	int numHazards = 0; 
+	void AddHazard();
 };
 
 

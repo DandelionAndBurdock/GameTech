@@ -21,6 +21,7 @@ protected:
 
 	void HandleMazeStructure(Packets::PacketType* message);
 	void HandleMazeRoute(Packets::PacketType* message);
+	void AddHazard();
 
 	void HandleKeyboardInput(KeyboardKeys key) override;
 	void HandleMouseInput(MouseButtons button) override;
@@ -33,7 +34,7 @@ protected:
 	void CreateAvatar();
 	void UpdateAvatar();
 	void SetAvatarTransform(Packets::PacketType* message);
-
+	void SetHazardTransform(Packets::PacketType* message);
 	// Make maze nodes clickable
 	void RegisterMazeWithScreenPicker();
 
@@ -44,19 +45,23 @@ protected:
 	void ChangeEndPoint(int index);
 	void SendRouteRequest(GraphNode* const start, GraphNode* const end);
 	void SendRouteRequest(int startIdx, int endIdx);
+	void SendHazardRequest();
 
 	void DrawNavMesh();
 
 	MazeGenerator* mazeGenerator = nullptr;
 	MazeRenderer* mazeRenderer = nullptr;
 
-	int mazeDim = 6;
+	int mazeDim = 10;
 	float mazeDensity = 0.5f;
 
 
 	GameObject* avatar;
 	int avatarPathIndex = 0;
 	std::vector<GraphEdge> path;
+
+	std::vector<GameObject*> hazards;
+	int numHazards = 0;
 
 	// Callback function which can be called when a node is clicked
 	void NodeSelectedCallback(GameObject* obj, float dt, const Vector3& newWsPos, const Vector3& wsMovedAmount, bool stopDragging);
@@ -66,7 +71,7 @@ protected:
 	bool showRoute = false;
 	bool showNavMesh = false;
 
-	void RefreshMazeRenderer();
+	void RefreshMazeRenderer(bool registerClick = true);
 
 private:
 	// Helper function: Makes a list of edges joining nodes together TODO: Move somewhere else

@@ -47,6 +47,13 @@ void MazeClient::ReceiveMessage(const ENetEvent& evnt) {
 		++message;
 		SetAvatarTransform(message);
 		break;
+	case ADD_HAZARD:
+		AddHazard();
+		break;
+	case HAZARD_POS:
+		++message;
+		SetHazardTransform(message);
+		break;
 	default:
 		std::cout << "Recieved Uncategorised Network Packet!" << std::endl;
 	}
@@ -100,22 +107,20 @@ void MazeClient::HandleMazeRoute(Packets::PacketType* message) {
 }
 
 void MazeClient::CreateAvatar() {
-	if (avatar) {
-		SAFE_DELETE(avatar);
+	if (!avatar) {
+		avatar = CommonUtils::BuildSphereObject(
+			"avatar",
+			Vector3(0.0f),
+			0.6f,
+			false,
+			0.0f,
+			false,
+			false,
+			Vector4(1.0f, 0.0f, 1.0f, 1.0f)
+		);
+		this->AddGameObject(avatar);//TODO: Necessary??
 	}
-		
 
-	avatar = CommonUtils::BuildSphereObject(
-		"avatar",
-		Vector3(0.0f),
-		0.6f,
-		false,
-		0.0f,
-		false,
-		false,
-		Vector4(1.0f, 0.0f, 1.0f, 1.0f)
-	);
-	this->AddGameObject(avatar);
 	mazeRenderer->Render()->AddChild(avatar->Render());
 
 	PacketCharArray avatarPacket(CREATE_AVATAR);
@@ -139,6 +144,9 @@ void MazeClient::HandleKeyboardInput(KeyboardKeys key) {
 		break;
 	case KEYBOARD_M:
 		showNavMesh = !showNavMesh;
+		break;
+	case KEYBOARD_H:
+		SendHazardRequest();
 		break;
 	default:
 		break;
@@ -267,7 +275,7 @@ void MazeClient::ChangeStartPoint(int newIndex) {
 	std::cout << "Changing start point " << std::endl;
 	mazeGenerator->SetStartIndex(newIndex);
 
-	RefreshMazeRenderer();
+	RefreshMazeRenderer(false);
 
 	SendRouteRequest(mazeGenerator->GetStartIndex(), mazeGenerator->GetGoalIndex());
 }
@@ -276,7 +284,7 @@ void MazeClient::ChangeEndPoint(int newIndex) {
 	std::cout << "Changing end point " << std::endl;
 	mazeGenerator->SetGoalIndex(newIndex);
 
-	RefreshMazeRenderer();
+	RefreshMazeRenderer(false);
 
 	SendRouteRequest(mazeGenerator->GetStartIndex(), mazeGenerator->GetGoalIndex());
 }
@@ -310,17 +318,67 @@ void MazeClient::DrawNavMesh() {
 
 }
 
-void MazeClient::RefreshMazeRenderer() {
+void MazeClient::RefreshMazeRenderer(bool registerClick) {
 	this->RemoveGameObject(mazeRenderer, true);
 
 	SAFE_DELETE(mazeRenderer);
 	mazeRenderer = new MazeRenderer(mazeGenerator);
 	mazeRenderer->Render()->SetTransform(Matrix4::Scale(mazeRenderScale));
 	this->AddGameObject(mazeRenderer);
-	RegisterMazeWithScreenPicker();
 	CreateAvatar();
+	if (registerClick) {
+		//RegisterMazeWithScreenPicker();
+	}
+
 }
 
+
+void MazeClient::AddHazard() {
+	hazards.push_back(CommonUtils::BuildCuboidObject(
+		"Hazard" + std::to_string(numHazards),
+		Vector3(0.0f),
+		0.3f,
+		false,
+		0.0f,
+		false,
+		false,
+		Vector4(1.0f, 0.2f, 0.2f, 1.0f)
+	));
+	hazards[numHazards]->Render()->SetTransform(Matrix4::Scale(Vector3(0.1f, 1.5f, 0.1f)));
+	mazeRenderer->Render()->AddChild(hazards[numHazards++]->Render());
+	
+
+}
+
+void MazeClient::SendHazardRequest() {
+	Packet hazard(ADD_HAZARD_REQUEST);
+	ENetPacket* packet = enet_packet_create(&hazard, sizeof(hazard), 0);
+	enet_peer_send(serverConnection, 0, packet);
+}
+
+
+void MazeClient::SetHazardTransform(Packets::PacketType* message) {
+	int* hazardID = reinterpret_cast<int*>(message);
+	++message;
+	Vector3* pos = reinterpret_cast<Vector3*>(message);
+	const float grid_scalar = 1.0f / (float)mazeGenerator->GetSize();
+	const float scalar = 1.f / (float)mazeRenderer->GetFlatMazeSize();
+
+	Vector3 cellpos = Vector3(
+		pos->x * 3,
+		0.0f,
+		pos->z * 3
+	) * scalar;
+
+
+	Vector3 cellSize = Vector3(
+		scalar * 2,
+		1.0f,
+		scalar * 2
+	);
+
+	hazards[*hazardID]->Render()->SetTransform(Matrix4::Translation(cellpos + cellSize * 0.5f) * Matrix4::Scale(cellSize * 0.5f));
+}
 
 //std::istringstream ss(*reinterpret_cast<std::string*>(message));
 //std::vector<int> routeIndices;

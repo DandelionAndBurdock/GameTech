@@ -6,7 +6,7 @@ using namespace Packets;
 #include <ncltech\MazeGenerator.h>
 #include <ncltech\SearchAStar.h>
 
-#include <ncltech\AIObject.h>
+#include "Hazard.h"
 
 #include "Avatar.h"
 
@@ -31,6 +31,7 @@ MazeServer::~MazeServer()
 
 void MazeServer::BroadcastOutgoingTraffic() {
 	BroadcastAvatarPositions();
+	BroadcastHazardPositions();
 	Server::BroadcastOutgoingTraffic();
 }
 
@@ -57,6 +58,9 @@ void MazeServer::ReceiveMessage(const ENetEvent& evnt) {
 		// Move pointer to the start of the data
 		++message;
 		HandleAvatarRequest(evnt.peer->incomingPeerID, evnt.peer, message);
+		break;
+	case ADD_HAZARD_REQUEST:
+		AddHazard();
 		break;
 	}
 
@@ -184,14 +188,36 @@ void MazeServer::BroadcastAvatarPositions() {
 		PacketVec3 positionUpdate(AVATAR_POS, avatar->GetPosition());
 		ENetPacket* position_update = enet_packet_create(&positionUpdate, sizeof(PacketVec3), 0);
 		enet_peer_send(sendClient, 0, position_update);
-		std::cout << "Sent avatar position update" << std::endl;
 	}
 }
 
-void MazeServer::CreateHazards() {
-	for (int i = 0; i < numHazards; ++i) {
-		hazards.push_back(new AIObject("Hazard" + std::to_string(i)));
+
+void MazeServer::BroadcastHazardPositions() {
+	for (auto& hazard : hazards) {
+		PacketVec3 positionUpdate(HAZARD_POS, hazard->Physics()->GetPosition());
+		ENetPacket* position_update = enet_packet_create(&positionUpdate, sizeof(PacketVec3), 0);
+		enet_host_broadcast(serverNetwork.m_pNetwork, 0, position_update);
 	}
+}
+
+void MazeServer::AddHazard() {
+	hazards.push_back(new Hazard("Hazard" + std::to_string(numHazards)));
+	// Make Patrol Route
+	int start = FindFreeNode();
+	int end = FindFreeNode();
+	graphSearch->FindBestPath(maze->GetNodeFromIndex(start), maze->GetNodeFromIndex(end));
+	hazards[numHazards]->SetPath(graphSearch->GetFinalPath());
+	++numHazards;
+	// Broadcast location
+	Packet hazard(ADD_HAZARD); // Need to make sure it is a free location
+	ENetPacket* packet = enet_packet_create(&hazard, sizeof(hazard), 0);
+	enet_host_broadcast(serverNetwork.m_pNetwork, 0, packet);
+}
+
+
+// Currently not working
+int MazeServer::FindFreeNode() {
+	return rand() % (maze->GetSize() * maze->GetSize());
 }
 
 //struct MyPacketNodeData;

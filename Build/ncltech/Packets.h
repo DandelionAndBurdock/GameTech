@@ -17,6 +17,9 @@ namespace Packets {
 					  MAZE_ROUTE,	  // Contains a list of indices to route nodes
 					  CREATE_AVATAR,  // Contains a node index to create an avatar
 					  AVATAR_POS,	  // Position of avatar in maze space
+					  ADD_HAZARD,	  // Contains node index to add a hazard
+					  ADD_HAZARD_REQUEST, // Requests the server to add a hazard
+					  HAZARD_POS,	 // Conaints ID of hazard and position
 	};	
 
 	// All packets must derive from Packet as we will cast message to determine what type
@@ -63,6 +66,13 @@ namespace Packets {
 
 		PacketCharArray(PacketType m) :
 			Packet(m)  {}
+	};
+
+	struct PacketIntVec3 : public Packet {
+		int i;
+		Vector3 vec;
+		PacketIntVec3(PacketType m, int i, Vector3 v) :
+			Packet(m), i(i), vec(v) {}
 	};
 
 	struct PacketNode : public Packet {

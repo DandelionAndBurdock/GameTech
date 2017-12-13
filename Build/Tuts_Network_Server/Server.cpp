@@ -25,6 +25,10 @@ void Server::Update(float dt) {
 	if (timeSinceBroadcast >= UPDATE_TIMESTEP) {
 		timeSinceBroadcast = 0.0f;
 		BroadcastOutgoingTraffic();
+
+		// Periodically inform of server traffic
+		printf("Incoming: %5.2fKbps\n", serverNetwork.m_IncomingKb);
+		printf("Outgoing: %5.2fKbps\n", serverNetwork.m_OutgoingKb);
 	}
 
 	rotation += 0.5f * 3.14f * dt;
