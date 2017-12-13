@@ -6,6 +6,8 @@ using namespace Packets;
 #include <ncltech\MazeGenerator.h>
 #include <ncltech\SearchAStar.h>
 
+#include <ncltech\AIObject.h>
+
 #include "Avatar.h"
 
 #include <sstream>
@@ -85,11 +87,8 @@ void MazeServer::HandleMazeParams(int clientID, Packets::PacketType* message) {
 		maze = new MazeGenerator();
 		maze->Generate(*dim, *density);
 		std::cout << "Generated maze" << std::endl;
-
-	
-		BroadcastMazeStructure();
 	}
-	
+	BroadcastMazeStructure();
 }
 
 
@@ -186,6 +185,12 @@ void MazeServer::BroadcastAvatarPositions() {
 		ENetPacket* position_update = enet_packet_create(&positionUpdate, sizeof(PacketVec3), 0);
 		enet_peer_send(sendClient, 0, position_update);
 		std::cout << "Sent avatar position update" << std::endl;
+	}
+}
+
+void MazeServer::CreateHazards() {
+	for (int i = 0; i < numHazards; ++i) {
+		hazards.push_back(new AIObject("Hazard" + std::to_string(i)));
 	}
 }
 

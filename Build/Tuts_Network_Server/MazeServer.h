@@ -6,6 +6,7 @@ class MazeGenerator;
 class GraphNode;
 class SearchAStar;
 class Avatar;
+class AIObject;
 
 class MazeServer : public Server
 {
@@ -35,6 +36,11 @@ protected:
 	SearchAStar* graphSearch = nullptr;
 
 	std::vector<Avatar*> avatars;
+
+	// Hazards
+	std::vector<AIObject*> hazards;
+	int numHazards = 5; // Hardcode for now
+	void CreateHazards();
 };
 
 

@@ -140,6 +140,7 @@
     <ClCompile Include="CommonUtils.cpp" />
     <ClCompile Include="CompositeCollisionShape.cpp" />
     <ClCompile Include="CuboidCollisionShape.cpp" />
+    <ClCompile Include="FollowPath.cpp" />
     <ClCompile Include="GeometryUtils.cpp" />
     <ClCompile Include="GraphicsPipeline.cpp" />
     <ClCompile Include="GroupAIObject.cpp" />
@@ -183,6 +184,7 @@
     <ClInclude Include="Constraint.h" />
     <ClInclude Include="CuboidCollisionShape.h" />
     <ClInclude Include="DistanceConstraint.h" />
+    <ClInclude Include="FollowPath.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GeometryUtils.h" />
     <ClInclude Include="GraphicsPipeline.h" />

@@ -5,6 +5,7 @@
 #include "Pursuit.h"
 #include "Seek.h"
 #include "Wander.h"
+#include "FollowPath.h"
 
 
 #include "AIObject.h"
@@ -55,6 +56,9 @@ void SteeringBehaviourManager::AddBehaviour(const BehaviourType b) {
 	case PURSUIT:
 		behaviours.push_back(new Pursuit(owner));
 		break;
+	case FOLLOW_PATH:
+		behaviours.push_back(new FollowPath(owner));
+		break;
 	default: 
 		std::cout << "Warning: Unimplemented Behaviour" << std::endl;
 	}
@@ -74,6 +78,14 @@ void SteeringBehaviourManager::SetPursuitTarget(PhysicsNode* target) {
 	for (auto& behaviour : behaviours) {
 		if (behaviour->GetType() == PURSUIT) {
 			dynamic_cast<Pursuit*>(behaviour)->SetTarget(target);
+		}
+	}
+}
+
+void SteeringBehaviourManager::SetFollowWaypoints(std::vector<Vector3>& waypoints) {
+	for (auto& behaviour : behaviours) {
+		if (behaviour->GetType() == FOLLOW_PATH) {
+			dynamic_cast<FollowPath*>(behaviour)->SetWaypoints(waypoints);
 		}
 	}
 }

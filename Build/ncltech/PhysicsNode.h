@@ -191,6 +191,7 @@ public:
 	void ChangeSeekTarget(Vector3 target);
 	void ChangePursuitTarget(PhysicsNode* target);
 	void ChangeSteeringSpeed(float vel);
+	void ChangeFollowWaypoints(std::vector<Vector3>& waypoints);
 
 protected:
 	//Useful parameters

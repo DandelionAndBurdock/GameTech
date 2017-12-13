@@ -10,7 +10,7 @@ namespace Messaging{
 		float sendTimeDelay;	//  How many seconds until message should be send
 		void* extraInfo;		// Extra information e.g. a target position
 
-		Message(int m, int r, int t = 0.0f, void* info = nullptr) :
+		Message(int m, int r, float t = 0.0f, void* info = nullptr) :
 			msg(m), receiever(r), sendTimeDelay(t), extraInfo(info)
 		{}
 

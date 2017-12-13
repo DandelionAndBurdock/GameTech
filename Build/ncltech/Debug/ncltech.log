@@ -1,12 +1,9 @@
-﻿  CommonUtils.cpp
+﻿  AIObject.cpp
   Generating Code...
   Compiling...
-  SceneManager.cpp
-  PathFollowing.cpp
-  MazeRenderer.cpp
-d:\gametechnewnew\gametech\build\ncltech\mazerenderer.cpp(314): warning C4018: '<': signed/unsigned mismatch
-  MazeGenerator.cpp
-d:\gametechnewnew\gametech\build\ncltech\mazegenerator.cpp(406): warning C4018: '<': signed/unsigned mismatch
-  Jelly.cpp
+  SteeringBehaviourManager.cpp
+  StateMachineManager.cpp
+  Messenger.cpp
+  HazardStates.cpp
   Generating Code...
   ncltech.vcxproj -> D:\GameTechNewNew\GameTech\Build\Debug\ncltech.lib

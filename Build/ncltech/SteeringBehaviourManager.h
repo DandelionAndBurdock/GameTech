@@ -23,6 +23,7 @@ public:
 
 	 void SetSeekTarget(Vector3 target);
 	 void SetPursuitTarget(PhysicsNode* target);
+	 void SetFollowWaypoints(std::vector<Vector3>& waypoints);
 
 protected:
 

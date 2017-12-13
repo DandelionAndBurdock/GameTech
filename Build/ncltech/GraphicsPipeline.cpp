@@ -288,6 +288,7 @@ void GraphicsPipeline::RenderScene()
 
 		uModelMtx = glGetUniformLocation(shaderForwardLighting->GetProgram(), "uModelMtx");
 		GLint uColor = glGetUniformLocation(shaderForwardLighting->GetProgram(), "uColor");
+		
 		RenderAllObjects(true,
 			[&](RenderNode* node)
 			{

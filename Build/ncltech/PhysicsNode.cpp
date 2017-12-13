@@ -199,3 +199,7 @@ void  PhysicsNode::ChangePursuitTarget(PhysicsNode* target) {
 void PhysicsNode::ChangeSteeringSpeed(float vel) {
 	//steering->SetVelocity(vel);
 }
+
+void PhysicsNode::ChangeFollowWaypoints(std::vector<Vector3>& waypoints) {
+	steering->SetFollowWaypoints(waypoints);
+}

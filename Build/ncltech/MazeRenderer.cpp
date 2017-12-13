@@ -82,7 +82,7 @@ void MazeRenderer::DrawPath(const std::vector<GraphEdge>& path, float line_width
 			0.1f,
 			(edge._b->_pos.y + 0.5f) * grid_scalar);
 
-		NCLDebug::DrawThickLine(start, end, line_width, CommonUtils::GenColor(colour));
+		NCLDebug::DrawThickLineNDT(start, end, line_width, CommonUtils::GenColor(colour));
 	}
 }
 

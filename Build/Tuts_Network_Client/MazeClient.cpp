@@ -59,11 +59,6 @@ void MazeClient::HandlePosData(PacketType* message) {
 
 void MazeClient::HandleMazeStructure(Packets::PacketType* message) {
 
-	//TeMP
-	//mazeGenerator = new MazeGenerator();
-	//int* seed = reinterpret_cast<int*>(message);
-	//mazeGenerator->Generate(*seed, mazeDim, mazeDensity);
-	//End Temp
 	char* mazeData = reinterpret_cast<char*>(message);
 	std::string s(mazeData);
 	std::istringstream ss(mazeData);
@@ -105,6 +100,10 @@ void MazeClient::HandleMazeRoute(Packets::PacketType* message) {
 }
 
 void MazeClient::CreateAvatar() {
+	if (avatar) {
+		SAFE_DELETE(avatar);
+	}
+		
 
 	avatar = CommonUtils::BuildSphereObject(
 		"avatar",
@@ -187,7 +186,6 @@ void MazeClient::OnUpdateScene(float dt) {
 }
 
 void MazeClient::RegisterMazeWithScreenPicker() {
-	return;
 	const float grid_scalar = 1.0f / (float)mazeGenerator->GetSize();
 	const float scalar = 1.f / (float)mazeRenderer->GetFlatMazeSize();
 
@@ -269,9 +267,7 @@ void MazeClient::ChangeStartPoint(int newIndex) {
 	std::cout << "Changing start point " << std::endl;
 	mazeGenerator->SetStartIndex(newIndex);
 
-	// Change start and end positions on the renderer is tricky, easier to make a new render
 	RefreshMazeRenderer();
-
 
 	SendRouteRequest(mazeGenerator->GetStartIndex(), mazeGenerator->GetGoalIndex());
 }
@@ -322,7 +318,6 @@ void MazeClient::RefreshMazeRenderer() {
 	mazeRenderer->Render()->SetTransform(Matrix4::Scale(mazeRenderScale));
 	this->AddGameObject(mazeRenderer);
 	RegisterMazeWithScreenPicker();
-
 	CreateAvatar();
 }
 
