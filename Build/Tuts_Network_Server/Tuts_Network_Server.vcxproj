@@ -83,11 +83,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Avatar.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MazeServer.cpp" />
     <ClCompile Include="Server.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Avatar.h" />
     <ClInclude Include="MazeServer.h" />
     <ClInclude Include="NetworkConstants.h" />
     <ClInclude Include="Server.h" />

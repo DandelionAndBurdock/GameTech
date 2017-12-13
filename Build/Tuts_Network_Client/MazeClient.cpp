@@ -71,10 +71,10 @@ void MazeClient::HandleMazeStructure(Packets::PacketType* message) {
 	mazeRenderer = new MazeRenderer(mazeGenerator);
 	mazeRenderer->Render()->SetTransform(Matrix4::Scale(Vector3(10.0f, 1.0f, 10.0f)));
 	this->AddGameObject(mazeRenderer);
-
-	CreateAvatar();
-	SendRouteRequest(mazeGenerator->GetStartNode(), mazeGenerator->GetGoalNode());
 	RegisterMazeWithScreenPicker();
+
+	//SendRouteRequest(mazeGenerator->GetStartNode(), mazeGenerator->GetGoalNode());
+	CreateAvatar();
 }
 
 void MazeClient::SendRouteRequest(GraphNode* const start, GraphNode* const end) {
@@ -94,12 +94,6 @@ void MazeClient::SendRouteRequest(GraphNode* const start, GraphNode* const end) 
 
 
 void MazeClient::HandleMazeRoute(Packets::PacketType* message) {
-	//std::istringstream ss(*reinterpret_cast<std::string*>(message));
-	//std::vector<int> routeIndices;
-	//int index;
-	//while (ss >> index) {
-	//	routeIndices.push_back(index);
-	//}
 	char* route = reinterpret_cast<char*>(message);
 	std::string s = std::string(route);
 	std::istringstream ss(s);
@@ -124,10 +118,17 @@ void MazeClient::CreateAvatar() {
 		false,
 		Vector4(1.0f, 0.0f, 1.0f, 1.0f)
 	);
-	mazeRenderer->Render()->AddChild(avatar->Render());
-	avatar->Render()->SetTransform(Matrix4::Translation(mazeRenderer->GetCellSize() * 0.5f) *
-		Matrix4::Scale(mazeRenderer->GetCellSize() * 0.5f));
 	this->AddGameObject(avatar);
+
+	PacketCharArray avatarPacket(CREATE_AVATAR);
+	std::ostringstream ss;
+	// Start/End Points
+	ss << mazeGenerator->GetStartIndex() << std::endl;
+	ss << mazeGenerator->GetGoalIndex() << std::endl;
+	memcpy(avatarPacket.data, ss.str().c_str(), ss.str().size() * sizeof(char));
+	ENetPacket* packet = enet_packet_create(&avatarPacket, sizeof(avatarPacket), 0);
+	enet_peer_send(serverConnection, 0, packet);
+	std::cout << "Sent request to create avatar" << std::endl;
 }
 
 void MazeClient::HandleKeyboardInput(KeyboardKeys key) {
@@ -225,7 +226,12 @@ std::vector<GraphEdge> MazeClient::MakePathFromIndices(std::vector<int>& nodeInd
 	return path;
 }
 
-
+//std::istringstream ss(*reinterpret_cast<std::string*>(message));
+//std::vector<int> routeIndices;
+//int index;
+//while (ss >> index) {
+//	routeIndices.push_back(index);
+//}
 
 //MyPacket header;
 //ENetPacket* packet = enet_packet_create(&header, sizeof(header) + sizeof(MyPacketNodeData) * 100, 0);
@@ -235,8 +241,13 @@ std::vector<GraphEdge> MazeClient::MakePathFromIndices(std::vector<int>& nodeInd
 //MyPacketNodeData* tmpArr = new MyPacketNodeData[header->numNodes];
 //memcpy(tmpArr, reinterpret_cast<char*>(packetData) + sizeof(MyPacket), sizeof(MyPacketNodeData) * header->numNodes);
 
+//enet_host_broadcast(serverNetwork.m_pNetwork, 0, packet);
+//avatar->Render()->SetTransform(Matrix4::Translation(mazeRenderer->GetCellSize() * 0.5f) *
+//	Matrix4::Scale(mazeRenderer->GetCellSize() * 0.5f));
+//this->AddGameObject(avatar);
 
 void MazeClient::UpdateAvatar() {
+	//avatar->SetTransform(mazeRenderer->Render()->GetWorldTransform());
 }
 
 void MazeClient::NodeSelectedCallback(GameObject* obj, float dt, const Vector3& newWsPos, const Vector3& wsMovedAmount, bool stopDragging)

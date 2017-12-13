@@ -5,6 +5,7 @@
 class MazeGenerator;
 class GraphNode;
 class SearchAStar;
+class Avatar;
 
 class MazeServer : public Server
 {
@@ -24,10 +25,14 @@ protected:
 
 	void SendMazeRoute(int client, ENetPeer * peer);
 	void HandleRouteRequest(int clientID, ENetPeer * peer, Packets::PacketType* message);
+	void HandleAvatarRequest(int clientID, ENetPeer * peer, Packets::PacketType* message);
 
+	bool SetAvatarPath(int clientID, ENetPeer * peer, int startIdx, int endIdx);
 	MazeGenerator* maze = nullptr;
 
 	SearchAStar* graphSearch = nullptr;
+
+	std::vector<Avatar*> avatars;
 };
 
 

@@ -6,7 +6,11 @@ using namespace Packets;
 #include <ncltech\MazeGenerator.h>
 #include <ncltech\SearchAStar.h>
 
+#include "Avatar.h"
+
 #include <sstream>
+
+#include <map>
 
 MazeServer::MazeServer(int portNumber, int maxClients) :
 	Server(portNumber, maxClients),
@@ -17,6 +21,9 @@ MazeServer::MazeServer(int portNumber, int maxClients) :
 
 MazeServer::~MazeServer()
 {
+	for (auto& avatar : avatars) {
+		delete avatar;
+	}
 }
 
 
@@ -39,11 +46,11 @@ void MazeServer::ReceiveMessage(const ENetEvent& evnt) {
 	case ROUTE_REQUEST:
 		// Move pointer to the start of the data
 		++message;
-		//GraphNode* start = reinterpret_cast<GraphNode*>(message);
-		//++message;
-		//GraphNode* end = reinterpret_cast<GraphNode*>(message);
-		//ss.read();
 		HandleRouteRequest(evnt.peer->incomingPeerID, evnt.peer, message);
+	case CREATE_AVATAR:
+		// Move pointer to the start of the data
+		++message;
+		HandleAvatarRequest(evnt.peer->incomingPeerID, evnt.peer, message);
 		break;
 	}
 
@@ -134,8 +141,39 @@ void  MazeServer::HandleRouteRequest(int clientID, ENetPeer * peer, Packets::Pac
 	ss >> startIdx >> endIdx;
 	
 	graphSearch->FindBestPath(maze->GetNodeFromIndex(startIdx), maze->GetNodeFromIndex(endIdx));
-	SendMazeRoute(clientID, peer);
+	if (!SetAvatarPath(clientID, peer, startIdx, endIdx)) {
+		SendMazeRoute(clientID, peer);
+	}
 }
+
+void MazeServer::HandleAvatarRequest(int clientID, ENetPeer * peer, Packets::PacketType* message) {
+	std::cout << "Received avatar creation request from client " << clientID << std::endl;
+	avatars.push_back(new Avatar(peer));
+
+	// Set avatar path
+	char* indices = reinterpret_cast<char*>(message);
+	std::string s = std::string(indices);
+	std::istringstream ss(s);
+	int startIdx, endIdx;
+	ss >> startIdx >> endIdx;
+
+	SetAvatarPath(clientID, peer, startIdx, endIdx);
+}
+
+
+bool MazeServer::SetAvatarPath(int clientID, ENetPeer * peer, int startIdx, int endIdx) {
+	auto avatarIter = std::find_if(avatars.begin(), avatars.end(), [peer](Avatar* a) { return (a->GetClient() == peer);});
+	if (avatarIter == avatars.end()) {
+		return false;
+	}
+	else {
+		graphSearch->FindBestPath(maze->GetNodeFromIndex(startIdx), maze->GetNodeFromIndex(endIdx));
+		(*avatarIter)->SetPath(graphSearch->GetFinalPath());
+		SendMazeRoute(clientID, peer);
+		return true;
+	}
+}
+
 
 //struct MyPacketNodeData;
 //struct MyPacket

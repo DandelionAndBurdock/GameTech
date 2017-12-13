@@ -16,10 +16,14 @@
     <ClCompile Include="MazeServer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Avatar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Server.h" />
     <ClInclude Include="NetworkConstants.h" />
     <ClInclude Include="MazeServer.h" />
+    <ClInclude Include="Avatar.h" />
   </ItemGroup>
 </Project>
