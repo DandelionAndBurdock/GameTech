@@ -24,6 +24,8 @@ public:
 	void SetPath(const std::list<const GraphNode*> path);
 
 	Vector3 GetPosition();
+
+	PhysicsNode* GetPhysics() { return physics; }
 protected:
 	PhysicsNode* physics = nullptr;
 

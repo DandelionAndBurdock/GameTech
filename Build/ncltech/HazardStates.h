@@ -72,5 +72,6 @@ protected:
 	bool isFollowingPath = false;
 	bool isIdle = false;
 	Patrol();
-
+	//Free
+	static std::vector<Patrol*> instances;
 };

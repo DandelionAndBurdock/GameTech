@@ -47,8 +47,10 @@ void StateMachineManager<StateOwner>::ChangeSuperState(State<StateOwner>* newSta
 		superState->Exit(entity);
 	}
 	superState = newState;
-
-	newState->Enter(entity);
+	if (newState) {
+		newState->Enter(entity);
+	}
+	
 }
 
 

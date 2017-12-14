@@ -213,3 +213,10 @@ void PhysicsNode::FollowPathOff() {
 void PhysicsNode::FollowPathLoop(bool isOn) {
 	steering->FollowPathLoop(isOn);
 }
+
+void PhysicsNode::PursuitOn() {
+	steering->PursuitOn();
+}
+void PhysicsNode::PursuitOff() {
+	steering->PursuitOn();
+}

@@ -35,7 +35,8 @@ Pursue::~Pursue()
 
 
 void Pursue::Enter(Hazard* owner) {
-	return;
+	owner->Physics()->AddSteeringBehaviour(PURSUIT);
+	owner->Physics()->PursuitOn();
 }
 
 void Pursue::Update(Hazard* owner, float dt) {
@@ -43,7 +44,7 @@ void Pursue::Update(Hazard* owner, float dt) {
 }
 
 void Pursue::Exit(Hazard* owner) {
-	return;
+	owner->Physics()->PursuitOff();
 }
 
 void Pursue::ReceiveMessage(Hazard* owner, Messaging::Message msg) {
@@ -83,7 +84,9 @@ void FollowHazardPath::Exit(Hazard* owner) {
 void FollowHazardPath::ReceiveMessage(Hazard* owner, Messaging::Message msg) {
 	Avatar* target = reinterpret_cast<Avatar*>(msg.data);
 	if (InRange(owner, target)) {
-		std::cout << "In Range" << std::endl;
+		owner->GetFSM()->ChangeState(Pursue::GetInstance());
+		owner->Physics()->ChangePursuitTarget(target->GetPhysics());
+		owner->GetFSM()->ChangeSuperState(nullptr);
 	}
 	
 }
@@ -114,12 +117,19 @@ void Idle::Exit(Hazard* owner) {
 }
 
 void Idle::ReceiveMessage(Hazard* owner, Messaging::Message msg) {
+	Avatar* target = reinterpret_cast<Avatar*>(msg.data);
+	if (InRange(owner, target)) {
+		owner->GetFSM()->ChangeState(Pursue::GetInstance());
+		owner->Physics()->ChangePursuitTarget(target->GetPhysics());
+		owner->GetFSM()->ChangeSuperState(nullptr);
+	}
 }
 
+std::vector<Patrol*> Patrol::instances; 
 
 Patrol* Patrol::GetInstance() {
-	static Patrol instance;
-	return &instance;
+	instances.push_back(new Patrol());
+	return instances.back();
 }
 
 Patrol::Patrol() {
@@ -141,6 +151,8 @@ void Patrol::Enter(Hazard* owner) {
 
 void Patrol::Update(Hazard* owner, float dt) {
 	timeSinceTransition += dt;
+
+	std::cout << owner << " TST: " << timeSinceTransition << " dt: " << dt << std::endl;
 
 	if (isFollowingPath && timeSinceTransition >= pathTime) {
 		timeSinceTransition -= pathTime;

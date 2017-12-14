@@ -113,3 +113,18 @@ void SteeringBehaviourManager::FollowPathLoop(bool isOn) {
 		}
 	}
 }
+
+void SteeringBehaviourManager::PursuitOn() {
+	for (auto& behaviour : behaviours) {
+		if (behaviour->GetType() == PURSUIT) {
+			behaviour->SetActive(true);
+		}
+	}
+}
+void SteeringBehaviourManager::PursuitOff() {
+	for (auto& behaviour : behaviours) {
+		if (behaviour->GetType() == PURSUIT) {
+			behaviour->SetActive(false);
+		}
+	}
+}

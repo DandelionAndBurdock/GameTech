@@ -1,9 +1,2 @@
-﻿  AIObject.cpp
-  Generating Code...
-  Compiling...
-  SteeringBehaviourManager.cpp
-  StateMachineManager.cpp
-  Messenger.cpp
-  HazardStates.cpp
-  Generating Code...
+﻿  HazardStates.cpp
   ncltech.vcxproj -> D:\GameTechNewNew\GameTech\Build\Debug\ncltech.lib

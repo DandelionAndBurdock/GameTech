@@ -195,6 +195,8 @@ public:
 	void FollowPathOn();
 	void FollowPathOff();
 	void FollowPathLoop(bool isOn);
+	void PursuitOn();
+	void PursuitOff();
 
 protected:
 	//Useful parameters
