@@ -20,13 +20,13 @@ public:
 
 	static AIObject* GetObjectFromID(int ID);
 
-	void Update(float dt);
+	virtual void Update(float dt);
 	
 	inline std::vector<AIObject*>& GetNeighbours() { return neighbours; }
 protected:
 	int uniqueID;
 
-	StateMachineManager<AIObject> fsm;
+	//StateMachineManager<AIObject> fsm;
 
 	void FindNeighbours(float radius, std::vector<AIObject*> excluding = std::vector<AIObject*>());
 

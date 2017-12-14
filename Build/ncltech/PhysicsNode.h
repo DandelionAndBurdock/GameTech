@@ -192,6 +192,9 @@ public:
 	void ChangePursuitTarget(PhysicsNode* target);
 	void ChangeSteeringSpeed(float vel);
 	void ChangeFollowWaypoints(std::vector<Vector3>& waypoints);
+	void FollowPathOn();
+	void FollowPathOff();
+	void FollowPathLoop(bool isOn);
 
 protected:
 	//Useful parameters

@@ -193,15 +193,16 @@ void MazeServer::BroadcastAvatarPositions() {
 
 
 void MazeServer::BroadcastHazardPositions() {
-	for (auto& hazard : hazards) {
-		PacketVec3 positionUpdate(HAZARD_POS, hazard->Physics()->GetPosition());
-		ENetPacket* position_update = enet_packet_create(&positionUpdate, sizeof(PacketVec3), 0);
+	for (uint i = 0; i < hazards.size(); ++i) {
+		PacketIntVec3 positionUpdate(HAZARD_POS, i, hazards[i]->Physics()->GetPosition());
+		ENetPacket* position_update = enet_packet_create(&positionUpdate, sizeof(positionUpdate), 0);
 		enet_host_broadcast(serverNetwork.m_pNetwork, 0, position_update);
 	}
 }
 
 void MazeServer::AddHazard() {
 	hazards.push_back(new Hazard("Hazard" + std::to_string(numHazards)));
+	PhysicsEngine::Instance()->AddPhysicsObject(hazards[numHazards]->Physics());
 	// Make Patrol Route
 	int start = FindFreeNode();
 	int end = FindFreeNode();
@@ -218,6 +219,13 @@ void MazeServer::AddHazard() {
 // Currently not working
 int MazeServer::FindFreeNode() {
 	return rand() % (maze->GetSize() * maze->GetSize());
+}
+
+void MazeServer::Update(float dt) {
+	for (auto& hazard : hazards) {
+		hazard->Update(dt);
+	}
+	Server::Update(dt);
 }
 
 //struct MyPacketNodeData;

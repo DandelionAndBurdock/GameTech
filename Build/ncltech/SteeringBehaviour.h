@@ -14,8 +14,11 @@ public:
 
 	inline Steering::BehaviourType GetType() { return type; }
 
+	void SetActive(bool isOn) {	isActive = isOn; }
+	bool IsActive() { return isActive; }
 protected:
 	Steering::BehaviourType type;
+	bool isActive = true;
 
 	PhysicsNode* owner;
 };

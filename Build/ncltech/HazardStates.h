@@ -1,18 +1,37 @@
 #pragma once
 
 #include "State.h"
-#include "AIObject.h"
+#include "../Tuts_Network_Server/Hazard.h"
 
-class Pursue : public State<AIObject*>
+class Pursue : public State<Hazard>
 {
 public:
-	Pursue();
+	static Pursue* GetInstance();
+
+	void Enter(Hazard* owner) override;
+	void Update(Hazard* owner, float dt) override;
+	void Exit(Hazard* owner) override;
+
+	void ReceiveMessage(Messaging::Message msg) override;
+
 	~Pursue();
+protected:
+	Pursue();
 
-	void Enter(GameObject* owner);
-	void Update(GameObject* owner, float dt);
-	void Exit(GameObject* owner);
-
-	void ReceiveMessage(Messaging::Message msg);
 };
 
+class FollowHazardPath : public State<Hazard> {
+public:
+	static FollowHazardPath* GetInstance();
+
+	void Enter(Hazard* owner) override;
+	void Update(Hazard* owner, float dt) override;
+	void Exit(Hazard* owner) override;
+
+	void ReceiveMessage(Messaging::Message msg) override;
+
+	~FollowHazardPath();
+protected:
+	FollowHazardPath();
+	
+};

@@ -17,6 +17,7 @@ public:
 
 	void SetWaypoints(std::vector<Vector3>& wayPoints);
 	
+	void SetLooping(bool isOn) { looping = isOn; }
 protected:
 	std::vector<Vector3> waypoints;
 	int currentWaypoint;

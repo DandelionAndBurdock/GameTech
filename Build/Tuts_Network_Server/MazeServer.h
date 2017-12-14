@@ -14,6 +14,8 @@ public:
 	MazeServer(int portNumber, int maxClients);
 	~MazeServer();
 
+	void Update(float dt);
+
 	void BroadcastOutgoingTraffic() override;
 protected:
 

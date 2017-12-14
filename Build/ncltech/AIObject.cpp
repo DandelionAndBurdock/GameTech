@@ -10,7 +10,7 @@ std::map<int, AIObject*> AIObject::objectDirectory;
 std::vector<AIObject*> AIObject::sceneObjects;
 
 AIObject::AIObject(const std::string& name) :
-	GameObject(name), fsm(this)
+	GameObject(name)//, fsm(this)
 {
 	static int ID = 0;
 	uniqueID = ID;
@@ -25,7 +25,7 @@ AIObject::~AIObject()
 }
 
 void AIObject::ReceiveMessage(const Messaging::Message& message) {
-	fsm.ReceiveMessage(message);
+	//fsm.ReceiveMessage(message);
 }
 
 

@@ -203,3 +203,13 @@ void PhysicsNode::ChangeSteeringSpeed(float vel) {
 void PhysicsNode::ChangeFollowWaypoints(std::vector<Vector3>& waypoints) {
 	steering->SetFollowWaypoints(waypoints);
 }
+
+void PhysicsNode::FollowPathOn() {
+	steering->FollowPathOn();
+}
+void PhysicsNode::FollowPathOff() {
+	steering->FollowPathOff();
+}
+void PhysicsNode::FollowPathLoop(bool isOn) {
+	steering->FollowPathLoop(isOn);
+}

@@ -34,7 +34,8 @@ void SteeringBehaviourManager::Update(float dt) {
 Vector3 SteeringBehaviourManager::GetVelocity() {
 	Vector3 velocity(0.0f);
 	for (auto& behaviour : behaviours) {
-		velocity += behaviour->GetVelocity();
+		if (behaviour->IsActive())
+			velocity += behaviour->GetVelocity();
 	}
 	return velocity;
 }
@@ -86,6 +87,29 @@ void SteeringBehaviourManager::SetFollowWaypoints(std::vector<Vector3>& waypoint
 	for (auto& behaviour : behaviours) {
 		if (behaviour->GetType() == FOLLOW_PATH) {
 			dynamic_cast<FollowPath*>(behaviour)->SetWaypoints(waypoints);
+		}
+	}
+}
+
+void SteeringBehaviourManager::FollowPathOn() {
+	for (auto& behaviour : behaviours) {
+		if (behaviour->GetType() == FOLLOW_PATH) {
+			behaviour->SetActive(true);
+		}
+	}
+}
+
+void SteeringBehaviourManager::FollowPathOff() {
+	for (auto& behaviour : behaviours) {
+		if (behaviour->GetType() == FOLLOW_PATH) {
+			behaviour->SetActive(false);
+		}
+	}
+}
+void SteeringBehaviourManager::FollowPathLoop(bool isOn) {
+	for (auto& behaviour : behaviours) {
+		if (behaviour->GetType() == FOLLOW_PATH) {
+			dynamic_cast<FollowPath*>(behaviour)->SetLooping(true);
 		}
 	}
 }

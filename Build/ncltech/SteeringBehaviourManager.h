@@ -25,6 +25,10 @@ public:
 	 void SetPursuitTarget(PhysicsNode* target);
 	 void SetFollowWaypoints(std::vector<Vector3>& waypoints);
 
+	 void FollowPathOn();
+	 void FollowPathOff();
+	 void FollowPathLoop(bool isOn);
+
 protected:
 
 	std::vector<SteeringBehaviour*> behaviours;

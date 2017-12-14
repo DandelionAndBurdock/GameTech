@@ -380,6 +380,7 @@ void MazeClient::SetHazardTransform(Packets::PacketType* message) {
 	hazards[*hazardID]->Render()->SetTransform(Matrix4::Translation(cellpos + cellSize * 0.5f) * Matrix4::Scale(cellSize * 0.5f));
 }
 
+
 //std::istringstream ss(*reinterpret_cast<std::string*>(message));
 //std::vector<int> routeIndices;
 //int index;
