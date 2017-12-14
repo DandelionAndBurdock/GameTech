@@ -160,6 +160,15 @@ void MazeServer::HandleAvatarRequest(int clientID, ENetPeer * peer, Packets::Pac
 	ss >> startIdx >> endIdx;
 
 	SetAvatarPath(clientID, peer, startIdx, endIdx);
+
+	// Inform any pre-existing clients to add a secondary avatar
+	for (auto& client : clients) {
+		if (client != peer) {
+			PacketInt avatar(ADD_SECONDARY_AVATAR, avatars.size()); // Need to make sure it is a free location
+			ENetPacket* packet = enet_packet_create(&avatar, sizeof(avatar), 0);
+			enet_peer_send(peer, 0, packet);
+		}
+	}
 }
 
 

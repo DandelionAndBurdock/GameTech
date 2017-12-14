@@ -60,7 +60,8 @@ void MazeClient::ReceiveMessage(const ENetEvent& evnt) {
 		break;
 	case SEC_AVATAR_UPDATE:
 		++message;
-		
+		SetSecondaryAvatarTransform(message);
+		break;
 	default:
 		std::cout << "Recieved Uncategorised Network Packet!" << std::endl;
 	}
@@ -297,6 +298,8 @@ void MazeClient::DrawNavMesh() {
 
 void MazeClient::RefreshMazeRenderer(bool registerClick) {
 	UnregisterMazeWithScreenPicker();
+
+
 	this->RemoveGameObject(mazeRenderer, true);
 
 	SAFE_DELETE(mazeRenderer);
@@ -305,6 +308,12 @@ void MazeClient::RefreshMazeRenderer(bool registerClick) {
 	//TODO: Re add Hazards
 	this->AddGameObject(mazeRenderer);
 	CreateAvatar();
+	// Re-add secondary avatars
+	for (auto& avatar : secondaryAvatars) {
+		avatar.second = MakeAvatarRenderNode(Vector4(0.3f, 1.0f, 0.0f, 1.0f));
+		mazeRenderer->Render()->AddChild(avatar.second);
+	}
+
 	RegisterMazeWithScreenPicker();
 
 }
@@ -348,17 +357,16 @@ void MazeClient::UnregisterMazeWithScreenPicker() {
 
 void MazeClient::AddSecondaryAvatar(Packets::PacketType* message) {
 	int* ID = reinterpret_cast<int*>(message);
-	secondaryAvatars[*ID] = MakeAvatarRenderNode(Vector4(1.0f, 1.0f, 0.0f, 1.0f));
+	secondaryAvatars[*ID] = MakeAvatarRenderNode(Vector4(0.3f, 1.0f, 0.0f, 1.0f));
 }
 
 RenderNode* MazeClient::MakeAvatarRenderNode(Vector4 colour) {
 	RenderNode* rNode = new RenderNode();
 
-	RenderNode* dummy = new RenderNode(CommonMeshes::Sphere());
+	RenderNode* dummy = new RenderNode(CommonMeshes::Sphere(), colour);
 	dummy->SetTransform(Matrix4::Scale(avatarScale));
 	rNode->AddChild(dummy);
 
-	//rnode->SetTransform(Matrix4::Translation(pos));
 	rNode->SetBoundingRadius(0.4f);
 	return rNode;
 }
@@ -367,7 +375,7 @@ void MazeClient::SetSecondaryAvatarTransform(Packets::PacketType* message) {
 	int* ID = reinterpret_cast<int*>(message);
 	++message;
 	Vector3* pos = reinterpret_cast<Vector3*>(message);
-
+	secondaryAvatars[*ID]->SetTransform(MazeSpaceToWorldSpace(*pos));
 }
 
 Matrix4 MazeClient::MazeSpaceToWorldSpace(Vector3 pos) {
