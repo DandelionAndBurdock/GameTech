@@ -62,6 +62,10 @@ void MazeClient::ReceiveMessage(const ENetEvent& evnt) {
 		++message;
 		SetSecondaryAvatarTransform(message);
 		break;
+	case NAV_MESH:
+		++message;
+		HandleNavMesh(message);
+		break;
 	default:
 		std::cout << "Recieved Uncategorised Network Packet!" << std::endl;
 	}
@@ -114,6 +118,19 @@ void MazeClient::HandleMazeRoute(Packets::PacketType* message) {
 	path = MakePathFromIndices(routeIndices);
 }
 
+void MazeClient::HandleNavMesh(Packets::PacketType* message) {
+	char* route = reinterpret_cast<char*>(message);
+	std::string s = std::string(route);
+	std::istringstream ss(s);
+	std::vector<int> routeIndices;
+	int index;
+	while (ss >> index) {
+		routeIndices.push_back(index);
+	}
+	std::cout << "Received maze route from server" << std::endl;
+	navMesh = MakePathFromIndices(routeIndices);
+}
+
 void MazeClient::CreateAvatar() {
 
 	avatar = MakeAvatarRenderNode();
@@ -141,7 +158,7 @@ void MazeClient::HandleKeyboardInput(KeyboardKeys key) {
 	case KEYBOARD_R:
 		showRoute = !showRoute;
 		break;
-	case KEYBOARD_M:
+	case KEYBOARD_N:
 		showNavMesh = !showNavMesh;
 		break;
 	case KEYBOARD_H:
@@ -293,7 +310,7 @@ void MazeClient::SetAvatarTransform(Packets::PacketType* message) {
 }
 
 void MazeClient::DrawNavMesh() {
-
+	mazeRenderer->DrawPath(navMesh, true, 0.3f, 0.3f);
 }
 
 void MazeClient::RefreshMazeRenderer(bool registerClick) {

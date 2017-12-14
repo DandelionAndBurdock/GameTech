@@ -64,7 +64,7 @@ void MazeRenderer::DrawSearchHistory(const SearchHistory& history, float line_wi
 	}
 }
 
-void MazeRenderer::DrawPath(const std::vector<GraphEdge>& path, float line_width, float colour) {
+void MazeRenderer::DrawPath(const std::vector<GraphEdge>& path, bool points, float line_width, float colour) {
 	float grid_scalar = 1.0f / (float)maze->GetSize();
 
 	Matrix4 transform = this->Render()->GetWorldTransform();
@@ -82,7 +82,15 @@ void MazeRenderer::DrawPath(const std::vector<GraphEdge>& path, float line_width
 			0.1f,
 			(edge._b->_pos.y + 0.5f) * grid_scalar);
 
-		NCLDebug::DrawThickLineNDT(start, end, line_width, CommonUtils::GenColor(colour));
+		
+		if (points) {
+			NCLDebug::DrawPoint(start, 0.5f, Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+			NCLDebug::DrawPoint(end, 0.5f, Vector4(0.0f, 0.0f, 1.0f, 1.0f));
+		}
+		else {
+			NCLDebug::DrawThickLineNDT(start, end, line_width, CommonUtils::GenColor(colour));
+		}
+
 	}
 }
 
@@ -311,7 +319,7 @@ void MazeRenderer::RegisterMazeWithScreenPicker() {
 	GraphNode* node = maze->GetAllNodesArr();
 
 	// Add a transparent cube object with callback to each node
-	for (int i = 0; i < maze->GetSize() *  maze->GetSize(); ++i) {
+	for (uint i = 0; i < maze->GetSize() *  maze->GetSize(); ++i) {
 		Vector3 cellpos = Vector3(
 			(node + i)->_pos.x * 3,
 			0.0f,

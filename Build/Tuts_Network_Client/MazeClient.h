@@ -21,6 +21,7 @@ protected:
 
 	void HandleMazeStructure(Packets::PacketType* message);
 	void HandleMazeRoute(Packets::PacketType* message);
+	void HandleNavMesh(Packets::PacketType* message);
 	void AddHazard();
 
 	void HandleKeyboardInput(KeyboardKeys key) override;
@@ -59,6 +60,7 @@ protected:
 	RenderNode* avatar;
 	int avatarPathIndex = 0;
 	std::vector<GraphEdge> path;
+	std::vector<GraphEdge> navMesh;
 
 	std::vector<GameObject*> hazards;
 	int numHazards = 0;

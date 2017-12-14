@@ -131,6 +131,23 @@ void MazeServer::SendMazeRoute(int client, ENetPeer * peer) {
 	std::cout << "Sent maze route to Client " << client << std::endl;
 }
 
+void MazeServer::SendNavMesh(int client, ENetPeer * peer) {
+	//Get nav mesh
+	std::vector<const GraphNode*> path = graphSearch->GetNavMesh();
+	// Put into a string
+	std::ostringstream ss;
+	for (auto iter = path.begin(); iter != path.end(); ++iter) {
+		ss << maze->GetIndexFromNode(*iter) << std::endl;
+	}
+
+	PacketCharArray mazeRoute(NAV_MESH);
+	memcpy(mazeRoute.data, ss.str().c_str(), ss.str().size() * sizeof(char));
+
+	ENetPacket* packet = enet_packet_create(&mazeRoute, sizeof(mazeRoute), 0);
+	enet_peer_send(peer, 0, packet);
+	std::cout << "Sent maze route to Client " << client << std::endl;
+}
+
 void  MazeServer::HandleRouteRequest(int clientID, ENetPeer * peer, Packets::PacketType* message) {
 	std::cout << "Received route request from client " << clientID << std::endl;
 	std::istringstream ss(*reinterpret_cast<std::string*>(message));
@@ -140,6 +157,7 @@ void  MazeServer::HandleRouteRequest(int clientID, ENetPeer * peer, Packets::Pac
 	graphSearch->FindBestPath(maze->GetNodeFromIndex(startIdx), maze->GetNodeFromIndex(endIdx));
 	if (!SetAvatarPath(clientID, peer, startIdx, endIdx)) {
 		SendMazeRoute(clientID, peer);
+		SendNavMesh(clientID, peer);
 	}
 }
 
@@ -181,6 +199,7 @@ bool MazeServer::SetAvatarPath(int clientID, ENetPeer * peer, int startIdx, int 
 		graphSearch->FindBestPath(maze->GetNodeFromIndex(startIdx), maze->GetNodeFromIndex(endIdx));
 		(*avatarIter)->SetPath(graphSearch->GetFinalPath());
 		SendMazeRoute(clientID, peer);
+		SendNavMesh(clientID, peer);
 		return true;
 	}
 }

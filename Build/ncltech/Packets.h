@@ -22,6 +22,7 @@ namespace Packets {
 					  HAZARD_POS,	 // Contains ID of hazard and position
 					  ADD_SECONDARY_AVATAR, // Request to add a non-player avatar to the client
 					  SEC_AVATAR_UPDATE,	// Contains ID and new position of a secondary avatar
+					  NAV_MESH,				// Contains indices with nav mesh for the maze
 	};	
 
 	// All packets must derive from Packet as we will cast message to determine what type

@@ -26,6 +26,7 @@ struct GraphNode
 
 	// Node positions are defined in (x,y) plane so need to do some swizzling
 	Vector3 GetPos() const { return Vector3(_pos.x, 0.0f, _pos.y); };
+	int NumNeighbours() const { return _neighbours.size(); }
 };
 
 //An edge that connects two graph nodes together
@@ -62,21 +63,41 @@ public:
 
 	const SearchHistory&			   GetSearchHistory()	const { return searchHistory; }
 	const std::list<const GraphNode*>& GetFinalPath()		const { return finalPath; }
+	const std::vector<const GraphNode*>&	   GetNavMesh()			const { return navMesh; }
 
 protected:
 	void BuildPathFromParentMap(const GraphNode* start, const GraphNode* goal, const ParentMap& map)
 	{
 		//To build a final path we can keep traversing back to the start node from the goal
 		const GraphNode* current = goal;
-
+		const GraphNode* previous = current;
+		navMesh.push_back(current);
 		while (current != NULL)
 		{
 			finalPath.push_front(current);
 			current = map.at(current);
+			if (current && !HasLineOfSight(previous, current)) {
+				navMesh.push_back(current);
+				previous = current;
+			}
+		}
+	}
+
+	// Not a true line of sight function but enough to compute the Nav Mesh for a maze
+	bool  HasLineOfSight(const GraphNode* const origin, const GraphNode* const provisional) const {
+		const float TOLERANCE = 0.002f;
+		// Is it a straight line ?
+		if (abs(provisional->_pos.x - origin->_pos.x) > TOLERANCE &&
+			abs(provisional->_pos.y - origin->_pos.y) > TOLERANCE) {
+			return true;
+		}
+		else { // Must have been direction change
+			return false;
 		}
 	}
 
 protected:
 	SearchHistory					searchHistory;
 	std::list<const GraphNode*>     finalPath;
+	std::vector<const GraphNode*>			navMesh;
 };

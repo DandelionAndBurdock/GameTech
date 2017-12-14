@@ -31,8 +31,11 @@ protected:
 	void BroadcastSecondaryAvatarPositions();
 
 	void SendMazeRoute(int client, ENetPeer * peer);
+	void SendNavMesh(int client, ENetPeer * peer);
 	void HandleRouteRequest(int clientID, ENetPeer * peer, Packets::PacketType* message);
 	void HandleAvatarRequest(int clientID, ENetPeer * peer, Packets::PacketType* message);
+
+
 
 	void OnClientConnection(ENetPeer* peer) override;
 
