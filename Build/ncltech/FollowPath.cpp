@@ -9,6 +9,7 @@ FollowPath::FollowPath(PhysicsNode* entity) :
 	SteeringBehaviour(entity), currentWaypoint(-1)
 {
 	type = FOLLOW_PATH;
+	isActive = false;
 }
 
 

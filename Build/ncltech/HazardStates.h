@@ -35,3 +35,42 @@ protected:
 	FollowHazardPath();
 	
 };
+
+class Idle : public State<Hazard> {
+public:
+	static Idle* GetInstance();
+
+	void Enter(Hazard* owner) override;
+	void Update(Hazard* owner, float dt) override;
+	void Exit(Hazard* owner) override;
+
+	void ReceiveMessage(Messaging::Message msg) override;
+
+	~Idle();
+protected:
+	Idle();
+
+};
+
+class Patrol : public State<Hazard> {
+public:
+	static Patrol* GetInstance();
+
+	void Enter(Hazard* owner) override;
+	void Update(Hazard* owner, float dt) override;
+	void Exit(Hazard* owner) override;
+
+	void ReceiveMessage(Messaging::Message msg) override;
+
+	~Patrol();
+protected:
+	float idleTime = 2.0f;
+	float pathTime = 2.0f;
+
+	float timeSinceTransition = 0.0f;
+
+	bool isFollowingPath = false;
+	bool isIdle = false;
+	Patrol();
+
+};

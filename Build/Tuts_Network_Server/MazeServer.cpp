@@ -155,7 +155,12 @@ void  MazeServer::HandleRouteRequest(int clientID, ENetPeer * peer, Packets::Pac
 
 void MazeServer::HandleAvatarRequest(int clientID, ENetPeer * peer, Packets::PacketType* message) {
 	std::cout << "Received avatar creation request from client " << clientID << std::endl;
-	avatars.push_back(new Avatar(peer));
+
+	auto avatarIter = std::find_if(avatars.begin(), avatars.end(), [peer](Avatar* a) { return (a->GetClient() == peer);});
+	if (avatarIter == avatars.end()) {
+		avatars.push_back(new Avatar(peer));
+	}
+
 
 	// Set avatar path
 	char* indices = reinterpret_cast<char*>(message);

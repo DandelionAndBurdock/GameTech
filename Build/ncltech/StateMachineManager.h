@@ -11,18 +11,20 @@ public:
 	~StateMachineManager();
 
 	void ChangeState(State<StateOwner>* state); 
+	void ChangeSuperState(State<StateOwner>* state);
 	void Update(float dt);
 
 	void ReceiveMessage(Messaging::Message msg);
 protected:
 	StateOwner*		   entity;		 // Entity running this FSM		
 	State<StateOwner>* currentState; // Current state of the entity
+	State<StateOwner>* superState;	 // My hacky solution to a hierachical state machine
 };
 
 
 template <typename StateOwner>
 StateMachineManager<StateOwner>::StateMachineManager(StateOwner* owner) :
-	entity(owner), currentState(nullptr)
+	entity(owner), currentState(nullptr), superState(nullptr)
 {}
 
 template <typename StateOwner>
@@ -40,9 +42,23 @@ void StateMachineManager<StateOwner>::ChangeState(State<StateOwner>* newState) {
 }
 
 template <typename StateOwner>
+void StateMachineManager<StateOwner>::ChangeSuperState(State<StateOwner>* newState) {
+	if (superState) {
+		superState->Exit(entity);
+	}
+	superState = newState;
+
+	newState->Enter(entity);
+}
+
+
+template <typename StateOwner>
 void StateMachineManager<StateOwner>::Update(float dt) {
 	if (currentState) {
 		currentState->Update(entity, dt);
+	}
+	if (superState) {
+		superState->Update(entity, dt);
 	}
 }
 
@@ -52,5 +68,6 @@ void StateMachineManager<StateOwner>::ReceiveMessage(Messaging::Message msg) {
 		currentState->ReceiveMessage(msg);
 	}
 }
+
 
 

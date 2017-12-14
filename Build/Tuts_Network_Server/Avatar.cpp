@@ -25,6 +25,7 @@ void Avatar::SetPath(std::list<const GraphNode*> pathList) {
 	currentPathIndex = 0;
 	physics->SetPosition(path[0]->GetPos());
 	physics->AddSteeringBehaviour(FOLLOW_PATH);
+	physics->FollowPathOn();
 	std::vector<Vector3> pathPos;
 	for (auto& node : path) {
 		pathPos.push_back(node->GetPos());

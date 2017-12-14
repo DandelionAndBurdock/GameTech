@@ -118,10 +118,12 @@ void MazeClient::CreateAvatar() {
 			false,
 			Vector4(1.0f, 0.0f, 1.0f, 1.0f)
 		);
-		this->AddGameObject(avatar);//TODO: Necessary??
+		//this->AddGameObject(avatar);//TODO: Necessary??
 	}
 
-	mazeRenderer->Render()->AddChild(avatar->Render());
+	if (mazeRenderer) {
+		mazeRenderer->Render()->AddChild(avatar->Render());
+	}
 
 	PacketCharArray avatarPacket(CREATE_AVATAR);
 	std::ostringstream ss;
@@ -324,6 +326,7 @@ void MazeClient::RefreshMazeRenderer(bool registerClick) {
 	SAFE_DELETE(mazeRenderer);
 	mazeRenderer = new MazeRenderer(mazeGenerator);
 	mazeRenderer->Render()->SetTransform(Matrix4::Scale(mazeRenderScale));
+	//TODO: Readd Hazards
 	this->AddGameObject(mazeRenderer);
 	CreateAvatar();
 	if (registerClick) {
