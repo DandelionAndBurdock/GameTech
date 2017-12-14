@@ -183,7 +183,6 @@ bool MazeServer::SetAvatarPath(int clientID, ENetPeer * peer, int startIdx, int 
 	else {
 		graphSearch->FindBestPath(maze->GetNodeFromIndex(startIdx), maze->GetNodeFromIndex(endIdx));
 		(*avatarIter)->SetPath(graphSearch->GetFinalPath());
-
 		SendMazeRoute(clientID, peer);
 		return true;
 	}
@@ -193,6 +192,7 @@ void MazeServer::BroadcastAvatarPositions() {
 	for (auto& avatar : avatars) {
 		ENetPeer* sendClient = avatar->GetClient();
 		PacketVec3 positionUpdate(AVATAR_POS, avatar->GetPosition());
+		std::cout << avatar->GetPosition();
 		ENetPacket* position_update = enet_packet_create(&positionUpdate, sizeof(PacketVec3), 0);
 		enet_peer_send(sendClient, 0, position_update);
 	}

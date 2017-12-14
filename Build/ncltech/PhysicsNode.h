@@ -151,6 +151,8 @@ public:
 
 	inline void SetDamping(bool damping)							{ this->damping = damping; }
 
+	inline void SetGravityBoost(float g)							{ gravityBoost = g; }
+
 	inline void SetNarrowPhaseCollisionShape(CollisionShape* colShape)
 	{ 
 		if (narrowCollisionShape) narrowCollisionShape->SetParent(NULL);
@@ -269,5 +271,8 @@ protected:
 
 	// Steering
 	SteeringBehaviourManager*  steering = nullptr;
+
+	// Increases gravity per object
+	float gravityBoost = 1.0f;
 
 };

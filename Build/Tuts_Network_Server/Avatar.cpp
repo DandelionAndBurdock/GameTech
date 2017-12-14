@@ -24,6 +24,7 @@ void Avatar::SetPath(std::list<const GraphNode*> pathList) {
 	path = std::vector<const GraphNode*>(std::begin(pathList), std::end(pathList));
 	currentPathIndex = 0;
 	physics->SetPosition(path[0]->GetPos());
+	std::cout << path[0]->GetPos() << std::endl;
 	physics->AddSteeringBehaviour(FOLLOW_PATH);
 	physics->FollowPathOn();
 	std::vector<Vector3> pathPos;
@@ -31,6 +32,7 @@ void Avatar::SetPath(std::list<const GraphNode*> pathList) {
 		pathPos.push_back(node->GetPos());
 	}
 	physics->ChangeFollowWaypoints(pathPos);
+	physics->SetLinearVelocity(Vector3(0.0f));
 
 }
 

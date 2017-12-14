@@ -54,7 +54,13 @@ Vector3 FollowPath::GetVelocity() {
 }
 
 void FollowPath::SetWaypoints(std::vector<Vector3>& wayPoints) {
+	if (wayPoints.empty()) {
+		return;
+	}
 	waypoints = wayPoints;
 	currentWaypoint = 0;
-	seek = new Seek(owner);
+	if (!seek) {
+		seek = new Seek(owner);
+	}
+	seek->SetTarget(wayPoints[0]);
 }

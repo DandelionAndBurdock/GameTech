@@ -37,7 +37,8 @@ protected:
 	void SetHazardTransform(Packets::PacketType* message);
 	// Make maze nodes clickable
 	void RegisterMazeWithScreenPicker();
-
+	void UnregisterMazeWithScreenPicker();
+	std::vector<RenderNode*> clickerCubes;
 	// Draw path between current start and end points
 	void DrawPath();
 
@@ -56,7 +57,7 @@ protected:
 	float mazeDensity = 0.5f;
 
 
-	GameObject* avatar;
+	RenderNode* avatar;
 	int avatarPathIndex = 0;
 	std::vector<GraphEdge> path;
 
@@ -64,7 +65,7 @@ protected:
 	int numHazards = 0;
 
 	// Callback function which can be called when a node is clicked
-	void NodeSelectedCallback(GameObject* obj, float dt, const Vector3& newWsPos, const Vector3& wsMovedAmount, bool stopDragging);
+	void NodeSelectedCallback(RenderNode* obj, int idx, float dt, const Vector3& newWsPos, const Vector3& wsMovedAmount, bool stopDragging);
 
 	Vector3 mazeRenderScale = Vector3(10.0f, 1.0f, 10.0f);
 

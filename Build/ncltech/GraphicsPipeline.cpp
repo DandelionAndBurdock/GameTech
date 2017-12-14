@@ -103,11 +103,6 @@ void GraphicsPipeline::AddRenderNode(RenderNode* node)
 
 void GraphicsPipeline::RemoveRenderNode(RenderNode* node, bool recursive)
 {
-	if (recursive) {
-		for (auto iter = node->GetChildIteratorStart(); iter != node->GetChildIteratorEnd(); iter++) {
-			RemoveRenderNode(*iter, true);
-		}
-	}
 	allNodes.erase(std::remove(allNodes.begin(), allNodes.end(), node), allNodes.end());
 }
 

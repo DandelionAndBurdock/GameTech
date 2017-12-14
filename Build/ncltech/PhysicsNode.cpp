@@ -121,7 +121,7 @@ Vector3 PhysicsNode::GetGravity() {
 
 
 	// Strength
-	return fieldDirection * PhysicsEngine::Instance()->GetGravity();
+	return fieldDirection * PhysicsEngine::Instance()->GetGravity() * gravityBoost;
 
 }
 

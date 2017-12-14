@@ -107,22 +107,18 @@ void MazeClient::HandleMazeRoute(Packets::PacketType* message) {
 }
 
 void MazeClient::CreateAvatar() {
-	if (!avatar) {
-		avatar = CommonUtils::BuildSphereObject(
-			"avatar",
-			Vector3(0.0f),
-			0.6f,
-			false,
-			0.0f,
-			false,
-			false,
-			Vector4(1.0f, 0.0f, 1.0f, 1.0f)
-		);
-		//this->AddGameObject(avatar);//TODO: Necessary??
-	}
+
+		avatar= new RenderNode();
+
+		RenderNode* dummy = new RenderNode(CommonMeshes::Sphere());
+		dummy->SetTransform(Matrix4::Scale(Vector3(0.4f)));
+		avatar->AddChild(dummy);
+
+		//rnode->SetTransform(Matrix4::Translation(pos));
+		avatar->SetBoundingRadius(0.4f);
 
 	if (mazeRenderer) {
-		mazeRenderer->Render()->AddChild(avatar->Render());
+		mazeRenderer->Render()->AddChild(avatar);
 	}
 
 	PacketCharArray avatarPacket(CREATE_AVATAR);
@@ -216,15 +212,16 @@ void MazeClient::RegisterMazeWithScreenPicker() {
 			(node + i)->_pos.y * 3
 		) * scalar;
 
-	
+		
 		RenderNode* cube = new RenderNode(nodeClickMesh, Vector4(0.0f, 1.0f, 0.0f, 0.0f));
-		GameObject* cubeObj = new GameObject(std::string("ClickNode:") + std::to_string(i), cube);
+		clickerCubes.push_back(cube);
+		//GameObject* cubeObj = new GameObject(std::string("ClickNode:") + std::to_string(i), cube);
 		cube->SetTransform(Matrix4::Translation(cellpos + cellSize * 0.5f) * Matrix4::Scale(cellSize * 0.5f));
 
 		mazeRenderer->Render()->AddChild(cube);
 
 		using namespace placeholders;
-		ScreenPicker::Instance()->RegisterNodeForMouseCallback(cube, std::bind(&MazeClient::NodeSelectedCallback, this, cubeObj, _1, _2, _3, _4));
+		ScreenPicker::Instance()->RegisterNodeForMouseCallback(cube, std::bind(&MazeClient::NodeSelectedCallback, this, cube, i,  _1, _2, _3, _4));
 	}
 }
 
@@ -249,26 +246,15 @@ void MazeClient::UpdateAvatar() {
 	//avatar->SetTransform(mazeRenderer->Render()->GetWorldTransform());
 }
 
-void MazeClient::NodeSelectedCallback(GameObject* obj, float dt, const Vector3& newWsPos, const Vector3& wsMovedAmount, bool stopDragging)
+void MazeClient::NodeSelectedCallback(RenderNode* obj, int idx, float dt, const Vector3& newWsPos, const Vector3& wsMovedAmount, bool stopDragging)
 {
-	// Get index from name
-	int index;
-	std::string name = obj->GetName();
-	auto iter = name.find_first_of(':');
-	if (iter == std::string::npos) {
-		return;
-	}
-	else {
-		++iter;
-		index = std::stoi(name.substr(iter));
-	}
 		if (Window::GetMouse()->ButtonDown(MOUSE_LEFT))
 		{
-			ChangeStartPoint(index);
+			ChangeStartPoint(idx);
 		}
 		else if (Window::GetMouse()->ButtonDown(MOUSE_RIGHT))
 		{
-			ChangeEndPoint(index);
+			ChangeEndPoint(idx);
 		}
 }
 
@@ -296,7 +282,7 @@ void MazeClient::SetAvatarTransform(Packets::PacketType* message) {
 		return;
 	}
 	Vector3* pos = reinterpret_cast<Vector3*>(message);
-
+	std::cout << *pos << std::endl;
 	const float grid_scalar = 1.0f / (float)mazeGenerator->GetSize();
 	const float scalar = 1.f / (float)mazeRenderer->GetFlatMazeSize();
 
@@ -313,7 +299,7 @@ void MazeClient::SetAvatarTransform(Packets::PacketType* message) {
 		scalar * 2
 	);
 
-	avatar->Render()->SetTransform(Matrix4::Translation(cellpos + cellSize * 0.5f) * Matrix4::Scale(cellSize * 0.5f));
+	avatar->SetTransform(Matrix4::Translation(cellpos + cellSize * 0.5f) * Matrix4::Scale(cellSize * 0.5f));
 }
 
 void MazeClient::DrawNavMesh() {
@@ -321,16 +307,17 @@ void MazeClient::DrawNavMesh() {
 }
 
 void MazeClient::RefreshMazeRenderer(bool registerClick) {
+	UnregisterMazeWithScreenPicker();
 	this->RemoveGameObject(mazeRenderer, true);
 
 	SAFE_DELETE(mazeRenderer);
 	mazeRenderer = new MazeRenderer(mazeGenerator);
 	mazeRenderer->Render()->SetTransform(Matrix4::Scale(mazeRenderScale));
-	//TODO: Readd Hazards
+	//TODO: Re add Hazards
 	this->AddGameObject(mazeRenderer);
 	CreateAvatar();
 	if (registerClick) {
-		//RegisterMazeWithScreenPicker();
+		RegisterMazeWithScreenPicker();
 	}
 
 }
@@ -349,8 +336,6 @@ void MazeClient::AddHazard() {
 	));
 	hazards[numHazards]->Render()->SetTransform(Matrix4::Scale(Vector3(0.1f, 1.5f, 0.1f)));
 	mazeRenderer->Render()->AddChild(hazards[numHazards++]->Render());
-	
-
 }
 
 void MazeClient::SendHazardRequest() {
@@ -383,7 +368,11 @@ void MazeClient::SetHazardTransform(Packets::PacketType* message) {
 	hazards[*hazardID]->Render()->SetTransform(Matrix4::Translation(cellpos + cellSize * 0.5f) * Matrix4::Scale(cellSize * 0.5f));
 }
 
-
+void MazeClient::UnregisterMazeWithScreenPicker() {
+	for (auto cube : clickerCubes) {
+		ScreenPicker::Instance()->UnregisterNodeForMouseCallback(cube);
+	}
+}
 //std::istringstream ss(*reinterpret_cast<std::string*>(message));
 //std::vector<int> routeIndices;
 //int index;

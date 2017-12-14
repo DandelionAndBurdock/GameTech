@@ -115,9 +115,14 @@ public:
 	//		  it will not call any delete functions.
 	void RemoveGameObject(GameObject* game_object, bool recursive = false)
 	{
+		//if (recursive) {
+		//	for (auto iter = game_object->Render()->GetChildIteratorStart(); iter != game_object->Render()->GetChildIteratorEnd(); iter++) {
+		//		RemoveGameObject((*iter)->Ge, true);
+		//	}
+		//}
 		if (game_object && game_object->scene == this)
 		{
-			if (game_object->renderNode) GraphicsPipeline::Instance()->RemoveRenderNode(game_object->renderNode, recursive);
+			if (game_object->renderNode) GraphicsPipeline::Instance()->RemoveRenderNode(game_object->renderNode);
 			if (game_object->physicsNode) PhysicsEngine::Instance()->RemovePhysicsObject(game_object->physicsNode);
 
 			m_vpObjects.erase(std::remove(m_vpObjects.begin(), m_vpObjects.end(), game_object), m_vpObjects.end());
