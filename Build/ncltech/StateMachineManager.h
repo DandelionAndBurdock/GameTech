@@ -14,7 +14,7 @@ public:
 	void ChangeSuperState(State<StateOwner>* state);
 	void Update(float dt);
 
-	void ReceiveMessage(Messaging::Message msg);
+	void ReceiveMessage(StateOwner* owner, Messaging::Message msg);
 protected:
 	StateOwner*		   entity;		 // Entity running this FSM		
 	State<StateOwner>* currentState; // Current state of the entity
@@ -63,9 +63,9 @@ void StateMachineManager<StateOwner>::Update(float dt) {
 }
 
 template <typename StateOwner>
-void StateMachineManager<StateOwner>::ReceiveMessage(Messaging::Message msg) {
+void StateMachineManager<StateOwner>::ReceiveMessage(StateOwner* owner, Messaging::Message msg) {
 	if (currentState) {
-		currentState->ReceiveMessage(msg);
+		currentState->ReceiveMessage(owner, msg);
 	}
 }
 

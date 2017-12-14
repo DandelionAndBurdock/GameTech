@@ -12,7 +12,7 @@ public:
 	void Update(Hazard* owner, float dt) override;
 	void Exit(Hazard* owner) override;
 
-	void ReceiveMessage(Messaging::Message msg) override;
+	void ReceiveMessage(Hazard* owner, Messaging::Message msg) override;
 
 	~Pursue();
 protected:
@@ -28,7 +28,7 @@ public:
 	void Update(Hazard* owner, float dt) override;
 	void Exit(Hazard* owner) override;
 
-	void ReceiveMessage(Messaging::Message msg) override;
+	void ReceiveMessage(Hazard* owner, Messaging::Message msg) override;
 
 	~FollowHazardPath();
 protected:
@@ -44,7 +44,7 @@ public:
 	void Update(Hazard* owner, float dt) override;
 	void Exit(Hazard* owner) override;
 
-	void ReceiveMessage(Messaging::Message msg) override;
+	void ReceiveMessage(Hazard* owner, Messaging::Message msg) override;
 
 	~Idle();
 protected:
@@ -60,7 +60,7 @@ public:
 	void Update(Hazard* owner, float dt) override;
 	void Exit(Hazard* owner) override;
 
-	void ReceiveMessage(Messaging::Message msg) override;
+	void ReceiveMessage(Hazard* owner, Messaging::Message msg) override;
 
 	~Patrol();
 protected:

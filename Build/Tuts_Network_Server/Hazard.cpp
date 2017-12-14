@@ -36,3 +36,7 @@ void Hazard::SetPath(std::list<const GraphNode*> pathList) {
 void Hazard::Update(float dt) {
 	fsm->Update(dt);
 }
+
+void Hazard::ReceiveMessage(const Messaging::Message& message) {
+	fsm->ReceiveMessage(this, message);
+}

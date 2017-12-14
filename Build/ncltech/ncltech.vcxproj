@@ -167,6 +167,7 @@
     <ClCompile Include="StateMachineManager.cpp" />
     <ClCompile Include="SteeringBehaviour.cpp" />
     <ClCompile Include="SteeringBehaviourManager.cpp" />
+    <ClCompile Include="VariableLoader.cpp" />
     <ClCompile Include="Wander.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -222,6 +223,7 @@
     <ClInclude Include="StateMachineManager.h" />
     <ClInclude Include="SteeringBehaviour.h" />
     <ClInclude Include="SteeringBehaviourManager.h" />
+    <ClInclude Include="VariableLoader.h" />
     <ClInclude Include="Wander.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

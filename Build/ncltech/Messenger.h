@@ -8,10 +8,10 @@ namespace Messaging{
 		int msg;				// Can be defined as an enum in context
 		int receiever;			// Every game object has a unique id
 		float sendTimeDelay;	//  How many seconds until message should be send
-		void* extraInfo;		// Extra information e.g. a target position
+		void* data;				// Information e.g. a target position
 
 		Message(int m, int r, float t = 0.0f, void* info = nullptr) :
-			msg(m), receiever(r), sendTimeDelay(t), extraInfo(info)
+			msg(m), receiever(r), sendTimeDelay(t), data(info)
 		{}
 
 		void Update(float dt) { sendTimeDelay -= dt; }

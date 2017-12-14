@@ -1,7 +1,23 @@
 #include "HazardStates.h"
 
 #include "BehaviourTypes.h"
+
+#include "VariableLoader.h"
+
+#include "../Tuts_Network_Server/Avatar.h"
+
 using namespace Steering;
+
+
+//Helper Function
+bool InRange(Hazard* hazard, Avatar* avatar) {
+	if (Vector3::DistanceSq(hazard->Physics()->GetPosition(), avatar->GetPosition()) < 1.0f) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
 
 Pursue* Pursue::GetInstance() {
 	static Pursue instance;
@@ -30,7 +46,7 @@ void Pursue::Exit(Hazard* owner) {
 	return;
 }
 
-void Pursue::ReceiveMessage(Messaging::Message msg) {
+void Pursue::ReceiveMessage(Hazard* owner, Messaging::Message msg) {
 	return;
 }
 
@@ -64,8 +80,12 @@ void FollowHazardPath::Exit(Hazard* owner) {
 	owner->Physics()->FollowPathOff();
 }
 
-void FollowHazardPath::ReceiveMessage(Messaging::Message msg) {
-
+void FollowHazardPath::ReceiveMessage(Hazard* owner, Messaging::Message msg) {
+	Avatar* target = reinterpret_cast<Avatar*>(msg.data);
+	if (InRange(owner, target)) {
+		std::cout << "In Range" << std::endl;
+	}
+	
 }
 
 
@@ -93,7 +113,7 @@ void Idle::Update(Hazard* owner, float dt) {
 void Idle::Exit(Hazard* owner) {
 }
 
-void Idle::ReceiveMessage(Messaging::Message msg) {
+void Idle::ReceiveMessage(Hazard* owner, Messaging::Message msg) {
 }
 
 
@@ -114,6 +134,9 @@ void Patrol::Enter(Hazard* owner) {
 	owner->GetFSM()->ChangeState(FollowHazardPath::GetInstance());
 	isIdle = false;
 	isFollowingPath = true;
+
+	idleTime = VariableLoader::GetInstance()->GetPatrolIdleTime();
+	pathTime = VariableLoader::GetInstance()->GetPatrolWalkTime();
 }
 
 void Patrol::Update(Hazard* owner, float dt) {
@@ -135,7 +158,8 @@ void Patrol::Update(Hazard* owner, float dt) {
 }
 
 void Patrol::Exit(Hazard* owner) {
+	owner->Physics()->FollowPathOff();
 }
 
-void Patrol::ReceiveMessage(Messaging::Message msg) {
+void Patrol::ReceiveMessage(Hazard* owner, Messaging::Message msg) {
 }

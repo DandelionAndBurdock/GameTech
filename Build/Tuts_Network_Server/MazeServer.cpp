@@ -14,6 +14,8 @@ using namespace Packets;
 
 #include <map>
 
+#include <ncltech\Messenger.h>
+
 MazeServer::MazeServer(int portNumber, int maxClients) :
 	Server(portNumber, maxClients),
 	graphSearch(new SearchAStar())
@@ -227,8 +229,16 @@ int MazeServer::FindFreeNode() {
 }
 
 void MazeServer::Update(float dt) {
+	Avatar* avatar = nullptr;
+	if (!avatars.empty()) {
+		avatar = avatars[0];
+	}
+
 	for (auto& hazard : hazards) {
 		hazard->Update(dt);
+		if (avatar) {
+			hazard->ReceiveMessage(Messaging::Message(0, -1, 0.0f, (void*)avatar));// Send hazard a message about avatar position(s)
+		}
 	}
 	Server::Update(dt);
 }

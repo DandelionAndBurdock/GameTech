@@ -16,7 +16,7 @@ public:
 	~AIObject();
 
 
-	void ReceiveMessage(const Messaging::Message& message);
+	virtual void ReceiveMessage(const Messaging::Message& message);
 
 	static AIObject* GetObjectFromID(int ID);
 

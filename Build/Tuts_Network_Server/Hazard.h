@@ -14,7 +14,7 @@ public:
 	~Hazard();
 	void Update(float dt) override;
 	void SetPath(std::list<const GraphNode*> pathList);
-
+	void ReceiveMessage(const Messaging::Message& message) override;
 	StateMachineManager<Hazard>* GetFSM() { return fsm; }
 protected:
 	// List of nodes on the path
