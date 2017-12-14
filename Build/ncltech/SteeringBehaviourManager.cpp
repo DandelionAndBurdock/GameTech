@@ -43,7 +43,7 @@ Vector3 SteeringBehaviourManager::GetVelocity() {
 void SteeringBehaviourManager::AddBehaviour(const BehaviourType b) {
 	for (auto& behaviour : behaviours) {
 		if (behaviour->GetType() == b) {
-			break;
+			return;
 		}
 	}
 

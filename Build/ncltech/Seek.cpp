@@ -26,5 +26,6 @@ Vector3 Seek::GetVelocity() {
 	float maxSpeed = 0.5f;
 	Vector3 desiredVelocity = direction * maxSpeed;
 
+
 	return (desiredVelocity - owner->GetLinearVelocity());
 }

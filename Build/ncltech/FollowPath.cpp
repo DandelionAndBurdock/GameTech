@@ -57,6 +57,7 @@ void FollowPath::SetWaypoints(std::vector<Vector3>& wayPoints) {
 	if (wayPoints.empty()) {
 		return;
 	}
+	std::cout << "New waypoints set************************************" << std::endl;
 	waypoints = wayPoints;
 	currentWaypoint = 0;
 	if (!seek) {

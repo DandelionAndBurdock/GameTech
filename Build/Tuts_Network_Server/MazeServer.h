@@ -28,11 +28,13 @@ protected:
 	void BroadcastMazeStructure();
 	void BroadcastAvatarPositions();
 	void BroadcastHazardPositions();
-
+	void BroadcastSecondaryAvatarPositions();
 
 	void SendMazeRoute(int client, ENetPeer * peer);
 	void HandleRouteRequest(int clientID, ENetPeer * peer, Packets::PacketType* message);
 	void HandleAvatarRequest(int clientID, ENetPeer * peer, Packets::PacketType* message);
+
+	void OnClientConnection(ENetPeer* peer) override;
 
 	bool SetAvatarPath(int clientID, ENetPeer * peer, int startIdx, int endIdx);
 
@@ -45,6 +47,8 @@ protected:
 
 	std::vector<Avatar*> avatars;
 
+	// List of connected clients
+	std::vector<ENetPeer*> clients;
 	// Hazards
 	std::vector<Hazard*> hazards;
 	int numHazards = 0; 

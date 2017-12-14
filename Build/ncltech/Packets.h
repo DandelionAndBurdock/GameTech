@@ -19,7 +19,9 @@ namespace Packets {
 					  AVATAR_POS,	  // Position of avatar in maze space
 					  ADD_HAZARD,	  // Contains node index to add a hazard
 					  ADD_HAZARD_REQUEST, // Requests the server to add a hazard
-					  HAZARD_POS,	 // Conaints ID of hazard and position
+					  HAZARD_POS,	 // Contains ID of hazard and position
+					  ADD_SECONDARY_AVATAR, // Request to add a non-player avatar to the client
+					  SEC_AVATAR_UPDATE,	// Contains ID and new position of a secondary avatar
 	};	
 
 	// All packets must derive from Packet as we will cast message to determine what type

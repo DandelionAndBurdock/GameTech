@@ -105,6 +105,15 @@ void HandleKeyboardInputs()
 		SceneManager::Instance()->GetCurrentScene()->HandleKeyboardInput(KEYBOARD_R);
 	if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_H))
 		SceneManager::Instance()->GetCurrentScene()->HandleKeyboardInput(KEYBOARD_H);
+	if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_1))
+		SceneManager::Instance()->GetCurrentScene()->HandleKeyboardInput(KEYBOARD_1);
+	if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_2))
+		SceneManager::Instance()->GetCurrentScene()->HandleKeyboardInput(KEYBOARD_2);
+	if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_3))
+		SceneManager::Instance()->GetCurrentScene()->HandleKeyboardInput(KEYBOARD_3);
+	if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_4))
+		SceneManager::Instance()->GetCurrentScene()->HandleKeyboardInput(KEYBOARD_4);
+
 
 	if (Window::GetMouse()->ButtonDown(MOUSE_LEFT)) {
 		SceneManager::Instance()->GetCurrentScene()->HandleMouseInput(MOUSE_LEFT);

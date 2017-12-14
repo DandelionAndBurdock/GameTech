@@ -152,8 +152,6 @@ void Patrol::Enter(Hazard* owner) {
 void Patrol::Update(Hazard* owner, float dt) {
 	timeSinceTransition += dt;
 
-	std::cout << owner << " TST: " << timeSinceTransition << " dt: " << dt << std::endl;
-
 	if (isFollowingPath && timeSinceTransition >= pathTime) {
 		timeSinceTransition -= pathTime;
 		owner->GetFSM()->ChangeState(Idle::GetInstance());

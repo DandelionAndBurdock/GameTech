@@ -34,6 +34,7 @@ MazeServer::~MazeServer()
 void MazeServer::BroadcastOutgoingTraffic() {
 	BroadcastAvatarPositions();
 	BroadcastHazardPositions();
+	BroadcastSecondaryAvatarPositions();
 	Server::BroadcastOutgoingTraffic();
 }
 
@@ -71,19 +72,6 @@ void MazeServer::ReceiveMessage(const ENetEvent& evnt) {
 
 void MazeServer::HandleMazeParams(int clientID, Packets::PacketType* message) {
 	std::cout << "Received maze parameters from client " << clientID << std::endl;
-	//TEMP
-	//int* dim = reinterpret_cast<int*>(message);
-	//++message;
-	//
-	//float* density = reinterpret_cast<float*>(message);
-	//maze = new MazeGenerator();
-	//
-	//maze->Generate(10, *dim, *density);
-	//PacketInt mazeParams(MAZE_STRUCTURE, 10);
-	//ENetPacket* packet = enet_packet_create(&mazeParams, sizeof(mazeParams), 0);
-	//enet_host_broadcast(serverNetwork.m_pNetwork, 0, packet);
-	// End Temp
-
 
 	if (!maze) {
 		int* dim = reinterpret_cast<int*>(message);
@@ -192,7 +180,6 @@ void MazeServer::BroadcastAvatarPositions() {
 	for (auto& avatar : avatars) {
 		ENetPeer* sendClient = avatar->GetClient();
 		PacketVec3 positionUpdate(AVATAR_POS, avatar->GetPosition());
-		std::cout << avatar->GetPosition();
 		ENetPacket* position_update = enet_packet_create(&positionUpdate, sizeof(PacketVec3), 0);
 		enet_peer_send(sendClient, 0, position_update);
 	}
@@ -243,6 +230,33 @@ void MazeServer::Update(float dt) {
 	Server::Update(dt);
 }
 
+
+void MazeServer::OnClientConnection(ENetPeer* peer) {
+	// Inform client about pre-exisiting avatars
+	for (uint i = 0; i < avatars.size(); ++i) {
+		if (avatars[i]->GetClient() != peer) {
+			// Broadcast location
+			PacketInt avatar(ADD_SECONDARY_AVATAR, i); // Need to make sure it is a free location
+			ENetPacket* packet = enet_packet_create(&avatar, sizeof(avatar), 0);
+			enet_peer_send(peer, 0, packet);
+		}
+	}
+
+	clients.push_back(peer);
+}
+
+
+void MazeServer::BroadcastSecondaryAvatarPositions() {
+	for (uint i = 0; i < avatars.size(); ++i) {
+		for (auto& client : clients) {
+			if (avatars[i]->GetClient() != client) {
+				PacketIntVec3 avatarUpdate(SEC_AVATAR_UPDATE, i, avatars[i]->GetPosition());
+				ENetPacket* packet = enet_packet_create(&avatarUpdate, sizeof(avatarUpdate), 0);
+				enet_peer_send(client, 0, packet);
+			}
+		}
+	}
+}
 //struct MyPacketNodeData;
 //struct MyPacket
 //{
@@ -256,3 +270,15 @@ void MazeServer::Update(float dt) {
 //header = reinterpret_cast<MyPacket*>(packetData); //memcpy this also otherwise when enet packet goers out of scope will delete mry|
 //MyPacketNodeData* tmpArr = new MyPacketNodeData[header->numNodes];
 //memcpy(tmpArr, reinterpret_cast<char*>(packetData) + sizeof(MyPacket), sizeof(MyPacketNodeData) * header->numNodes);
+//TEMP
+//int* dim = reinterpret_cast<int*>(message);
+//++message;
+//
+//float* density = reinterpret_cast<float*>(message);
+//maze = new MazeGenerator();
+//
+//maze->Generate(10, *dim, *density);
+//PacketInt mazeParams(MAZE_STRUCTURE, 10);
+//ENetPacket* packet = enet_packet_create(&mazeParams, sizeof(mazeParams), 0);
+//enet_host_broadcast(serverNetwork.m_pNetwork, 0, packet);
+// End Temp

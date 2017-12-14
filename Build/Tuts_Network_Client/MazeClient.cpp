@@ -54,6 +54,13 @@ void MazeClient::ReceiveMessage(const ENetEvent& evnt) {
 		++message;
 		SetHazardTransform(message);
 		break;
+	case ADD_SECONDARY_AVATAR:
+		++message;
+		AddSecondaryAvatar(message);
+		break;
+	case SEC_AVATAR_UPDATE:
+		++message;
+		
 	default:
 		std::cout << "Recieved Uncategorised Network Packet!" << std::endl;
 	}
@@ -108,14 +115,7 @@ void MazeClient::HandleMazeRoute(Packets::PacketType* message) {
 
 void MazeClient::CreateAvatar() {
 
-		avatar= new RenderNode();
-
-		RenderNode* dummy = new RenderNode(CommonMeshes::Sphere());
-		dummy->SetTransform(Matrix4::Scale(Vector3(0.4f)));
-		avatar->AddChild(dummy);
-
-		//rnode->SetTransform(Matrix4::Translation(pos));
-		avatar->SetBoundingRadius(0.4f);
+	avatar = MakeAvatarRenderNode();
 
 	if (mazeRenderer) {
 		mazeRenderer->Render()->AddChild(avatar);
@@ -145,6 +145,30 @@ void MazeClient::HandleKeyboardInput(KeyboardKeys key) {
 		break;
 	case KEYBOARD_H:
 		SendHazardRequest();
+		break;
+	case KEYBOARD_1:
+		if (mazeDim > 3) {
+			--mazeDim;
+			SendMazeParams(true);
+		}
+		break;
+	case KEYBOARD_2:
+		if (mazeDim < 15) {
+			++mazeDim;
+			SendMazeParams(true);
+		}
+		break;
+	case KEYBOARD_3:
+		if (mazeDensity > 0.049f) {
+			mazeDensity -= 0.05f;
+			SendMazeParams(true);
+		}
+		break;
+	case KEYBOARD_4:
+		if (mazeDensity < 0.9501f) {
+			mazeDensity += 0.05f;
+			SendMazeParams(true);
+		}
 		break;
 	default:
 		break;
@@ -185,38 +209,23 @@ void MazeClient::OnUpdateScene(float dt) {
 	if (showNavMesh) {
 		DrawNavMesh();
 	}
-	if (avatar) {
-		UpdateAvatar();
-	}
-
 }
 
 void MazeClient::RegisterMazeWithScreenPicker() {
-	const float grid_scalar = 1.0f / (float)mazeGenerator->GetSize();
-	const float scalar = 1.f / (float)mazeRenderer->GetFlatMazeSize();
-
-	Vector3 cellSize = Vector3(
-		scalar * 2,
-		1.0f,
-		scalar * 2
-	);
-
-
 	GraphNode* node = mazeGenerator->GetAllNodesArr();
 
 	// Add a transparent cube object with callback to each node
 	for (int i = 0; i < mazeDim * mazeDim; ++i) {
-		Vector3 cellpos = Vector3(
-			(node + i)->_pos.x * 3,
-			0.0f,
-			(node + i)->_pos.y * 3
-		) * scalar;
 
+		Vector3 cellpos = Vector3(
+			(node + i)->_pos.x,
+			0.0f,
+			(node + i)->_pos.y
+		);
 		
 		RenderNode* cube = new RenderNode(nodeClickMesh, Vector4(0.0f, 1.0f, 0.0f, 0.0f));
 		clickerCubes.push_back(cube);
-		//GameObject* cubeObj = new GameObject(std::string("ClickNode:") + std::to_string(i), cube);
-		cube->SetTransform(Matrix4::Translation(cellpos + cellSize * 0.5f) * Matrix4::Scale(cellSize * 0.5f));
+		cube->SetTransform(MazeSpaceToWorldSpace(cellpos));
 
 		mazeRenderer->Render()->AddChild(cube);
 
@@ -241,10 +250,6 @@ std::vector<GraphEdge> MazeClient::MakePathFromIndices(std::vector<int>& nodeInd
 	return path;
 }
 
-
-void MazeClient::UpdateAvatar() {
-	//avatar->SetTransform(mazeRenderer->Render()->GetWorldTransform());
-}
 
 void MazeClient::NodeSelectedCallback(RenderNode* obj, int idx, float dt, const Vector3& newWsPos, const Vector3& wsMovedAmount, bool stopDragging)
 {
@@ -282,24 +287,8 @@ void MazeClient::SetAvatarTransform(Packets::PacketType* message) {
 		return;
 	}
 	Vector3* pos = reinterpret_cast<Vector3*>(message);
-	std::cout << *pos << std::endl;
-	const float grid_scalar = 1.0f / (float)mazeGenerator->GetSize();
-	const float scalar = 1.f / (float)mazeRenderer->GetFlatMazeSize();
 
-	Vector3 cellpos = Vector3(
-		pos->x * 3,
-		0.0f,
-		pos->z * 3
-	) * scalar;
-
-
-	Vector3 cellSize = Vector3(
-		scalar * 2,
-		1.0f,
-		scalar * 2
-	);
-
-	avatar->SetTransform(Matrix4::Translation(cellpos + cellSize * 0.5f) * Matrix4::Scale(cellSize * 0.5f));
+	avatar->SetTransform(MazeSpaceToWorldSpace(*pos));
 }
 
 void MazeClient::DrawNavMesh() {
@@ -347,29 +336,58 @@ void MazeClient::SetHazardTransform(Packets::PacketType* message) {
 	int* hazardID = reinterpret_cast<int*>(message);
 	++message;
 	Vector3* pos = reinterpret_cast<Vector3*>(message);
-	const float grid_scalar = 1.0f / (float)mazeGenerator->GetSize();
-	const float scalar = 1.f / (float)mazeRenderer->GetFlatMazeSize();
 
-	Vector3 cellpos = Vector3(
-		pos->x * 3,
-		0.0f,
-		pos->z * 3
-	) * scalar;
-
-
-	Vector3 cellSize = Vector3(
-		scalar * 2,
-		1.0f,
-		scalar * 2
-	);
-
-	hazards[*hazardID]->Render()->SetTransform(Matrix4::Translation(cellpos + cellSize * 0.5f) * Matrix4::Scale(cellSize * 0.5f));
+	hazards[*hazardID]->Render()->SetTransform(MazeSpaceToWorldSpace(*pos));
 }
 
 void MazeClient::UnregisterMazeWithScreenPicker() {
 	for (auto cube : clickerCubes) {
 		ScreenPicker::Instance()->UnregisterNodeForMouseCallback(cube);
 	}
+}
+
+void MazeClient::AddSecondaryAvatar(Packets::PacketType* message) {
+	int* ID = reinterpret_cast<int*>(message);
+	secondaryAvatars[*ID] = MakeAvatarRenderNode(Vector4(1.0f, 1.0f, 0.0f, 1.0f));
+}
+
+RenderNode* MazeClient::MakeAvatarRenderNode(Vector4 colour) {
+	RenderNode* rNode = new RenderNode();
+
+	RenderNode* dummy = new RenderNode(CommonMeshes::Sphere());
+	dummy->SetTransform(Matrix4::Scale(avatarScale));
+	rNode->AddChild(dummy);
+
+	//rnode->SetTransform(Matrix4::Translation(pos));
+	rNode->SetBoundingRadius(0.4f);
+	return rNode;
+}
+
+void MazeClient::SetSecondaryAvatarTransform(Packets::PacketType* message) {
+	int* ID = reinterpret_cast<int*>(message);
+	++message;
+	Vector3* pos = reinterpret_cast<Vector3*>(message);
+
+}
+
+Matrix4 MazeClient::MazeSpaceToWorldSpace(Vector3 pos) {
+	const float grid_scalar = 1.0f / (float)mazeGenerator->GetSize();
+	const float scalar = 1.f / (float)mazeRenderer->GetFlatMazeSize();
+
+	Vector3 cellpos = Vector3(
+		pos.x * 3,
+		0.0f,
+		pos.z * 3
+	) * scalar;
+
+	// Could precompute this every time generated new maze to save a few multiplies
+	Vector3 cellSize = Vector3(
+		scalar * 2,
+		1.0f,
+		scalar * 2
+	);
+
+	return Matrix4::Translation(cellpos + cellSize * 0.5f) * Matrix4::Scale(cellSize * 0.5f);
 }
 //std::istringstream ss(*reinterpret_cast<std::string*>(message));
 //std::vector<int> routeIndices;

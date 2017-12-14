@@ -20,6 +20,7 @@ protected:
 	virtual void HandleIncomingTraffic(float dt);
 	virtual void BroadcastOutgoingTraffic();
 
+	virtual void OnClientConnection(ENetPeer* peer) {}
 	virtual void ReceiveMessage(const ENetEvent& evnt);
 
 	virtual void HandleTestPacket(int clientID, Packets::PacketType* message);

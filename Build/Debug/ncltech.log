@@ -1,10 +1,2 @@
-﻿  CommonUtils.cpp
-  Generating Code...
-  Compiling...
-  SceneManager.cpp
-  PathFollowing.cpp
-  MazeRenderer.cpp
-  MazeGenerator.cpp
-  Jelly.cpp
-  Generating Code...
+﻿  HazardStates.cpp
   ncltech.vcxproj -> D:\GameTechNewNew\GameTech\Build\Debug\ncltech.lib

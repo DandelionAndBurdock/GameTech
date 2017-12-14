@@ -42,6 +42,7 @@ void Server::HandleIncomingTraffic(float dt) {
 		{
 		case ENET_EVENT_TYPE_CONNECT:
 			printf("- New Client Connected\n");
+			OnClientConnection(evnt.peer);
 			break;
 
 		case ENET_EVENT_TYPE_RECEIVE:
