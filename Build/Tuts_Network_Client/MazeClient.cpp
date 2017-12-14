@@ -316,9 +316,7 @@ void MazeClient::RefreshMazeRenderer(bool registerClick) {
 	//TODO: Re add Hazards
 	this->AddGameObject(mazeRenderer);
 	CreateAvatar();
-	if (registerClick) {
-		RegisterMazeWithScreenPicker();
-	}
+	RegisterMazeWithScreenPicker();
 
 }
 
