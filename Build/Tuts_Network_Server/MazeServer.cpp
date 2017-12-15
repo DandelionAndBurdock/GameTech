@@ -35,6 +35,7 @@ void MazeServer::BroadcastOutgoingTraffic() {
 	BroadcastAvatarPositions();
 	BroadcastHazardPositions();
 	BroadcastSecondaryAvatarPositions();
+	BroadcastAvatarVelocities();
 	Server::BroadcastOutgoingTraffic();
 }
 
@@ -281,6 +282,24 @@ void MazeServer::BroadcastSecondaryAvatarPositions() {
 				PacketIntVec3 avatarUpdate(SEC_AVATAR_UPDATE, i, avatars[i]->GetPosition());
 				ENetPacket* packet = enet_packet_create(&avatarUpdate, sizeof(avatarUpdate), 0);
 				enet_peer_send(client, 0, packet);
+			}
+		}
+	}
+}
+
+
+void MazeServer::BroadcastAvatarVelocities() {
+	for (uint i = 0; i < avatars.size(); ++i) {
+		for (auto& client : clients) {
+			if (avatars[i]->GetClient() != client) {
+				PacketIntVec3 avatarUpdate(SEC_AVATAR_VEL_UPDATE, i, avatars[i]->GetVelocity());
+				ENetPacket* packet = enet_packet_create(&avatarUpdate, sizeof(avatarUpdate), 0);
+				enet_peer_send(client, 0, packet);
+			}
+			else {
+				PacketVec3 positionUpdate(AVATAR_VEL_UPDATE, avatars[i]->GetVelocity());
+				ENetPacket* position_update = enet_packet_create(&positionUpdate, sizeof(PacketVec3), 0);
+				enet_peer_send(client, 0, position_update);
 			}
 		}
 	}

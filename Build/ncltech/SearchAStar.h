@@ -48,6 +48,7 @@ public:
 
 		searchHistory.clear();
 		finalPath.clear();
+		navMesh.clear();
 
 		std::list<const GraphNode*> open_set;
 		std::list<const GraphNode*> closed_set;

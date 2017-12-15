@@ -41,3 +41,6 @@ Vector3 Avatar::GetPosition() {
 	return physics->GetPosition();
 }
 
+Vector3 Avatar::GetVelocity() {
+	return physics->GetLinearVelocity();
+}

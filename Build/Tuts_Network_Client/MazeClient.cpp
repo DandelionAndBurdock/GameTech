@@ -66,6 +66,12 @@ void MazeClient::ReceiveMessage(const ENetEvent& evnt) {
 		++message;
 		HandleNavMesh(message);
 		break;
+	case AVATAR_VEL_UPDATE:
+		++message;
+		HandleAvatarVelocity(message);
+	case SEC_AVATAR_VEL_UPDATE:
+		++message;
+		break;
 	default:
 		std::cout << "Recieved Uncategorised Network Packet!" << std::endl;
 	}
@@ -227,6 +233,11 @@ void MazeClient::OnUpdateScene(float dt) {
 	if (showNavMesh) {
 		DrawNavMesh();
 	}
+
+	if (avatar) {
+		timeSinceLastPosUpdate += dt;
+		UpdateAvatar(timeSinceLastPosUpdate);
+	}
 }
 
 void MazeClient::RegisterMazeWithScreenPicker() {
@@ -304,9 +315,9 @@ void MazeClient::SetAvatarTransform(Packets::PacketType* message) {
 	if (!avatar) {
 		return;
 	}
-	Vector3* pos = reinterpret_cast<Vector3*>(message);
-
-	avatar->SetTransform(MazeSpaceToWorldSpace(*pos));
+	avatarPosition = *reinterpret_cast<Vector3*>(message);
+	timeSinceLastPosUpdate = 0.0f;
+	avatar->SetTransform(MazeSpaceToWorldSpace(avatarPosition));
 }
 
 void MazeClient::DrawNavMesh() {
@@ -413,6 +424,14 @@ Matrix4 MazeClient::MazeSpaceToWorldSpace(Vector3 pos) {
 	);
 
 	return Matrix4::Translation(cellpos + cellSize * 0.5f) * Matrix4::Scale(cellSize * 0.5f);
+}
+
+void MazeClient::HandleAvatarVelocity(Packets::PacketType* message) {
+	avatarVelocity = *reinterpret_cast<Vector3*>(message);
+}
+
+void MazeClient::UpdateAvatar(float time) {
+	avatar->SetTransform(MazeSpaceToWorldSpace(avatarPosition + avatarVelocity * time));
 }
 //std::istringstream ss(*reinterpret_cast<std::string*>(message));
 //std::vector<int> routeIndices;

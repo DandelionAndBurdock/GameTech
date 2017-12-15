@@ -29,6 +29,7 @@ protected:
 	void BroadcastAvatarPositions();
 	void BroadcastHazardPositions();
 	void BroadcastSecondaryAvatarPositions();
+	void BroadcastAvatarVelocities();
 
 	void SendMazeRoute(int client, ENetPeer * peer);
 	void SendNavMesh(int client, ENetPeer * peer);

@@ -81,6 +81,14 @@ protected:
 	void AddSecondaryAvatar(Packets::PacketType* message);
 	void SetSecondaryAvatarTransform(Packets::PacketType* message);
 
+	
+	void HandleAvatarVelocity(Packets::PacketType* message);
+	void UpdateAvatar(float dt);
+	Vector3 avatarPosition;
+	Vector3 avatarVelocity;
+
+
+	float timeSinceLastPosUpdate = 0.0f;
 private:
 	// Helper function: Makes a list of edges joining nodes together TODO: Move somewhere else
 	std::vector<GraphEdge> MakePathFromIndices(std::vector<int>& nodeIndices);

@@ -28,4 +28,6 @@ protected:
 
 	NetworkBase network;
 	ENetPeer*	serverConnection;
+
+	float timeNetworkEvent = 0.0f;
 };

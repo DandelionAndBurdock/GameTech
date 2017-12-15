@@ -87,8 +87,8 @@ protected:
 	bool  HasLineOfSight(const GraphNode* const origin, const GraphNode* const provisional) const {
 		const float TOLERANCE = 0.002f;
 		// Is it a straight line ?
-		if (abs(provisional->_pos.x - origin->_pos.x) > TOLERANCE &&
-			abs(provisional->_pos.y - origin->_pos.y) > TOLERANCE) {
+		if (fabs(provisional->_pos.x - origin->_pos.x) > TOLERANCE &&
+			fabs(provisional->_pos.y - origin->_pos.y) > TOLERANCE) {
 			return true;
 		}
 		else { // Must have been direction change
