@@ -71,5 +71,8 @@
     <ClInclude Include="TestScene8.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Phy7_Solver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

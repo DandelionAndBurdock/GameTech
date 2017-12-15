@@ -4,15 +4,14 @@
 
 #include "PhysicsEngine.h"
 
-Hull Octtree::cubeHull = Hull();
+#include "CommonUtils.h"
+
+// Static variables
+bool Octtree::debugDraw = true;
 
 Octtree::Octtree(Vector3 minCorner, Vector3 maxCorner) 
 {
 	root = new OcttreeNode(minCorner, maxCorner);
-
-	if (cubeHull.GetNumVertices() == 0){
-		ConstructCubeHull();
-	}
 }
 
 
@@ -119,6 +118,9 @@ void Octtree::InsertObject(PhysicsNode* object, OcttreeNode* node) {
 
 
 void Octtree::DebugDraw() {
+	if (!debugDraw)
+		return;
+
 	DebugDraw(root);
 }
 
@@ -139,8 +141,7 @@ void Octtree::SendObjectsToChildren(OcttreeNode* node) {
 
 
 void Octtree::DebugDraw(OcttreeNode* node) {
-	Matrix4 transform = Matrix4::Translation(node->GetCentre()) * Matrix4::Scale(node->GetSize() / 2.0f);
-	cubeHull.DebugDraw(transform);
+	CommonUtils::DrawBox(node->GetCentre(), node->GetSize().x, 0.05f);
 
 	// Draw children (if they exist)
 	for (int i = 0; i < NUM_OCTANTS; ++i) {
@@ -152,40 +153,11 @@ void Octtree::DebugDraw(OcttreeNode* node) {
 
 
 
-void Octtree::ConstructCubeHull()
-{
-	//Vertices
-	cubeHull.AddVertex(Vector3(-1.0f, -1.0f, -1.0f));		// 0
-	cubeHull.AddVertex(Vector3(-1.0f, 1.0f, -1.0f));		// 1
-	cubeHull.AddVertex(Vector3(1.0f, 1.0f, -1.0f));		// 2
-	cubeHull.AddVertex(Vector3(1.0f, -1.0f, -1.0f));		// 3
-
-	cubeHull.AddVertex(Vector3(-1.0f, -1.0f, 1.0f));		// 4
-	cubeHull.AddVertex(Vector3(-1.0f, 1.0f, 1.0f));		// 5
-	cubeHull.AddVertex(Vector3(1.0f, 1.0f, 1.0f));		// 6
-	cubeHull.AddVertex(Vector3(1.0f, -1.0f, 1.0f));		// 7
-
-														//Indices ( MUST be provided in ccw winding order )
-	int face1[] = { 0, 1, 2, 3 };
-	int face2[] = { 7, 6, 5, 4 };
-	int face3[] = { 5, 6, 2, 1 };
-	int face4[] = { 0, 3, 7, 4 };
-	int face5[] = { 6, 7, 3, 2 };
-	int face6[] = { 4, 5, 1, 0 };
-
-	//Faces
-	cubeHull.AddFace(Vector3(0.0f, 0.0f, -1.0f), 4, face1);
-	cubeHull.AddFace(Vector3(0.0f, 0.0f, 1.0f), 4, face2);
-	cubeHull.AddFace(Vector3(0.0f, 1.0f, 0.0f), 4, face3);
-	cubeHull.AddFace(Vector3(0.0f, -1.0f, 0.0f), 4, face4);
-	cubeHull.AddFace(Vector3(1.0f, 0.0f, 0.0f), 4, face5);
-	cubeHull.AddFace(Vector3(-1.0f, 0.0f, 0.0f), 4, face6);
-}
 
 
 void Octtree::Update() {
 
-	UpdateNonStaticObjects(root); 
+	//UpdateNonStaticObjects(root); 
 	
 	//UpdateRecombine(root);
 	//
@@ -324,7 +296,6 @@ bool Octtree::AtMinimumSize(OcttreeNode* node) {
 std::vector<CollisionPair*> Octtree::BuildPotentialCollisionList() {
 	pairList.clear();
 	BuildPotentialCollisionList(root, pairList);
-	std::cout << pairList.size() << std::endl;
 	return pairList;
 }
 
@@ -347,6 +318,11 @@ void Octtree::BuildPotentialCollisionList(OcttreeNode* node, std::vector<Collisi
 }
 
 void Octtree::AddCollisionPair(PhysicsNode* a, PhysicsNode* b) {
+	// Don't add two stationary pairs
+	if (a->IsStationary() && b->IsStationary()) {
+		return;
+	}
+	// Don't re-add already added pairs
 	for (const auto& pair : pairList) {
 		if (pair->pObjectA == a || pair->pObjectB == a) {
 			if (pair->pObjectA == b || pair->pObjectB == b) {

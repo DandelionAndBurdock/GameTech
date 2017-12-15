@@ -1,6 +1,8 @@
 #include "PhysicsNode.h"
 #include "PhysicsEngine.h"
 
+// Objects with a velocity less than the rest velocity are considered to be at rest
+#define REST_VELOCITY_SQUARE 0.1F
 
 #include "SteeringBehaviourManager.h"
 
@@ -219,4 +221,9 @@ void PhysicsNode::PursuitOn() {
 }
 void PhysicsNode::PursuitOff() {
 	steering->PursuitOn();
+}
+
+
+bool PhysicsNode::IsStationary() const {
+	return Vector3::Dot(linVelocity, linVelocity) < REST_VELOCITY_SQUARE;
 }

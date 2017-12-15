@@ -128,7 +128,7 @@ public:
 	const Matrix4&				GetWorldSpaceTransform()    const { return worldTransform; }
 
 
-
+	bool						IsStationary()				const;
 
 	//<--------- SETTERS ------------->
 	inline void SetParent(GameObject* obj)							{ parent = obj; }

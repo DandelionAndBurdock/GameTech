@@ -4,6 +4,7 @@
 #include <nclgl\NCLDebug.h>
 #include <nclgl\PerfTimer.h>
 
+#include "Phy7_Solver.h"
 #include "TestScene.h"
 #include "TestScene2.h"
 #include "TestScene3.h"
@@ -57,6 +58,7 @@ void Initialize()
 	PhysicsEngine::Instance();
 
 	//Enqueue All Scenes
+	SceneManager::Instance()->EnqueueScene(new Phy7_Solver("GameTech #1 - Octtree"));
 	SceneManager::Instance()->EnqueueScene(new TestScene("GameTech #1 - Framework Sandbox!"));
 	SceneManager::Instance()->EnqueueScene(new TestScene2("GameTech #2 - Peace and quiet"));
 	SceneManager::Instance()->EnqueueScene(new TestScene3("GameTech #3 - More peace and quiet"));
@@ -125,9 +127,13 @@ void HandleKeyboardInputs()
 	if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_G))
 		show_perf_metrics = !show_perf_metrics;
 
+	if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_O))
+		PhysicsEngine::Instance()->GetTree()->ToggleDraw();
+
 	if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_J)) {
 		CommonUtils::SpawnSphere(GraphicsPipeline::Instance()->GetCamera()->GetPosition(), GraphicsPipeline::Instance()->GetCamera()->GetForwardDirection());
 	}
+
 
 	if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_C)) {
 		uint drawFlags = PhysicsEngine::Instance()->GetDebugDrawFlags();

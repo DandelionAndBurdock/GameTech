@@ -114,6 +114,8 @@ public:
 
 	inline float GetDeltaTime() const			{ return updateTimestep; }
 
+	inline Octtree* GetTree() { return tree; }
+
 	inline std::vector<PhysicsNode*>& GetPhysicsNodes() { return physicsNodes; }
 
 	void BuildTree();

@@ -85,5 +85,7 @@ namespace CommonUtils
 	//}
 	// Spawn a sphere from spawnPos in direction dir
 	void SpawnSphere(const Vector3& spawnPos, const Vector3& dir);
+
+	void DrawBox(Vector3 centre, float dimension, float thickness = 0.1f);
 };
 

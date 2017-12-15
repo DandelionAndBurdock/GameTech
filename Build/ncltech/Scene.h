@@ -65,7 +65,7 @@ public:
 
 	// Called when scene is being activated, and will begin being rendered/updated. 
 	//	 - Initialize objects/physics here
-	virtual void OnInitializeScene() { PhysicsEngine::Instance()->BuildTree(); }
+	virtual void OnInitializeScene() {  }
 
 	// Called when scene is being swapped and will no longer be rendered/updated 
 	//	 - Override to remove custom objects/physics here as needed
@@ -76,7 +76,7 @@ public:
 	// Update Scene Logic
 	//   - Called once per frame and should contain time-sensitive update logic
 	//	   Note: This is time relative to seconds not milliseconds! (e.g. msec / 1000)
-	virtual void OnUpdateScene(float dt) {}
+	virtual void OnUpdateScene(float dt) { PhysicsEngine::Instance()->BuildTree(); }
 
 
 	// Should be the action fired by the main game loop when updating a scene

@@ -148,6 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EmptyScene.h" />
+    <ClInclude Include="Phy7_Solver.h" />
     <ClInclude Include="TestScene.h" />
     <ClInclude Include="TestScene2.h" />
     <ClInclude Include="TestScene3.h" />

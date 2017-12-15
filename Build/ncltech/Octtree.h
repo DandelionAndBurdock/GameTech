@@ -61,6 +61,9 @@ public:
 	void DebugDraw();
 
 	bool AtMinimumSize(OcttreeNode* node);
+
+	// Switch debug drawing on and off
+	static void ToggleDraw() { debugDraw = !debugDraw;}
 protected:
 	// Lists of all objects in the octtree
 	std::vector<PhysicsNode*> objects;
@@ -80,6 +83,7 @@ protected:
 
 	// Returns all objects in children inside set
 	void GetObjects(std::set<PhysicsNode*> s, OcttreeNode* node);
+
 
 protected:
 	// Divide octant into 8 further child octants
@@ -108,13 +112,12 @@ protected:
 	void AddCollisionPair(PhysicsNode* a, PhysicsNode* b);
 	// Recursively deletes node and all of its children
 	void DeleteTree(OcttreeNode* node);
+
 protected:
 	// Recursive draw function
 	void DebugDraw(OcttreeNode* node);
-	//Constructs the static cube hull 
-	static void ConstructCubeHull();
-	// For debug drawing
-	static Hull	 cubeHull;		
+
+	static bool debugDraw;
 
 };
 

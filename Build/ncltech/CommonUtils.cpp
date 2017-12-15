@@ -268,3 +268,33 @@ void CommonUtils::SpawnSphere(const Vector3& spawnPos, const Vector3& dir) {
 
 	SceneManager::Instance()->GetCurrentScene()->AddProjectile(sphere);
 }
+
+void CommonUtils::DrawBox(Vector3 centre, float dimension, float thickness) {
+	float halfDimension = dimension / 2.0f;
+
+	// Corners of the box
+	Vector3 frontBottomLeft = centre - Vector3(halfDimension, halfDimension, halfDimension);
+	Vector3 frontBottomRight = centre - Vector3(-halfDimension, halfDimension, halfDimension);
+
+	Vector3 backBottomLeft = centre - Vector3(halfDimension, halfDimension, -halfDimension);
+	Vector3 backBottomRight = centre - Vector3(-halfDimension, halfDimension, -halfDimension);
+
+	Vector3 backTopRight = centre + Vector3(halfDimension, halfDimension, halfDimension);
+	Vector3 backTopLeft = centre + Vector3(-halfDimension, halfDimension, halfDimension);
+
+	Vector3 frontTopRight = centre - Vector3(-halfDimension, -halfDimension, halfDimension);
+	Vector3 frontTopLeft = centre - Vector3(halfDimension, -halfDimension, halfDimension);
+
+	NCLDebug::DrawThickLine(frontBottomLeft, frontBottomRight, thickness);
+	NCLDebug::DrawThickLine(frontBottomLeft, frontTopLeft, thickness);
+	NCLDebug::DrawThickLine(backBottomLeft, backBottomRight, thickness);
+	NCLDebug::DrawThickLine(backBottomLeft, backTopLeft, thickness);
+	NCLDebug::DrawThickLine(backBottomLeft, frontBottomLeft, thickness);
+	NCLDebug::DrawThickLine(backTopLeft, frontTopLeft, thickness);
+	NCLDebug::DrawThickLine(backTopRight, frontTopRight, thickness);
+	NCLDebug::DrawThickLine(backBottomRight, frontBottomRight, thickness);
+	NCLDebug::DrawThickLine(backBottomRight, backTopRight, thickness);
+	NCLDebug::DrawThickLine(frontBottomRight, frontTopRight, thickness);
+	NCLDebug::DrawThickLine(frontTopLeft, frontTopRight, thickness);
+	NCLDebug::DrawThickLine(backTopLeft, backTopRight, thickness);
+}
