@@ -171,6 +171,7 @@ void Net1_Client::OnUpdateScene(float dt)
 	NCLDebug::AddStatusEntry(status_color, "Press 'R' to toggle path display");
 	NCLDebug::AddStatusEntry(status_color, "Press 'N' to toggle nav mesh display");
 	NCLDebug::AddStatusEntry(status_color, "Press 'H' to add hazard");
+	NCLDebug::AddStatusEntry(status_color, "Press 'P' to add client avatar prediction");
 	NCLDebug::AddStatusEntry(status_color, "");
 	NCLDebug::AddStatusEntry(status_color, "Press '1/2' to decrease/increase maze dimensions");
 	NCLDebug::AddStatusEntry(status_color, "Press '3/4' to decrease/increase maze density");

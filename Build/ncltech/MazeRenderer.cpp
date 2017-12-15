@@ -84,8 +84,8 @@ void MazeRenderer::DrawPath(const std::vector<GraphEdge>& path, bool points, flo
 
 		
 		if (points) {
-			NCLDebug::DrawPoint(start, 0.5f, Vector4(1.0f, 0.0f, 0.0f, 1.0f));
-			NCLDebug::DrawPoint(end, 0.5f, Vector4(0.0f, 0.0f, 1.0f, 1.0f));
+			NCLDebug::DrawPointNDT(start, 0.2f, Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+			NCLDebug::DrawPointNDT(end, 0.2f, Vector4(1.0f, 0.0f, 0.0f, 1.0f));
 		}
 		else {
 			NCLDebug::DrawThickLineNDT(start, end, line_width, CommonUtils::GenColor(colour));

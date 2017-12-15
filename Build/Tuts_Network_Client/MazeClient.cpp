@@ -170,6 +170,9 @@ void MazeClient::HandleKeyboardInput(KeyboardKeys key) {
 	case KEYBOARD_H:
 		SendHazardRequest();
 		break;
+	case KEYBOARD_P:
+		clientPrediction = !clientPrediction;
+		break;
 	case KEYBOARD_1:
 		if (mazeDim > 3) {
 			--mazeDim;
@@ -234,7 +237,7 @@ void MazeClient::OnUpdateScene(float dt) {
 		DrawNavMesh();
 	}
 
-	if (avatar) {
+	if (clientPrediction && avatar) {
 		timeSinceLastPosUpdate += dt;
 		UpdateAvatar(timeSinceLastPosUpdate);
 	}

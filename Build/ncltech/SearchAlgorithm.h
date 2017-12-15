@@ -86,13 +86,13 @@ protected:
 	// Not a true line of sight function but enough to compute the Nav Mesh for a maze
 	bool  HasLineOfSight(const GraphNode* const origin, const GraphNode* const provisional) const {
 		const float TOLERANCE = 0.002f;
-		// Is it a straight line ?
+		
 		if (fabs(provisional->_pos.x - origin->_pos.x) > TOLERANCE &&
 			fabs(provisional->_pos.y - origin->_pos.y) > TOLERANCE) {
-			return true;
+			return false;  // Must have been direction change
 		}
-		else { // Must have been direction change
-			return false;
+		else { 
+			return true;  // Should be a straight line 
 		}
 	}
 

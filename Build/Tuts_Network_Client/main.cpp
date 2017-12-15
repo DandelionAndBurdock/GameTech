@@ -107,6 +107,8 @@ void HandleKeyboardInputs()
 		SceneManager::Instance()->GetCurrentScene()->HandleKeyboardInput(KEYBOARD_H);
 	if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_N))
 		SceneManager::Instance()->GetCurrentScene()->HandleKeyboardInput(KEYBOARD_N);
+	if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_P))
+		SceneManager::Instance()->GetCurrentScene()->HandleKeyboardInput(KEYBOARD_P);
 	if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_1))
 		SceneManager::Instance()->GetCurrentScene()->HandleKeyboardInput(KEYBOARD_1);
 	if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_2))
